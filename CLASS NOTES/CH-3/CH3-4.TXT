@@ -1,0 +1,475 @@
+SQL*Plus: Release 12.2.0.1.0 Production on Sun Feb 22 08:58:01 2026
+
+Copyright (c) 1982, 2016, Oracle.  All rights reserved.
+
+Enter user-name: SCOTT/TIGER
+Last Successful login time: Sat Feb 21 2026 15:49:19 +05:30
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.2.0.1.0 - 64bit Production
+
+SQL> SET SERVEROUT ON FOR WRA LINES 200 PAGES 24
+SQL>
+SQL> STA E:\PL1003.SQL
+
+Table dropped.
+
+
+Table created.
+
+
+Trigger created.
+
+SQL> SELECT * FROM S1;
+
+no rows selected
+
+SQL> INSERT INTO S1 VALUES ('CLErk');
+
+1 row created.
+
+SQL> /
+
+1 row created.
+
+SQL> INSERT INTO S1 VALUES ('itprog');
+
+1 row created.
+
+SQL> select * from s1;
+
+JOB_ID
+------------------------------
+CLERK
+CLERK
+ITPROG
+
+SQL> SPOOL 'D:\CH3-4.TXT'
+SQL>
+SQL> /*
+SQL>
+SQL> 23. DISPLAY FIRST_NAME , SALARY , MANAGER_ID , JOB_ID. REPORTS TO MANAGER_ID 100 OR 101 (USE MULTI ROW OPERATOR) AND WORKS AS EITHER MK_MAN, SA_MAN, AD_ASST (DON'T USE SPECIAL OPERATOR AS WELL AS MULTI ROW OPERATOR). SORT ROWS ON SALARY DESC.
+SQL>
+SQL> 24. DISPLAY FIRST_NAME , SALARY , DEPARTMENT_ID. SALARY OUTSIDE RANGE 4500 AND 9500 (DON'T USE SPECIAL OPERATOR) AND DEPARTMENT_ID OTHER THAN 90,110,50 (USING MULTI ROW OPERATOR) SORT RESULT ON 3rd AND 2nd COLUMNS.
+SQL>
+SQL> 1. DISPLAY DEPARTMENT_ID , MANAGER_ID , COMMISSION_PCT , FIRST_NAME. SORT RESULT ON ALL 4 COLUMNS AS SPECIFIED IN SINGLE SELECT STATEMENT. SORT ON DEPARTMENT_ID COLUMN IN ASCENDING ORDER KEEPING NULLS AT THE TOP, MANAGER_ID IN DESCENDING ORDER KEEPING NULLS AT THE BOTTOM, ASCENDING ORDER OF COMMISSION_PCT USING COLUMN POSITION AND ON FIRST_NAME COLUMN IN DESCENDING USING COLUMN ALIAS.
+SQL>
+SQL> 17. DISPLAY FIRST_NAME , SALARY , HIRE_DATE. EMPLOYEE SHOULD BE HIRED IN ANY YEAR OF 99,98 OR 87. DISPLAY ONLY THOSE WHO GETS 3rd LOWEST SALARY UPTO 6th LOWEST SALARY.
+SQL>
+SQL> 19. DISPLAY FIRST_NAME , SALARY , COMMISSION_PCT , HIRE_DATE. EMPLOYEE SHOULD NOT GET ANY COMMISSION AND SHOULD BE HIRED IN FIRST QUARTER OF ANY YEAR. DISPLAY ALL OTHER THAN FIRST TWO HIGHEST PAID EMPLOYEES.
+SQL> 25 DISPLAY LAST_NAME , MANAGER_ID WHO REPORTS TO SOMEBODY.
+SQL>
+SQL> 23 DISPLAY ONLY THOSE FIRST_NAME WHOSE FIRST ALPHABET IS IN THE RANGE OF 'S' TO 'Z'
+SQL>
+SQL> */
+SQL>
+SQL>
+SQL> REM 23. DISPLAY FIRST_NAME , SALARY , MANAGER_ID , JOB_ID. REPORTS TO MANAGER_ID 100 OR 101 (USE MULTI ROW OPERATOR) AND WORKS AS EITHER MK_MAN, SA_MAN, AD_ASST (DON'T USE SPECIAL OPERATOR AS WELL AS MULTI ROW OPERATOR). SORT ROWS ON SALARY DESC.
+SQL>
+SQL> REM SINGLE ROW OPERATORS : = < > <=  <> != ^=
+SQL>
+SQL> REM MULTI ROW OPERATORS : ANY/SOME ALL
+SQL>
+SQL> REM SPECIAL OPERATORS : IN BETWEEN LIKE    IS NULL
+SQL>
+SQL> REM LOGICAL OPERATORS : NOT AND OR
+SQL>
+SQL> SELECT FIRST_NAME , SALARY , MANAGER_ID , JOB_ID
+  2  FROM EMPLOYEES
+  3  WHERE MANAGER_ID = ANY (100,101)
+  4  AND JOB_ID = 'MK_MAN' OR JOB_ID = 'SA_MAN' OR JOB_ID = 'AD_ASST'
+  5  ORDER BY 2 DESC;
+
+FIRST_NAME          SALARY MANAGER_ID JOB_ID
+--------------- ---------- ---------- ----------
+Michael              13000        100 MK_MAN
+Eleni                10500        100 SA_MAN
+Jennifer              4400        101 AD_ASST
+
+SQL> REM 1. DISPLAY DEPARTMENT_ID , MANAGER_ID , COMMISSION_PCT , FIRST_NAME. SORT RESULT ON ALL 4 COLUMNS AS SPECIFIED IN SINGLE SELECT STATEMENT. SORT ON DEPARTMENT_ID COLUMN IN ASCENDING ORDER KEEPING NULLS AT THE TOP, MANAGER_ID IN DESCENDING ORDER KEEPING NULLS AT THE BOTTOM, ASCENDING ORDER OF COMMISSION_PCT USING COLUMN POSITION AND ON FIRST_NAME COLUMN IN DESCENDING USING COLUMN ALIAS.
+SQL>
+SQL> SELECT DEPARTMENT_ID , MANAGER_ID , COMMISSION_PCT , FIRST_NAME
+  2  FROM EMPLOYEES
+  3  ORDER BY 1 NULLS FIRST , MANAGER_ID DESC NULLS LAST , 3 , FNM DESC
+  4
+SQL>
+SQL> SELECT DEPARTMENT_ID , MANAGER_ID , COMMISSION_PCT , FIRST_NAME FNM
+  2  FROM EMPLOYEES
+  3  ORDER BY 1 NULLS FIRST , MANAGER_ID DESC NULLS LAST , 3 , FNM DESC;
+
+DEPARTMENT_ID MANAGER_ID COMMISSION_PCT FNM
+------------- ---------- -------------- ---------------
+                     149            .15 Kimerely
+           10        101                Jennifer
+           20        201                Pat
+           20        100                Michael
+           50        124                Trenna
+           50        124                Randall
+           50        124                Peter
+           50        124                Curtis
+           50        100                Kevin
+           60        103                Diana
+           60        103                Bruce
+           60        102                Alexander
+           80        149             .3 Jonathon
+           80        149             .3 Ellen
+           80        100             .2 Eleni
+           90        100                Neena
+           90        100                Lex
+           90                           Steven
+          110        205                William
+          110        101                Shelley
+
+20 rows selected.
+
+SQL> REM 17. DISPLAY FIRST_NAME , SALARY , HIRE_DATE. EMPLOYEE SHOULD BE HIRED IN ANY YEAR OF 99,98 OR 87. DISPLAY ONLY THOSE WHO GETS 3rd LOWEST SALARY UPTO 6th LOWEST SALARY.
+SQL>
+SQL> SELECT FIRST_NAME , SALARY , HIRE_DATE
+  2  FROM EMPLOYEES
+  3  WHERE HIRE_DATE BETWEEN '1JAN98' AND '31DEC99' OR HIRE_DATE LIKE '%87'
+  4  ORDER BY 2
+  5  OFFSET 2 ROWS FETCH NEXT 4 ROW ONLY;
+
+FIRST_NAME          SALARY HIRE_DATE
+--------------- ---------- ---------
+Diana                 4200 07-FEB-99
+Jennifer              4400 17-SEP-87
+Kevin                 5800 16-NOV-99
+Kimerely              7000 24-MAY-99
+
+SQL> REM 25 DISPLAY LAST_NAME , MANAGER_ID WHO REPORTS TO SOMEBODY.
+SQL>
+SQL> SELECT * FROM EMPLOYEES WHERE MANAGER_ID IS NOT NULL;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50
+        144 Peter           Vargas                     650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80
+        174 Ellen           Abel            EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110
+
+19 rows selected.
+
+SQL> 23 DISPLAY ONLY THOSE FIRST_NAME WHOSE FIRST ALPHABET IS IN THE RANGE OF 'S' TO 'Z'
+SQL>
+SQL> SEIECT FIRST_NAME FROM EMPLOYEES WHERE FIRST_NAME >= 'S' ORDER BY 1;
+SP2-0734: unknown command beginning "SEIECT FIR..." - rest of line ignored.
+SQL> SELECT FIRST_NAME FROM EMPLOYEES WHERE FIRST_NAME >= 'S' ORDER BY 1;
+
+FIRST_NAME
+---------------
+Shelley
+Steven
+Trenna
+William
+
+SQL> REM 1 DISPLAY NAME WHICH CONTAINS T%P
+SQL>
+SQL> REM 2 DISPLAY NAME WHICH CONTAINS T_P (USE DIGIT AS ESCAPE CHARACTER)
+SQL>
+SQL> REM 3 DISPLAY NAME WHICH CONTAINS T_%P (USE SINGLE QUOTE AS ESCAPE CHARACTER)
+SQL>
+SQL> REM 4 DISPLAY NAME WHICH CONTAINS T_^P (USE ANY ALPHABET AS ESCAPE CHARACTER))
+SQL>
+SQL> REM 5 DISPLAY NAME WHICH CONTAINS T^P
+SQL> ]
+SP2-0042: unknown command "]" - rest of line ignored.
+SQL>
+SQL>
+SQL> REM _ : SINGLE CHARACTER
+SQL>
+SQL> REM % : ZERO OR MORE CHARACTERS
+SQL>
+SQL> SELECT * FROM MPSLIKETBL;
+
+NAME
+------------------------------
+AMIT PATEL
+AMIT_PATEL
+AMIT%PATEL
+AMIT_%PATEL
+AMIT  PATEL
+TAPAN PATEL
+PARMAR TARAK
+AMIT^PATEL
+AMIT_^PATEL
+AMIT^%PATEL
+
+10 rows selected.
+
+SQL> REM 1 DISPLAY NAME WHICH CONTAINS T%P
+SQL>
+SQL> SELECT * FROM MPSLIKETBL WHERE NAME LIKE '%T%P%';
+
+NAME
+------------------------------
+AMIT PATEL
+AMIT_PATEL
+AMIT%PATEL
+AMIT_%PATEL
+AMIT  PATEL
+TAPAN PATEL
+AMIT^PATEL
+AMIT_^PATEL
+AMIT^%PATEL
+
+9 rows selected.
+
+SQL> SELECT * FROM MPSLIKETBL WHERE NAME LIKE '%T\%P%' ESCAPE '\';
+
+NAME
+------------------------------
+AMIT%PATEL
+
+SQL> REM 2 DISPLAY NAME WHICH CONTAINS T_P (USE DIGIT AS ESCAPE CHARACTER)
+SQL>
+SQL> SELECT * FROM MPSLIKETBL WHERE NAME LIKE '%T4_P%' ESCAPE '4';
+
+NAME
+------------------------------
+AMIT_PATEL
+
+SQL> REM 3 DISPLAY NAME WHICH CONTAINS T_%P (USE SINGLE QUOTE AS ESCAPE CHARACTER)
+SQL>
+SQL> SELECT * FROM MPSLIKETBL WHERE NAME LIKE '%T''_''%P%' ESCAPE '''';
+
+NAME
+------------------------------
+AMIT_%PATEL
+
+SQL> REM 4 DISPLAY NAME WHICH CONTAINS T_^P (USE ANY ALPHABET AS ESCAPE CHARACTER))
+SQL>
+SQL> SELECT * FROM MPSLIKETBL WHERE NAME LIKE '%TX_^P%' ESCAPE 'X';
+
+NAME
+------------------------------
+AMIT_^PATEL
+
+SQL> REM 5 DISPLAY NAME WHICH CONTAINS T^P
+SQL>
+SQL> SELECT * FROM MPSLIKETBL WHERE NAME LIKE '%T^P%';
+
+NAME
+------------------------------
+AMIT^PATEL
+
+SQL> SELECT INSTR('NEELKAMAL','A', -2) FROM DUAL;
+
+INSTR('NEELKAMAL','A',-2)
+-------------------------
+                        8
+
+SQL> SELECT INSTR('NEELKAMAL','A', -3) FROM DUAL;
+
+INSTR('NEELKAMAL','A',-3)
+-------------------------
+                        6
+
+SQL> SELECT INSTR('NEELKAMAL','A', -5) FROM DUAL;
+
+INSTR('NEELKAMAL','A',-5)
+-------------------------
+                        0
+
+SQL> REM DATE FUNCTIONS + DATE ARITHMETICS :
+SQL>
+SQL> REM LIST OF DATE FUNCTIONS : SYSDATE CURRENT_DATE   ADD_MONTHS MONTHS_BETWEEN   LAST_DAY NEXT_DAY   TRUNC ROUND
+SQL>
+SQL> REM SYSDATE : IT RETURNS SERVER MACHINE'S DATE AND TIME INFO.
+SQL>
+SQL> REM CURRENT_DATE : IT RETURNS CURRENT/LOCAL/CLIENT MACHINE'S DATE AND TIME INFO.
+SQL>
+SQL>
+SQL> SELECT SYSDATE , CURRENT_DATE FROM DUAL;
+
+SYSDATE   CURRENT_D
+--------- ---------
+22-FEB-26 22-FEB-26
+
+SQL> ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MONTH-RRRR HH:MI.SS AM DAY';
+
+Session altered.
+
+SQL> SELECT SYSDATE , CURRENT_DATE FROM DUAL;
+
+SYSDATE                                 CURRENT_DATE
+--------------------------------------- ---------------------------------------
+22-FEBRUARY -2026 11:43.11 AM SUNDAY    22-FEBRUARY -2026 11:43.11 AM SUNDAY
+
+SQL> REM DATE ARITHMETIC :
+SQL>
+SQL> REM DATE HAS 7 PARTS/COMPONENTS/INTERVALS : CENTURY   YEAR   MONTH    DATE/DAY NUMBER    HOUR(24)   MINUTE    SECOND
+SQL>
+SQL> REM DATE VALUES                           : 20        26     02       22                 11         43        11
+SQL>
+SQL>
+SQL> REM WE CAN ADD/SUBTRACT ALL ABOVE 7 INTERVALS TO/FROM DATE VALUE.
+SQL>
+SQL> REM DATE ARITHMETICS : 1 DATE + INTERVAL 2 DATE - INTERVAL 3 DATE - DATE
+SQL>
+SQL>
+SQL>
+SQL> SELECT SYSDATE , SYSDATE + 3 , SYSDATE - 2 FROM DUAL;
+
+SYSDATE                                 SYSDATE+3                               SYSDATE-2
+--------------------------------------- --------------------------------------- ---------------------------------------
+22-FEBRUARY -2026 11:51.19 AM SUNDAY    25-FEBRUARY -2026 11:51.19 AM WEDNESDAY 20-FEBRUARY -2026 11:51.19 AM FRIDAY
+
+SQL> REM 1 DAY = 24 HOURS = 24 * 60 = 1440 MINUTES = 24 * 60 * 60 = 86400 SECONDS
+SQL>
+SQL> REM 1 DAY = 24 HOURS = 1440 MINUTES = 86400 SECONDS
+SQL>
+SQL> SELECT SYSDATE , SYSDATE + (3/24) , SYSDATE - (2/24) FROM DUAL;
+
+SYSDATE                                 SYSDATE+(3/24)                          SYSDATE-(2/24)
+--------------------------------------- --------------------------------------- ---------------------------------------
+22-FEBRUARY -2026 11:54.03 AM SUNDAY    22-FEBRUARY -2026 02:54.03 PM SUNDAY    22-FEBRUARY -2026 09:54.03 AM SUNDAY
+
+SQL> SELECT SYSDATE , SYSDATE + (3/1440) , SYSDATE - (2/(24*60)) FROM DUAL;
+
+SYSDATE                                 SYSDATE+(3/1440)                        SYSDATE-(2/(24*60))
+--------------------------------------- --------------------------------------- ---------------------------------------
+22-FEBRUARY -2026 11:55.42 AM SUNDAY    22-FEBRUARY -2026 11:58.42 AM SUNDAY    22-FEBRUARY -2026 11:53.42 AM SUNDAY
+
+SQL> SELECT SYSDATE , SYSDATE + (3/86400) , SYSDATE - (2/(24*60*60)) FROM DUAL;
+
+SYSDATE                                 SYSDATE+(3/86400)                       SYSDATE-(2/(24*60*60))
+--------------------------------------- --------------------------------------- ---------------------------------------
+22-FEBRUARY -2026 11:56.04 AM SUNDAY    22-FEBRUARY -2026 11:56.07 AM SUNDAY    22-FEBRUARY -2026 11:56.02 AM SUNDAY
+
+SQL> REM DISPLAY SYSDATE AND ADD 2 HOURS AND SUBTRACT 10 MINUTES
+SQL>
+SQL> SELECT SYSDATE , SYSDATE + (2/24) - (10/1440) FROM DUAL;
+
+SYSDATE                                 SYSDATE+(2/24)-(10/1440)
+--------------------------------------- ---------------------------------------
+22-FEBRUARY -2026 11:57.12 AM SUNDAY    22-FEBRUARY -2026 01:47.12 PM SUNDAY
+
+SQL>
+SQL> REM 1 ADD 10 MINUTES TO CURRENT_DATE
+SQL>
+SQL> REM 2 SUBSTRACT 40 SECONDS FROM SYSDATE
+SQL>
+SQL> REM 3 ADD 2 DAYS AND 3 HOURS : CURRENT_DATE
+SQL>
+SQL> REM 4 SUBSTRACT 3 HOURS AND 10 SECONDS FROM CURRENT_DATE
+SQL>
+SQL> REM 5 ADD 5 DAYS , SUBTRACT 10 MINUTES , ADD 20 SECONDS AND SUBTRACT 4 HOURS : SYSDATE
+SQL>
+SQL>
+SQL>
+SQL> REM ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MONTH-RRRR HH:MI.SS AM DAY';
+SQL>
+SQL>
+SQL> REM 1 ADD 10 MINUTES TO CURRENT_DATE
+SQL>
+SQL> SELECT CURRENT_DATE , CURRENT_DATE + (10/1440) FROM DUAL;
+
+CURRENT_DATE                            CURRENT_DATE+(10/1440)
+--------------------------------------- ---------------------------------------
+22-FEBRUARY -2026 12:13.54 PM SUNDAY    22-FEBRUARY -2026 12:23.54 PM SUNDAY
+
+SQL> REM 2 SUBSTRACT 40 SECONDS FROM SYSDATE
+SQL>
+SQL> SELECT CURRENT_DATE , CURRENT_DATE - (40/86400) FROM DUAL;
+
+CURRENT_DATE                            CURRENT_DATE-(40/86400)
+--------------------------------------- ---------------------------------------
+22-FEBRUARY -2026 12:14.10 PM SUNDAY    22-FEBRUARY -2026 12:13.30 PM SUNDAY
+
+SQL> REM 3 ADD 2 DAYS AND 3 HOURS : CURRENT_DATE
+SQL>
+SQL> SELECT CURRENT_DATE , CURRENT_DATE + 2 + (3/24) FROM DUAL;
+
+CURRENT_DATE                            CURRENT_DATE+2+(3/24)
+--------------------------------------- ---------------------------------------
+22-FEBRUARY -2026 12:14.43 PM SUNDAY    24-FEBRUARY -2026 03:14.43 PM TUESDAY
+
+SQL> REM 4 SUBSTRACT 3 HOURS AND 10 SECONDS FROM CURRENT_DATE
+SQL>
+SQL> SELECT CURRENT_DATE , CURRENT_DATE - (3/24) - (10/86400) FROM DUAL;
+
+CURRENT_DATE                            CURRENT_DATE-(3/24)-(10/86400)
+--------------------------------------- ---------------------------------------
+22-FEBRUARY -2026 12:15.08 PM SUNDAY    22-FEBRUARY -2026 09:14.58 AM SUNDAY
+
+SQL> REM 5 ADD 5 DAYS , SUBTRACT 10 MINUTES , ADD 20 SECONDS AND SUBTRACT 4 HOURS : SYSDATE
+SQL>
+SQL> SELECT SYSDATE , SYSDATE + 5 - (10/1440) + (20/86400) - (4/24) FROM DUAL;
+
+SYSDATE                                 SYSDATE+5-(10/1440)+(20/86400)-(4/24)
+--------------------------------------- ---------------------------------------
+22-FEBRUARY -2026 12:15.35 PM SUNDAY    27-FEBRUARY -2026 08:05.55 AM FRIDAY
+
+SQL> REM 1 REMOVE ALL DIGITS AFTER . FROM 3456.89
+SQL>
+SQL> REM 2 DEVELOP RESULT 10000 FROM 5678.90.
+SQL>
+SQL> REM 3 FIND REMAINDER OF 40 BY 7.
+SQL>
+SQL> REM 4 ROUND OFF THE 3456.7891 VALUE BY KEEPING 2 DIGITS AFTER DECIMAL POINT.
+SQL>
+SQL> REM 5 FIND THE INTEGER OF 5678.99
+SQL>
+SQL>
+SQL> REM 1 REMOVE ALL DIGITS AFTER . FROM 3456.89
+SQL>
+SQL> SELECT 3456.89 , TRUNC(3456.89) FROM DUAL;
+
+   3456.89 TRUNC(3456.89)
+---------- --------------
+   3456.89           3456
+
+SQL> REM 2 DEVELOP RESULT 10000 FROM 5678.90.
+SQL>
+SQL> SELECT ROUND(5678.90.,-4) FROM DUAL;
+SELECT ROUND(5678.90.,-4) FROM DUAL
+                    *
+ERROR at line 1:
+ORA-00907: missing right parenthesis
+
+
+SQL> SELECT ROUND(5678.90,-4) FROM DUAL;
+
+ROUND(5678.90,-4)
+-----------------
+            10000
+
+SQL> REM 3 FIND REMAINDER OF 40 BY 7.
+SQL>
+SQL> SELECT MOD(40,7) FROM DUAL;
+
+ MOD(40,7)
+----------
+         5
+
+SQL> REM 4 ROUND OFF THE 3456.7891 VALUE BY KEEPING 2 DIGITS AFTER DECIMAL POINT.
+SQL>
+SQL> SELECT ROUND(3456.7891,2) FROM DUAL;
+
+ROUND(3456.7891,2)
+------------------
+           3456.79
+
+SQL> REM 5 FIND THE INTEGER OF 5678.99
+SQL>
+SQL> SELECT TRUNC( 5678.99), FLOOR( 5678.99) FROM DUAL;
+
+TRUNC(5678.99) FLOOR(5678.99)
+-------------- --------------
+          5678           5678

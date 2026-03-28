@@ -1,0 +1,679 @@
+SQL> 
+SQL> CL SCR
+
+SQL> REM LIST OF VALID NUMBER FORMAT CHARACTERS :  9 0   . ,   D G   $ L U   S
+SQL> 
+SQL> REM 1 10000 + 98765
+SQL> 
+SQL> REM 2 10000 + 98765.43
+SQL> 
+SQL> REM 3 10000 + '98,765.43'
+SQL> 
+SQL> REM 4 10000 + '98,765.43' (DON'T USE , AND . IN FORMAT)
+SQL> 
+SQL> REM 5 10000 + '98,765'
+SQL> 
+SQL> REM 6 10000 + '98765.43'
+SQL> 
+SQL> REM 7 10000 + '+98765'
+SQL> 
+SQL> REM 8 10000 + '98765-'
+SQL> 
+SQL> REM 9 10000 + '$98765' (5 STYLES)
+SQL> 
+SQL> REM 10 10000 + '98765$' (2 STYLES)
+SQL> 
+SQL> REM SELECT * FROM NLS_SESSION_PARAMETERS;
+SQL> 
+SQL> REM COL PARAMETER FORMAT A30
+SQL> 
+SQL> REM COL VALUE FORMAT A30
+SQL> 
+SQL> REM ALTER SESSION SET parametet = 'value';
+SQL> 
+SQL> 
+SQL> 
+SQL> REM 1 10000 + 98765
+SQL> 
+SQL> SELECT 10000 + 98765 FROM DUAL;
+
+10000+98765                                                                                                                                                                                             
+-----------                                                                                                                                                                                             
+     108765                                                                                                                                                                                             
+
+SQL> REM 2 10000 + 98765.43
+SQL> 
+SQL> SELECT 10000 + 98765.43 FROM DUAL;
+
+10000+98765.43                                                                                                                                                                                          
+--------------                                                                                                                                                                                          
+     108765.43                                                                                                                                                                                          
+
+SQL> REM 3 10000 + '98,765.43'
+SQL> 
+SQL> SELECT 10000 + TO_NUMBER('98,765.43','99,999.99') FROM DUAL;
+
+10000+TO_NUMBER('98,765.43','99,999.99')                                                                                                                                                                
+----------------------------------------                                                                                                                                                                
+                               108765.43                                                                                                                                                                
+
+SQL> REM 4 10000 + '98,765.43' (DON'T USE , AND . IN FORMAT)
+SQL> 
+SQL> SELECT 10000 + TO_NUMBER('98,765.43','00G000D00') FROM DUAL;
+
+10000+TO_NUMBER('98,765.43','00G000D00')                                                                                                                                                                
+----------------------------------------                                                                                                                                                                
+                               108765.43                                                                                                                                                                
+
+SQL> REM 5 10000 + '98,765'
+SQL> 
+SQL> SELECT 10000 + TO_NUMBER('98,765','99,000') FROM DUAL;
+
+10000+TO_NUMBER('98,765','99,000')                                                                                                                                                                      
+----------------------------------                                                                                                                                                                      
+                            108765                                                                                                                                                                      
+
+SQL> REM 6 10000 + '98765.43'
+SQL> 
+SQL> SELECT 10000 + TO_NUMBER('98765.43','00000D99') FROM DUAL;
+
+10000+TO_NUMBER('98765.43','00000D99')                                                                                                                                                                  
+--------------------------------------                                                                                                                                                                  
+                             108765.43                                                                                                                                                                  
+
+SQL> REM 7 10000 + '+98765'
+SQL> 
+SQL> SELECT 10000 + TO_NUMBER('+98765','S00000') FROM DUAL;
+
+10000+TO_NUMBER('+98765','S00000')                                                                                                                                                                      
+----------------------------------                                                                                                                                                                      
+                            108765                                                                                                                                                                      
+
+SQL> SELECT 10000 + '+98765' FROM DUAL;
+
+10000+'+98765'                                                                                                                                                                                          
+--------------                                                                                                                                                                                          
+        108765                                                                                                                                                                                          
+
+SQL> REM 8 10000 + '98765-'
+SQL> 
+SQL> SELECT 10000 + TO_NUMBER('98765-','00000S') FROM DUAL;
+
+10000+TO_NUMBER('98765-','00000S')                                                                                                                                                                      
+----------------------------------                                                                                                                                                                      
+                            -88765                                                                                                                                                                      
+
+SQL> REM 9 10000 + '$98765' (5 STYLES)
+SQL> 
+SQL> SELECT 10000 + TO_NUMBER('$98765','$99999') FROM DUAL;
+
+10000+TO_NUMBER('$98765','$99999')                                                                                                                                                                      
+----------------------------------                                                                                                                                                                      
+                            108765                                                                                                                                                                      
+
+SQL> SELECT 10000 + TO_NUMBER('$98765','99$999') FROM DUAL;
+
+10000+TO_NUMBER('$98765','99$999')                                                                                                                                                                      
+----------------------------------                                                                                                                                                                      
+                            108765                                                                                                                                                                      
+
+SQL> SELECT 10000 + TO_NUMBER('$98765','99999$') FROM DUAL;
+
+10000+TO_NUMBER('$98765','99999$')                                                                                                                                                                      
+----------------------------------                                                                                                                                                                      
+                            108765                                                                                                                                                                      
+
+SQL> SELECT 10000 + TO_NUMBER('$98765','L99999') FROM DUAL;
+
+10000+TO_NUMBER('$98765','L99999')                                                                                                                                                                      
+----------------------------------                                                                                                                                                                      
+                            108765                                                                                                                                                                      
+
+SQL> SELECT 10000 + TO_NUMBER('$98765','U99999') FROM DUAL;
+
+10000+TO_NUMBER('$98765','U99999')                                                                                                                                                                      
+----------------------------------                                                                                                                                                                      
+                            108765                                                                                                                                                                      
+
+SQL> REM 10 10000 + '98765$' (2 STYLES)
+SQL> 
+SQL> SELECT 10000 + TO_NUMBER'98765$','99999L') FROM DUAL;
+SELECT 10000 + TO_NUMBER'98765$','99999L') FROM DUAL
+                        *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> SELECT 10000 + TO_NUMBER('98765$','99999L') FROM DUAL;
+
+10000+TO_NUMBER('98765$','99999L')                                                                                                                                                                      
+----------------------------------                                                                                                                                                                      
+                            108765                                                                                                                                                                      
+
+SQL> SELECT 10000 + TO_NUMBER('98765$','99999U') FROM DUAL;
+
+10000+TO_NUMBER('98765$','99999U')                                                                                                                                                                      
+----------------------------------                                                                                                                                                                      
+                            108765                                                                                                                                                                      
+
+SQL> REM 1 10000 + 'Rs.2345.67'
+SQL> 
+SQL> REM 2 10000 + '2345.67Ÿ' (DON'T USE . AND , AS FORMAT CHARACTER)
+SQL> 
+SQL> REM 3 10000 + '2345^67'
+SQL> 
+SQL> REM 4 10000 + '12.345,67'
+SQL> 
+SQL> REM 5 10000 + '12#345~67'  (WITHOUT USING ALTER SESSION COMMAND)
+SQL> 
+SQL> REM SELECT * FROM NLS_SESSION_PARAMETERS;
+SQL> 
+SQL> REM COL PARAMETER FORMAT A30
+SQL> 
+SQL> REM COL VALUE FORMAT A30
+SQL> 
+SQL> REM ALTER SESSION SET parametet = 'value';
+SQL> 
+SQL> REM LIST OF VALID NUMBER FORMAT CHARACTERS :  9 0   . ,   D G   $ L U   S
+SQL> 
+SQL> REM  = 157
+SQL> 
+SQL> REM Ÿ = 159
+SQL> 
+SQL> REM Ÿ = FLORIN : CURRENCY OF SWITZERLAND
+SQL> 
+SQL> 
+SQL> 
+SQL> REM 1 10000 + 'Rs.2345.67'
+SQL> 
+SQL> ALTER SESSION SET NLS_CURRENCY = 'Rs.';
+
+Session altered.
+
+SQL> SELECT 10000 + TO_NUMBER('Rs.2345.67','L9999.99') FROM DUAL;
+
+10000+TO_NUMBER('RS.2345.67','L9999.99')                                                                                                                                                                
+----------------------------------------                                                                                                                                                                
+                                12345.67                                                                                                                                                                
+
+SQL> REM 2 10000 + '2345.67Ÿ' (DON'T USE . AND , AS FORMAT CHARACTER)
+SQL> 
+SQL> ALTER SESSION SET NLS_DUAL_CURRENCY = 'Ÿ';
+
+Session altered.
+
+SQL> SELECT 10000 + TO_NUMBER('2345.67Ÿ','9999.99U') FROM DUAL;
+
+10000+TO_NUMBER('2345.67Ÿ','9999.99U')                                                                                                                                                                  
+--------------------------------------                                                                                                                                                                  
+                              12345.67                                                                                                                                                                  
+
+SQL> REM 3 10000 + '2345^67'
+SQL> 
+SQL> ALTER SESSION SET NLS_NUMERIC_CHARACTERS  = '^,';
+
+Session altered.
+
+SQL> SELECT 10000 + TO_NUMBER('2345^67','9999D99') FROM DUAL;
+
+10000+TO_NUMBER('2345^67','9999D99')                                                                                                                                                                    
+------------------------------------                                                                                                                                                                    
+                            12345^67                                                                                                                                                                    
+
+SQL> REM 5 10000 + '12#345~67'  (WITHOUT USING ALTER SESSION COMMAND)
+SQL> 
+SQL> REM 4 10000 + '12.345,67'
+SQL> 
+SQL> ALTER SESSION SET NLS_NUMERIC_CHARACTERS = ',.';
+
+Session altered.
+
+SQL> SELECT 10000 + TO_NUMBER('12.345,67','99G999D99') FROM DUAL;
+
+10000+TO_NUMBER('12.345,67','99G999D99')                                                                                                                                                                
+----------------------------------------                                                                                                                                                                
+                                22345,67                                                                                                                                                                
+
+SQL> REM 5 10000 + '12#345~67'  (WITHOUT USING ALTER SESSION COMMAND)
+SQL> 
+SQL> SELECT 10000 + TO_NUMBER('12#345~67','U99G000D09','NLS_DUAL_CURRENCY= NLS_NUMERIC_CHARACTERS=~#') FROM DUAL;
+
+10000+TO_NUMBER('12#345~67','U99G000D09','NLS_DUAL_CURRENCY=NLS_NUMERIC_CHARACTERS=~#')                                                                                                               
+-----------------------------------------------------------------------------------------                                                                                                               
+                                                                                 22345,67                                                                                                               
+
+SQL> SELECT 10000 + TO_NUMBER('12#345~67','U99G000D09','NLS_DUAL_CURRENCY= NLS_NUMERIC_CHARACTERS=~#') RESULT FROM DUAL;
+
+    RESULT                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+  22345,67                                                                                                                                                                                              
+
+SQL> SELECT 10000 + TO_NUMBER('12#345~67','L00G000D00','NLS_CURRENCY= NLS_NUMERIC_CHARACTERS=~#') FROM DUAL;
+
+10000+TO_NUMBER('12#345~67','L00G000D00','NLS_CURRENCY=NLS_NUMERIC_CHARACTERS=~#')                                                                                                                    
+------------------------------------------------------------------------------------                                                                                                                    
+                                                                            22345,67                                                                                                                    
+
+SQL> REM DISPLAY THOSE WHO GET HIGHER SALARY THAN 10000
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > 10000;
+
+FIRST_NAME          SALARY                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Steven               24000                                                                                                                                                                              
+Neena                17000                                                                                                                                                                              
+Lex                  17000                                                                                                                                                                              
+Eleni                10500                                                                                                                                                                              
+Ellen                11000                                                                                                                                                                              
+Michael              13000                                                                                                                                                                              
+Shelley              12000                                                                                                                                                                              
+
+7 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > '10000';
+
+FIRST_NAME          SALARY                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Steven               24000                                                                                                                                                                              
+Neena                17000                                                                                                                                                                              
+Lex                  17000                                                                                                                                                                              
+Eleni                10500                                                                                                                                                                              
+Ellen                11000                                                                                                                                                                              
+Michael              13000                                                                                                                                                                              
+Shelley              12000                                                                                                                                                                              
+
+7 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > '10000.00';
+SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > '10000.00'
+                                                         *
+ERROR at line 1:
+ORA-01722: invalid number 
+
+
+SQL> CONN SCOTT/TIGER
+Connected.
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > '10000.00';
+
+FIRST_NAME          SALARY                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Steven               24000                                                                                                                                                                              
+Neena                17000                                                                                                                                                                              
+Lex                  17000                                                                                                                                                                              
+Eleni                10500                                                                                                                                                                              
+Ellen                11000                                                                                                                                                                              
+Michael              13000                                                                                                                                                                              
+Shelley              12000                                                                                                                                                                              
+
+7 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > '+10000.00';
+
+FIRST_NAME          SALARY                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Steven               24000                                                                                                                                                                              
+Neena                17000                                                                                                                                                                              
+Lex                  17000                                                                                                                                                                              
+Eleni                10500                                                                                                                                                                              
+Ellen                11000                                                                                                                                                                              
+Michael              13000                                                                                                                                                                              
+Shelley              12000                                                                                                                                                                              
+
+7 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > '-10000.00';
+
+FIRST_NAME          SALARY                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Steven               24000                                                                                                                                                                              
+Neena                17000                                                                                                                                                                              
+Lex                  17000                                                                                                                                                                              
+Alexander             9000                                                                                                                                                                              
+Bruce                 6000                                                                                                                                                                              
+Diana                 4200                                                                                                                                                                              
+Kevin                 5800                                                                                                                                                                              
+Trenna                3500                                                                                                                                                                              
+Curtis                3100                                                                                                                                                                              
+Randall               2600                                                                                                                                                                              
+Peter                 2500                                                                                                                                                                              
+Eleni                10500                                                                                                                                                                              
+Ellen                11000                                                                                                                                                                              
+Jonathon              8600                                                                                                                                                                              
+Kimerely              7000                                                                                                                                                                              
+Jennifer              4400                                                                                                                                                                              
+Michael              13000                                                                                                                                                                              
+Pat                   6000                                                                                                                                                                              
+Shelley              12000                                                                                                                                                                              
+William               8300                                                                                                                                                                              
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > '10000.00+';
+SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > '10000.00+'
+                                                         *
+ERROR at line 1:
+ORA-01722: invalid number 
+
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > '10000.00-';
+SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > '10000.00-'
+                                                         *
+ERROR at line 1:
+ORA-01722: invalid number 
+
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > '10,000';
+SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > '10,000'
+                                                         *
+ERROR at line 1:
+ORA-01722: invalid number 
+
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > '$10000';
+SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > '$10000'
+                                                         *
+ERROR at line 1:
+ORA-01722: invalid number 
+
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > TO_NUMBER('10000.00+','99999.99');
+SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > TO_NUMBER('10000.00+','99999.99')
+                                                                   *
+ERROR at line 1:
+ORA-01722: invalid number 
+
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > TO_NUMBER('10000.00+','99999.99S');
+
+FIRST_NAME          SALARY                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Steven               24000                                                                                                                                                                              
+Neena                17000                                                                                                                                                                              
+Lex                  17000                                                                                                                                                                              
+Eleni                10500                                                                                                                                                                              
+Ellen                11000                                                                                                                                                                              
+Michael              13000                                                                                                                                                                              
+Shelley              12000                                                                                                                                                                              
+
+7 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > TO_NUMBER('10000.00-','99999.99S');
+
+FIRST_NAME          SALARY                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Steven               24000                                                                                                                                                                              
+Neena                17000                                                                                                                                                                              
+Lex                  17000                                                                                                                                                                              
+Alexander             9000                                                                                                                                                                              
+Bruce                 6000                                                                                                                                                                              
+Diana                 4200                                                                                                                                                                              
+Kevin                 5800                                                                                                                                                                              
+Trenna                3500                                                                                                                                                                              
+Curtis                3100                                                                                                                                                                              
+Randall               2600                                                                                                                                                                              
+Peter                 2500                                                                                                                                                                              
+Eleni                10500                                                                                                                                                                              
+Ellen                11000                                                                                                                                                                              
+Jonathon              8600                                                                                                                                                                              
+Kimerely              7000                                                                                                                                                                              
+Jennifer              4400                                                                                                                                                                              
+Michael              13000                                                                                                                                                                              
+Pat                   6000                                                                                                                                                                              
+Shelley              12000                                                                                                                                                                              
+William               8300                                                                                                                                                                              
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > TO_NUMBER('10,000','99,999');
+
+FIRST_NAME          SALARY                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Steven               24000                                                                                                                                                                              
+Neena                17000                                                                                                                                                                              
+Lex                  17000                                                                                                                                                                              
+Eleni                10500                                                                                                                                                                              
+Ellen                11000                                                                                                                                                                              
+Michael              13000                                                                                                                                                                              
+Shelley              12000                                                                                                                                                                              
+
+7 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > TO_NUMBER('10,000','99G999');
+
+FIRST_NAME          SALARY                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Steven               24000                                                                                                                                                                              
+Neena                17000                                                                                                                                                                              
+Lex                  17000                                                                                                                                                                              
+Eleni                10500                                                                                                                                                                              
+Ellen                11000                                                                                                                                                                              
+Michael              13000                                                                                                                                                                              
+Shelley              12000                                                                                                                                                                              
+
+7 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > TO_NUMBER('$10000','$00000');
+
+FIRST_NAME          SALARY                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Steven               24000                                                                                                                                                                              
+Neena                17000                                                                                                                                                                              
+Lex                  17000                                                                                                                                                                              
+Eleni                10500                                                                                                                                                                              
+Ellen                11000                                                                                                                                                                              
+Michael              13000                                                                                                                                                                              
+Shelley              12000                                                                                                                                                                              
+
+7 rows selected.
+
+SQL> REM TO_DATE :
+SQL> 
+SQL> REM TO_DATE : TO CONVERT CHARACTER TYPE VALUE INTO DATE TYPE VALUE.
+SQL> 
+SQL> REM PURPOSE : 1 FOR CALCULATION 2 FOR COMPARISON
+SQL> 
+SQL> REM DISPLAY NUMBER OF DAYS WORKED BY EACH EMPLOYEE
+SQL> 
+SQL> SELECT FIRST_NAME , CURRENT_dATE , HIRE_DATE , CURRENT_DATE - HIRE_DATE DAYS_WORKED FROM EMPLOYEES;
+
+FIRST_NAME      CURRENT_D HIRE_DATE DAYS_WORKED                                                                                                                                                         
+--------------- --------- --------- -----------                                                                                                                                                         
+Steven          15-MAR-26 17-JUL-87  14121.5132                                                                                                                                                         
+Neena           15-MAR-26 21-SEP-89  13324.5132                                                                                                                                                         
+Lex             15-MAR-26 13-JAN-93  12114.5132                                                                                                                                                         
+Alexander       15-MAR-26 03-JAN-90  13220.5132                                                                                                                                                         
+Bruce           15-MAR-26 21-MAY-91  12717.5132                                                                                                                                                         
+Diana           15-MAR-26 07-FEB-99  9898.51323                                                                                                                                                         
+Kevin           15-MAR-26 16-NOV-99  9616.51323                                                                                                                                                         
+Trenna          15-MAR-26 17-OCT-95  11107.5132                                                                                                                                                         
+Curtis          15-MAR-26 29-JAN-97  10637.5132                                                                                                                                                         
+Randall         15-MAR-26 15-MAR-98  10227.5132                                                                                                                                                         
+Peter           15-MAR-26 09-JUL-98  10111.5132                                                                                                                                                         
+Eleni           15-MAR-26 29-JAN-00  9542.51323                                                                                                                                                         
+Ellen           15-MAR-26 11-MAY-96  10900.5132                                                                                                                                                         
+Jonathon        15-MAR-26 24-MAR-98  10218.5132                                                                                                                                                         
+Kimerely        15-MAR-26 24-MAY-99  9792.51323                                                                                                                                                         
+Jennifer        15-MAR-26 17-SEP-87  14059.5132                                                                                                                                                         
+Michael         15-MAR-26 17-FEB-96  10984.5132                                                                                                                                                         
+Pat             15-MAR-26 17-AUG-97  10437.5132                                                                                                                                                         
+Shelley         15-MAR-26 07-JUN-94  11604.5132                                                                                                                                                         
+William         15-MAR-26 07-JUN-94  11604.5132                                                                                                                                                         
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , CURRENT_dATE , HIRE_DATE , TRUNC(CURRENT_DATE - HIRE_DATE) DAYS_WORKED FROM EMPLOYEES;
+
+FIRST_NAME      CURRENT_D HIRE_DATE DAYS_WORKED                                                                                                                                                         
+--------------- --------- --------- -----------                                                                                                                                                         
+Steven          15-MAR-26 17-JUL-87       14121                                                                                                                                                         
+Neena           15-MAR-26 21-SEP-89       13324                                                                                                                                                         
+Lex             15-MAR-26 13-JAN-93       12114                                                                                                                                                         
+Alexander       15-MAR-26 03-JAN-90       13220                                                                                                                                                         
+Bruce           15-MAR-26 21-MAY-91       12717                                                                                                                                                         
+Diana           15-MAR-26 07-FEB-99        9898                                                                                                                                                         
+Kevin           15-MAR-26 16-NOV-99        9616                                                                                                                                                         
+Trenna          15-MAR-26 17-OCT-95       11107                                                                                                                                                         
+Curtis          15-MAR-26 29-JAN-97       10637                                                                                                                                                         
+Randall         15-MAR-26 15-MAR-98       10227                                                                                                                                                         
+Peter           15-MAR-26 09-JUL-98       10111                                                                                                                                                         
+Eleni           15-MAR-26 29-JAN-00        9542                                                                                                                                                         
+Ellen           15-MAR-26 11-MAY-96       10900                                                                                                                                                         
+Jonathon        15-MAR-26 24-MAR-98       10218                                                                                                                                                         
+Kimerely        15-MAR-26 24-MAY-99        9792                                                                                                                                                         
+Jennifer        15-MAR-26 17-SEP-87       14059                                                                                                                                                         
+Michael         15-MAR-26 17-FEB-96       10984                                                                                                                                                         
+Pat             15-MAR-26 17-AUG-97       10437                                                                                                                                                         
+Shelley         15-MAR-26 07-JUN-94       11604                                                                                                                                                         
+William         15-MAR-26 07-JUN-94       11604                                                                                                                                                         
+
+20 rows selected.
+
+SQL> SELECT '23-JUL-07' - '01-JUN-07' FROM DUAL;
+SELECT '23-JUL-07' - '01-JUN-07' FROM DUAL
+       *
+ERROR at line 1:
+ORA-01722: invalid number 
+
+
+SQL> SELECT '23-07-07' - '01-06-07' FROM DUAL;
+SELECT '23-07-07' - '01-06-07' FROM DUAL
+       *
+ERROR at line 1:
+ORA-01722: invalid number 
+
+
+SQL> SELECT '230707' - '010607' FROM DUAL;
+
+'230707'-'010607'                                                                                                                                                                                       
+-----------------                                                                                                                                                                                       
+           220100                                                                                                                                                                                       
+
+SQL> REM TO_DATE SYNTAX : TO_DATE('value','format')
+SQL> 
+SQL> REM LIST OF VALID DATE FORMAT CHARACTERS : DD MON MONTH MM RM YY YYYY RR RRRR
+SQL> 
+SQL> SELECT TO_DATE('23-JUL-07') - TO_DATE('01-JUN-07') FROM DUAL;
+
+TO_DATE('23-JUL-07')-TO_DATE('01-JUN-07')                                                                                                                                                               
+-----------------------------------------                                                                                                                                                               
+                                       52                                                                                                                                                               
+
+SQL> SELECT TO_DATE('23-JUL-2007') - TO_DATE('01-JUN-2007') FROM DUAL;
+
+TO_DATE('23-JUL-2007')-TO_DATE('01-JUN-2007')                                                                                                                                                           
+---------------------------------------------                                                                                                                                                           
+                                           52                                                                                                                                                           
+
+SQL> SELECT TO_DATE('23-JULY-2007') - TO_DATE('01-JUNE-2007') FROM DUAL;
+
+TO_DATE('23-JULY-2007')-TO_DATE('01-JUNE-2007')                                                                                                                                                         
+-----------------------------------------------                                                                                                                                                         
+                                             52                                                                                                                                                         
+
+SQL> SELECT TO_DATE('23-JULY-2007') - TO_DATE('01-06-2007') FROM DUAL;
+SELECT TO_DATE('23-JULY-2007') - TO_DATE('01-06-2007') FROM DUAL
+                                         *
+ERROR at line 1:
+ORA-01843: not a valid month 
+
+
+SQL> SELECT TO_DATE('23-VII-2007') - TO_DATE('01-06-2007') FROM DUAL;
+SELECT TO_DATE('23-VII-2007') - TO_DATE('01-06-2007') FROM DUAL
+               *
+ERROR at line 1:
+ORA-01843: not a valid month 
+
+
+SQL> SELECT TO_DATE('23-VII-2007','DD-RM-RRRR') - TO_DATE('01-06-2007','DD-MM-YYYY') FROM DUAL;
+
+TO_DATE('23-VII-2007','DD-RM-RRRR')-TO_DATE('01-06-2007','DD-MM-YYYY')                                                                                                                                  
+----------------------------------------------------------------------                                                                                                                                  
+                                                                    52                                                                                                                                  
+
+SQL> REM LIST OF VALID DATE FORMAT CHARACTERS : DD MON MONTH MM RM YY YYYY RR RRRR
+SQL> 
+SQL> REM DD-MON-RR / # MONTH mon Mon month Month MoNtH rrrr yyyy rr yy
+SQL> 
+SQL> 
+SQL> REM 1 FIND YOUR AGE IN NUMBER OF DAYS.
+SQL> 
+SQL> REM 2 CALCULATE : 12-JUN-90 - 23-AUGust-1985
+SQL> 
+SQL> REM 3 CALCULATE : 11-NOVEMBER-85 - 1990-07-24
+SQL> 
+SQL> REM 4 DISPLAY NUMBER OF WEEKS WORKED BY EACH EMPLOYEE
+SQL> 
+SQL> REM 5 DISPLAY DIFFERENCE IN DAYS BETWEEN YOUR MOTHER AND FATHER'S BIRTH DATE (USE DATE INCOMPATIBLE FORMATS)
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> REM 1 FIND YOUR AGE IN NUMBER OF DAYS.
+SQL> 
+SQL> SELECT SYSDATE - TO_DATE('15-JAN-1971') FROM DUAL;
+
+SYSDATE-TO_DATE('15-JAN-1971')                                                                                                                                                                          
+------------------------------                                                                                                                                                                          
+                    20148.5329                                                                                                                                                                          
+
+SQL> SELECT TRUNC(SYSDATE - TO_DATE('15-JAN-1971')) FROM DUAL;
+
+TRUNC(SYSDATE-TO_DATE('15-JAN-1971'))                                                                                                                                                                   
+-------------------------------------                                                                                                                                                                   
+                                20148                                                                                                                                                                   
+
+SQL> REM 2 CALCULATE : 12-JUN-90 - 23-AUGust-1985
+SQL> 
+SQL> SELECT TO_DATE('12-JUN-90') - TO_DATE('23-AUGust-1985') FROM DUAL;
+
+TO_DATE('12-JUN-90')-TO_DATE('23-AUGUST-1985')                                                                                                                                                          
+----------------------------------------------                                                                                                                                                          
+                                          1754                                                                                                                                                          
+
+SQL> REM 3 CALCULATE : 11-NOVEMBER-85 - 1990-07-24
+SQL> 
+SQL> SELECT TO_DATE('11-NOVEMBER-85') - TO_DATE('1990-07-24','RRRR-MM-DD') FROM DUAL;
+
+TO_DATE('11-NOVEMBER-85')-TO_DATE('1990-07-24','RRRR-MM-DD')                                                                                                                                            
+------------------------------------------------------------                                                                                                                                            
+                                                       -1716                                                                                                                                            
+
+SQL> REM 4 DISPLAY NUMBER OF WEEKS WORKED BY EACH EMPLOYEE
+SQL> 
+SQL> SELECT SYSDATE , HIRE_dATE , TRUNC((SYSDATE-HIRE_DATE)/7) WEEKS_WORKED FROM EMPLOYEES;
+
+SYSDATE   HIRE_DATE WEEKS_WORKED                                                                                                                                                                        
+--------- --------- ------------                                                                                                                                                                        
+15-MAR-26 17-JUL-87         2017                                                                                                                                                                        
+15-MAR-26 21-SEP-89         1903                                                                                                                                                                        
+15-MAR-26 13-JAN-93         1730                                                                                                                                                                        
+15-MAR-26 03-JAN-90         1888                                                                                                                                                                        
+15-MAR-26 21-MAY-91         1816                                                                                                                                                                        
+15-MAR-26 07-FEB-99         1414                                                                                                                                                                        
+15-MAR-26 16-NOV-99         1373                                                                                                                                                                        
+15-MAR-26 17-OCT-95         1586                                                                                                                                                                        
+15-MAR-26 29-JAN-97         1519                                                                                                                                                                        
+15-MAR-26 15-MAR-98         1461                                                                                                                                                                        
+15-MAR-26 09-JUL-98         1444                                                                                                                                                                        
+15-MAR-26 29-JAN-00         1363                                                                                                                                                                        
+15-MAR-26 11-MAY-96         1557                                                                                                                                                                        
+15-MAR-26 24-MAR-98         1459                                                                                                                                                                        
+15-MAR-26 24-MAY-99         1398                                                                                                                                                                        
+15-MAR-26 17-SEP-87         2008                                                                                                                                                                        
+15-MAR-26 17-FEB-96         1569                                                                                                                                                                        
+15-MAR-26 17-AUG-97         1491                                                                                                                                                                        
+15-MAR-26 07-JUN-94         1657                                                                                                                                                                        
+15-MAR-26 07-JUN-94         1657                                                                                                                                                                        
+
+20 rows selected.
+
+SQL> REM 5 DISPLAY DIFFERENCE IN DAYS BETWEEN YOUR MOTHER AND FATHER'S BIRTH DATE (USE DATE INCOMPATIBLE FORMATS)
+SQL> 
+SQL> SELECT TO_DATE('15-08-1947','DD-MM-RRRR') - TO_DATE('1944-MAY-31','RRRR-MON-DD') FROM DUAL;
+
+TO_DATE('15-08-1947','DD-MM-RRRR')-TO_DATE('1944-MAY-31','RRRR-MON-DD')                                                                                                                                 
+-----------------------------------------------------------------------                                                                                                                                 
+                                                                   1171                                                                                                                                 
+
+SQL> SPOOL OFF

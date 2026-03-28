@@ -1,0 +1,111 @@
+SQL> 
+SQL> REM CENTURY TENURE YEAR QUARTER MONTH WEEK DAY HOUR MINUTE SECOND
+SQL> 
+SQL> REM 1 WEEK = 7 DAYS
+SQL> 
+SQL> REM ADD 3 WEEKS TO SYSDATE
+SQL> 
+SQL> SELECT SYSDATE , SYSDATE + (7*3) FROM DUAL;
+
+SYSDATE   SYSDATE+(                                                             
+--------- ---------                                                             
+22-FEB-26 15-MAR-26                                                             
+
+SQL> SELECT SYSDATE , SYSDATE - (7*2) FROM DUAL;
+
+SYSDATE   SYSDATE-(                                                             
+--------- ---------                                                             
+22-FEB-26 08-FEB-26                                                             
+
+SQL> REM 1 MONTH = ?? DAYS (28/29/30/31)
+SQL> 
+SQL> REM ADD_MONTHS : TO ADD/SUBTRACT MONTHS/QUARTERS/YEARS/TENURES/CENTURIES TO/FROM DATE VALUE
+SQL> 
+SQL> REM ADD 37 WEEKS TO SYSDATE
+SQL> 
+SQL> SELECT SYSDATE , SYSDATE - (7*37) FROM DUAL;
+
+SYSDATE   SYSDATE-(                                                             
+--------- ---------                                                             
+22-FEB-26 08-JUN-25                                                             
+
+SQL> 
+SQL> 
+SQL> REM CENTURY DECADE YEAR QUARTER MONTH WEEK DAY HOUR MINUTE SECOND
+SQL> 
+SQL> REM 1 QUARTER = 3 MONTHS
+SQL> 
+SQL> REM 1 YEAR = 12 MONTHS
+SQL> 
+SQL> REM 1 DECADE = 10 YEARS/120 MONTHS
+SQL> 
+SQL> REM 1 CENTURY = 100 YEARS/1200 MONTHS
+SQL> 
+SQL> 
+SQL> REM ADD 2 MONTHS TO SYSDATE AND SUBTRACT 3 MONTHS FROM SYSDATE
+SQL> 
+SQL> SELECT SYSDATE , ADD_MONTHS(SYSDATE,2) , ADD_MONTHS(SYSDATE,-3) FROM DUAL;
+
+SYSDATE   ADD_MONTH ADD_MONTH                                                   
+--------- --------- ---------                                                   
+22-FEB-26 22-APR-26 22-NOV-25                                                   
+
+SQL> REM ADD 1 QUARTER TO CURRENT_DATE
+SQL> 
+SQL> SELECT CURRENT_DATE , ADD_MONTHS(CURRENT_DATE , 3) FROM DUAL;
+
+CURRENT_D ADD_MONTH                                                             
+--------- ---------                                                             
+22-FEB-26 22-MAY-26                                                             
+
+SQL> 
+SQL> REM SUBTRACT 5 QUARTER TO CURRENT_DATE
+SQL> 
+SQL> SELECT CURRENT_DATE , ADD_MONTHS(CURRENT_DATE , -3*5) FROM DUAL;
+
+CURRENT_D ADD_MONTH                                                             
+--------- ---------                                                             
+22-FEB-26 22-NOV-24                                                             
+
+SQL> REM ADD 2 YEARS TO SYSDATE
+SQL> 
+SQL> SELECT SYSDATE , ADD_MONTHS(SYSDATE , 2*12) FROM DUAL;
+
+SYSDATE   ADD_MONTH                                                             
+--------- ---------                                                             
+22-FEB-26 22-FEB-28                                                             
+
+SQL> REM SUBTRACT 3 DECADES FROM CURRENT_DATE
+SQL> 
+SQL> SELECT CURRENT_DATE , ADD_MONTHS(CURRENT_DATE , -3*12*10) FROM DUAL;
+
+CURRENT_D ADD_MONTH                                                             
+--------- ---------                                                             
+22-FEB-26 22-FEB-96                                                             
+
+SQL> REM ADD 2 CENTURIES TO SYSDATE
+SQL> 
+SQL> SELECT SYSDATE , ADD_MONTHS(SYSDATE ,12*100) FROM DUAL;
+
+SYSDATE   ADD_MONTH                                                             
+--------- ---------                                                             
+22-FEB-26 22-FEB-26                                                             
+
+SQL> SELECT SYSDATE , ADD_MONTHS(SYSDATE ,2*12*100) FROM DUAL;
+
+SYSDATE   ADD_MONTH                                                             
+--------- ---------                                                             
+22-FEB-26 22-FEB-26                                                             
+
+SQL> ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MONTH-RRRR';
+
+Session altered.
+
+SQL> 
+SQL> SELECT SYSDATE , ADD_MONTHS(SYSDATE ,2*12*100) FROM DUAL;
+
+SYSDATE           ADD_MONTHS(SYSDAT                                             
+----------------- -----------------                                             
+22-FEBRUARY -2026 22-FEBRUARY -2226                                             
+
+SQL> SPOOL OFF

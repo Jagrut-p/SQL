@@ -1,0 +1,256 @@
+SQL> REM DISPLAY THOSE WHO REPORTS TO MANAGER_ID 100 , 124 OR 149
+SQL> select first_name, manager_id where manager id = ANY(100,124,149);
+select first_name, manager_id where manager id = ANY(100,124,149)
+                              *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> select first_name, manager_id from employees where manager id = ANY(100,124,149);
+select first_name, manager_id from employees where manager id = ANY(100,124,149)
+                                                           *
+ERROR at line 1:
+ORA-00920: invalid relational operator 
+
+
+SQL> select first_name, manager_id from employees where manager_id = ANY(100,124,149);
+
+FIRST_NAME      MANAGER_ID                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Neena                  100                                                                                                                                                                              
+Lex                    100                                                                                                                                                                              
+Kevin                  100                                                                                                                                                                              
+Trenna                 124                                                                                                                                                                              
+Curtis                 124                                                                                                                                                                              
+Randall                124                                                                                                                                                                              
+Peter                  124                                                                                                                                                                              
+Eleni                  100                                                                                                                                                                              
+Ellen                  149                                                                                                                                                                              
+Jonathon               149                                                                                                                                                                              
+Kimerely               149                                                                                                                                                                              
+Michael                100                                                                                                                                                                              
+
+12 rows selected.
+
+SQL> select first_name, manager_id from employees where manager_id = ANY(100,124,149) order by 2;
+
+FIRST_NAME      MANAGER_ID                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Eleni                  100                                                                                                                                                                              
+Kevin                  100                                                                                                                                                                              
+Michael                100                                                                                                                                                                              
+Neena                  100                                                                                                                                                                              
+Lex                    100                                                                                                                                                                              
+Peter                  124                                                                                                                                                                              
+Curtis                 124                                                                                                                                                                              
+Trenna                 124                                                                                                                                                                              
+Randall                124                                                                                                                                                                              
+Jonathon               149                                                                                                                                                                              
+Kimerely               149                                                                                                                                                                              
+Ellen                  149                                                                                                                                                                              
+
+12 rows selected.
+
+SQL> select first_name, manager_id from employees where manager_id in (100,124,149);
+
+FIRST_NAME      MANAGER_ID                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Neena                  100                                                                                                                                                                              
+Lex                    100                                                                                                                                                                              
+Kevin                  100                                                                                                                                                                              
+Trenna                 124                                                                                                                                                                              
+Curtis                 124                                                                                                                                                                              
+Randall                124                                                                                                                                                                              
+Peter                  124                                                                                                                                                                              
+Eleni                  100                                                                                                                                                                              
+Ellen                  149                                                                                                                                                                              
+Jonathon               149                                                                                                                                                                              
+Kimerely               149                                                                                                                                                                              
+Michael                100                                                                                                                                                                              
+
+12 rows selected.
+
+SQL> select first_name, manager_id from employees where manager_id in (100,124,149) order by 2;
+
+FIRST_NAME      MANAGER_ID                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Eleni                  100                                                                                                                                                                              
+Kevin                  100                                                                                                                                                                              
+Michael                100                                                                                                                                                                              
+Neena                  100                                                                                                                                                                              
+Lex                    100                                                                                                                                                                              
+Peter                  124                                                                                                                                                                              
+Curtis                 124                                                                                                                                                                              
+Trenna                 124                                                                                                                                                                              
+Randall                124                                                                                                                                                                              
+Jonathon               149                                                                                                                                                                              
+Kimerely               149                                                                                                                                                                              
+Ellen                  149                                                                                                                                                                              
+
+12 rows selected.
+
+SQL> REM DISPLAY OTHER THAN THOSE WHO WORKS IN DEPARTMENT 90,110,10
+SQL> select first_name, department_id from employees where department_id <> ALL(90,110,10);
+
+FIRST_NAME      DEPARTMENT_ID                                                                                                                                                                           
+--------------- -------------                                                                                                                                                                           
+Alexander                  60                                                                                                                                                                           
+Bruce                      60                                                                                                                                                                           
+Diana                      60                                                                                                                                                                           
+Kevin                      50                                                                                                                                                                           
+Trenna                     50                                                                                                                                                                           
+Curtis                     50                                                                                                                                                                           
+Randall                    50                                                                                                                                                                           
+Peter                      50                                                                                                                                                                           
+Eleni                      80                                                                                                                                                                           
+Ellen                      80                                                                                                                                                                           
+Jonathon                   80                                                                                                                                                                           
+Michael                    20                                                                                                                                                                           
+Pat                        20                                                                                                                                                                           
+
+13 rows selected.
+
+SQL> select first_name, department_id from employees where department_id <> ALL(90,110,10) order by 2;
+
+FIRST_NAME      DEPARTMENT_ID                                                                                                                                                                           
+--------------- -------------                                                                                                                                                                           
+Michael                    20                                                                                                                                                                           
+Pat                        20                                                                                                                                                                           
+Randall                    50                                                                                                                                                                           
+Peter                      50                                                                                                                                                                           
+Curtis                     50                                                                                                                                                                           
+Trenna                     50                                                                                                                                                                           
+Kevin                      50                                                                                                                                                                           
+Alexander                  60                                                                                                                                                                           
+Bruce                      60                                                                                                                                                                           
+Diana                      60                                                                                                                                                                           
+Jonathon                   80                                                                                                                                                                           
+Ellen                      80                                                                                                                                                                           
+Eleni                      80                                                                                                                                                                           
+
+13 rows selected.
+
+SQL> select first_name, manager_id from employess where manager_id not in (90,110,10);
+select first_name, manager_id from employess where manager_id not in (90,110,10)
+                                   *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> select first_name, manager_id from employees where manager_id not in (90,110,10);
+
+FIRST_NAME      MANAGER_ID                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Neena                  100                                                                                                                                                                              
+Lex                    100                                                                                                                                                                              
+Alexander              102                                                                                                                                                                              
+Bruce                  103                                                                                                                                                                              
+Diana                  103                                                                                                                                                                              
+Kevin                  100                                                                                                                                                                              
+Trenna                 124                                                                                                                                                                              
+Curtis                 124                                                                                                                                                                              
+Randall                124                                                                                                                                                                              
+Peter                  124                                                                                                                                                                              
+Eleni                  100                                                                                                                                                                              
+Ellen                  149                                                                                                                                                                              
+Jonathon               149                                                                                                                                                                              
+Kimerely               149                                                                                                                                                                              
+Jennifer               101                                                                                                                                                                              
+Michael                100                                                                                                                                                                              
+Pat                    201                                                                                                                                                                              
+Shelley                101                                                                                                                                                                              
+William                205                                                                                                                                                                              
+
+19 rows selected.
+
+SQL> select first_name, department_id from employees where department_id not in (90,110,10);
+
+FIRST_NAME      DEPARTMENT_ID                                                                                                                                                                           
+--------------- -------------                                                                                                                                                                           
+Alexander                  60                                                                                                                                                                           
+Bruce                      60                                                                                                                                                                           
+Diana                      60                                                                                                                                                                           
+Kevin                      50                                                                                                                                                                           
+Trenna                     50                                                                                                                                                                           
+Curtis                     50                                                                                                                                                                           
+Randall                    50                                                                                                                                                                           
+Peter                      50                                                                                                                                                                           
+Eleni                      80                                                                                                                                                                           
+Ellen                      80                                                                                                                                                                           
+Jonathon                   80                                                                                                                                                                           
+Michael                    20                                                                                                                                                                           
+Pat                        20                                                                                                                                                                           
+
+13 rows selected.
+
+SQL> select first_name, department_id from employees where department_id not in (90,110,10) order by 2;
+
+FIRST_NAME      DEPARTMENT_ID                                                                                                                                                                           
+--------------- -------------                                                                                                                                                                           
+Michael                    20                                                                                                                                                                           
+Pat                        20                                                                                                                                                                           
+Randall                    50                                                                                                                                                                           
+Peter                      50                                                                                                                                                                           
+Curtis                     50                                                                                                                                                                           
+Trenna                     50                                                                                                                                                                           
+Kevin                      50                                                                                                                                                                           
+Alexander                  60                                                                                                                                                                           
+Bruce                      60                                                                                                                                                                           
+Diana                      60                                                                                                                                                                           
+Jonathon                   80                                                                                                                                                                           
+Ellen                      80                                                                                                                                                                           
+Eleni                      80                                                                                                                                                                           
+
+13 rows selected.
+
+SQL> REM DISPLAY ALL OTHER THAN THOSE WHO REPORTS TO 124 , 149 AND 100.
+SQL> select first_name, manager_id from employees where manager_id <> ALL (124,149,100) order by 2;
+
+FIRST_NAME      MANAGER_ID                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Jennifer               101                                                                                                                                                                              
+Shelley                101                                                                                                                                                                              
+Alexander              102                                                                                                                                                                              
+Diana                  103                                                                                                                                                                              
+Bruce                  103                                                                                                                                                                              
+Pat                    201                                                                                                                                                                              
+William                205                                                                                                                                                                              
+
+7 rows selected.
+
+SQL> select first_name, manager_id from employees where manager_id not in all (124,149,100) order by 2;
+select first_name, manager_id from employees where manager_id not in all (124,149,100) order by 2
+                                                                     *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+SQL> select first_name, manager_id from employees where manager_id <> all (124,149,100) order by 2;
+
+FIRST_NAME      MANAGER_ID                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Jennifer               101                                                                                                                                                                              
+Shelley                101                                                                                                                                                                              
+Alexander              102                                                                                                                                                                              
+Diana                  103                                                                                                                                                                              
+Bruce                  103                                                                                                                                                                              
+Pat                    201                                                                                                                                                                              
+William                205                                                                                                                                                                              
+
+7 rows selected.
+
+SQL> select first_name, manager_id from employees where manager_id not in (124,149,100) order by 2;
+
+FIRST_NAME      MANAGER_ID                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Jennifer               101                                                                                                                                                                              
+Shelley                101                                                                                                                                                                              
+Alexander              102                                                                                                                                                                              
+Diana                  103                                                                                                                                                                              
+Bruce                  103                                                                                                                                                                              
+Pat                    201                                                                                                                                                                              
+William                205                                                                                                                                                                              
+
+7 rows selected.
+
+SQL> spool off

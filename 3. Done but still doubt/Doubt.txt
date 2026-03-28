@@ -1,0 +1,94 @@
+SQL> SPOOL 'D:\CH2-3.TXT'
+SQL>
+SQL> /*
+SQL>
+SQL>  REM 4 DISPLAY ALL EXCEPT FIRST 8 AND 15-20  (USER FUNCTION ,DONT' USE 'ROWS' AND 'ONLY' KEY WORDS)
+SQL>
+SQL>  REM 5 DISPLAY 10 ROWS STARTING WITH 15th ROW (USE FORMULA , DON'T USE 'WITH TIES' KEY WORDS)
+SQL>
+SQL> */
+SQL>
+SQL>
+SQL> REM 4 DISPLAY ALL FIRST 8 AND 15-20  (USER FUNCTION ,DONT' USE 'ROWS' AND 'ONLY' KEY WORDS)
+SQL>
+SQL> REM 4 DISPLAY ALL EXCEPT FIRST 8 AND 15-20  (USER FUNCTION ,DONT' USE 'ROWS' AND 'ONLY' KEY WORDS)
+SQL>
+SQL> SELECT * FROM EMPLOYEES OFFSET 8 ROWS FETCH NEXT 6 ROWS ONLY;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50
+        144 Peter           Vargas                     650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80
+        174 Ellen           Abel            EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80
+
+6 rows selected.
+SQL> SELECT * FROM EMPLOYEES OFFSET SQRT(64) ROWS FETCH NEXT SQRT(36) ROW WITH TIES;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50
+        144 Peter           Vargas                     650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80
+        174 Ellen           Abel            EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80
+
+6 rows selected.
+SQL> REM 5 DISPLAY 10 ROWS STARTING WITH 15th ROW (USE FORMULA , DON'T USE 'WITH TIES' KEY WORDS)
+SQL>
+SQL>
+SQL> SELECT * FROM EMPLOYEES OFFSET 10+4 ROWS FETCH NEXT 6+4 ROWS WITH TIES;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110
+
+6 rows selected.
+
+SQL> REM 9 DISPLAY FIRST\_NAME AND LAST\_NAME IN SINGLE COLUMN WITH PROPER COLUMN ALIAS/HEADING.
+
+SQL> select first\_name || ' ' || last\_name from employees;
+
+
+
+---
+
+
+
+7 DISPLAY FIRST\_NAME , SALARY , COMMISSION\_PCT , COMMISSION\_AMOUNT , TOTAL\_PAYMENT (SHOULD NOT DISPLAY NULL IN TOTAL\_REMUNERATION COLUMN)
+
+
+
+15 DISPLAY MUHURT 12.39 USING (+ AND ||) WITH PROPER HEADING.
+
+ 
+
+16 DISPLAY MUHURT 12.39 USING (\* AND ||) WITH PROPER HEADING.
+
+
+
+7\. select FIRST\_NAME , SALARY , COMMISSION\_PCT, salary\*commission\_pct commission\_amount, salary+ salary\*NVL(commission\_pct,0) as total\_payment from employees;
+
+
+
+#### **If used table alias than we cannot use column alias both can be**
+
+### 
+
+### **Can we only put 0 in NVL and not '-' ans cannot be - only number.**
+
+**SQL> REM CALCULATION RULES / PRECEDENCE : 1 () 2 FUNCTIONS 3 / \* 4 + - ||**
+
+
+
+
+
+
