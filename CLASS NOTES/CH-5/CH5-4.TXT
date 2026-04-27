@@ -1,0 +1,429 @@
+SQL> 
+SQL> CL SCR
+
+SQL> REM SAL_UPTO_6000_CNT    SAL_6001_9000_CNT    SAL_9001_13000_CNT    SAL_13001_ONWARDS_CNT
+SQL> 
+SQL> SELECT COUNT(CASE WHEN SALARY <= 6000 THEN '*' END) SAL_UPTO_6000_CNT,
+  2         COUNT(CASE WHEN SALARY BETWEEN 6000.01 AND 9000 THEN '*' END) SAL_6001_9000_CNT,
+  3         COUNT(CASE WHEN SALARY BETWEEN 9000.01 AND 13000 THEN '*' END) SAL_9001_13000_CNT,
+  4         COUNT(CASE WHEN SALARY >= 13000.01 THEN '*' END) SAL_13001_ONWARDS_CNT
+  5  FROM EMPLOYEES;
+
+SAL_UPTO_6000_CNT SAL_6001_9000_CNT SAL_9001_13000_CNT SAL_13001_ONWARDS_CNT                                                                                                                            
+----------------- ----------------- ------------------ ---------------------                                                                                                                            
+                9                 4                  4                     3                                                                                                                            
+
+SQL> REM 1 MGR_100_149_CNT     MGR_124_102_CNT            MGR_103_104_CNT
+SQL> 
+SQL> REM 2 MIN_SAL_DEPT_20_50   AVG_SAL_DEPT_60_110    MAX_SAL_DEPT_10_80_90
+SQL> 
+SQL> REM 3 SUM_SAL_HY_UPTO_92   CNT_SAL_HY_93_96    MAX_SAL_OTHERS
+SQL> 
+SQL> REM 4 FN_A_TO_D_CNT        FN_E_TO_H_CNT       FN_I_TO_N_CNT      FN_O_TO_T_CNT        FN_U_TO_Z_CNT
+SQL> 
+SQL> REM 5 JAN_MAR_MAY_SUM_SAL     FEB_SEP_DEC_MAX_SAL     JUN_JUL_AUG_AVG_SAL
+SQL> 
+SQL> 
+SQL> REM 1 MGR_100_149_CNT     MGR_124_102_CNT            MGR_103_104_CNT
+SQL> 
+SQL> SELECT COUNT(CASE WHEN MANAGER_ID IN (100,149) THEN '*' END) MGR_100_149_CNT,
+  2         COUNT(CASE WHEN MANAGER_ID = ANY (124,102) THEN '*' END) MGR_124_102_CNT,
+  3         COUNT(CASE WHEN MANAGER_ID = SOME (103,104) THEN '*' END) MGR_103_104_CNT
+  4  FROM EMPLOYEES;
+
+MGR_100_149_CNT MGR_124_102_CNT MGR_103_104_CNT                                                                                                                                                         
+--------------- --------------- ---------------                                                                                                                                                         
+              8               5               2                                                                                                                                                         
+
+SQL> REM 2 MIN_SAL_DEPT_20_50   AVG_SAL_DEPT_60_110    MAX_SAL_DEPT_10_80_90
+SQL> 
+SQL> SELECT MIN(CASE WHEN DEPARTMENT_ID IN (20,50) THEN SALARY END) MIN_SAL_DEPT_20_50,
+  2         AVG(CASE WHEN DEPARTMENT_ID = ANY (60,110) THEN SALARY END) AVG_SAL_DEPT_60_110,
+  3         MAX(CASE WHEN DEPARTMENT_ID = SOME (10,80,90) THEN SALARY END) MAX_SAL_DEPT_10_80,90
+  4  FROM EMPLOYEES;
+
+MIN_SAL_DEPT_20_50 AVG_SAL_DEPT_60_110 MAX_SAL_DEPT_10_80         90                                                                                                                                    
+------------------ ------------------- ------------------ ----------                                                                                                                                    
+              2500                7900              24000         90                                                                                                                                    
+
+SQL> SELECT MIN(CASE WHEN DEPARTMENT_ID IN (20,50) THEN SALARY END) MIN_SAL_DEPT_20_50,
+  2         AVG(CASE WHEN DEPARTMENT_ID = ANY (60,110) THEN SALARY END) AVG_SAL_DEPT_60_110,
+  3         MAX(CASE WHEN DEPARTMENT_ID = SOME (10,80,90) THEN SALARY END) MAX_SAL_DEPT_10_80_90
+  4  FROM EMPLOYEES;
+
+MIN_SAL_DEPT_20_50 AVG_SAL_DEPT_60_110 MAX_SAL_DEPT_10_80_90                                                                                                                                            
+------------------ ------------------- ---------------------                                                                                                                                            
+              2500                7900                 24000                                                                                                                                            
+
+SQL> REM 3 SUM_SAL_HY_UPTO_92   CNT_SAL_HY_93_96    MAX_SAL_OTHERS
+SQL> 
+SQL> SELECT SUM(CASE WHEN TO_CHAR(HIRE_DATE,'RR') <= 92 THEN SALARY END) SUM_SAL_HY_UPTO_92,
+  2         COUNT(CASE WHEN TO_CHAR(HIRE_DATE,'RR') BETWEEN 93 AND 96 THEN '*' END) CNT_SAL_HY_93_96
+  3         MAX(CASE WHEN TO_CHAR(HIRE_DATE,'RR') >= 97 THEN SALARY END) MAX_SAL_OTHERS
+  4  FROM EMPLOYEES;
+       MAX(CASE WHEN TO_CHAR(HIRE_DATE,'RR') >= 97 THEN SALARY END) MAX_SAL_OTHERS
+       *
+ERROR at line 3:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> SELECT SUM(CASE WHEN TO_CHAR(HIRE_DATE,'RR') <= 92 THEN SALARY END) SUM_SAL_HY_UPTO_92,
+  2         COUNT(CASE WHEN TO_CHAR(HIRE_DATE,'RR') BETWEEN 93 AND 96 THEN '*' END) CNT_SAL_HY_93_96,
+  3         MAX(CASE WHEN TO_CHAR(HIRE_DATE,'RR') >= 97 THEN SALARY END) MAX_SAL_OTHERS
+  4  FROM EMPLOYEES;
+
+SUM_SAL_HY_UPTO_92 CNT_SAL_HY_93_96 MAX_SAL_OTHERS                                                                                                                                                      
+------------------ ---------------- --------------                                                                                                                                                      
+             70900                6           8600                                                                                                                                                      
+
+SQL> REM 4 FN_A_TO_D_CNT        FN_E_TO_H_CNT       FN_I_TO_N_CNT      FN_O_TO_T_CNT        FN_U_TO_Z_CNT
+SQL> 
+SQL> SELECT COUNT(CASE WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'A' AND 'D' THEN SYSDATE END) FN_A_TO_D_CNT,
+  2         COUNT(CASE WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'E' AND 'H' THEN 'HI' END) FN_E_TO_H_CNT,
+  3         COUNT(CASE WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'I' AND 'N' THEN 5 END) FN_I_TO_N_CNT,
+  4         COUNT(CASE WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'O' AND 'T' THEN 'ANY THING' END) FN_O_TO_T_CNT,
+  5         COUNT(CASE WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'U' AND 'Z' THEN 'ANY THING' END) FN_U_TO_Z_CNT
+  6  FROM EMPLOYEES;
+
+FN_A_TO_D_CNT FN_E_TO_H_CNT FN_I_TO_N_CNT FN_O_TO_T_CNT FN_U_TO_Z_CNT                                                                                                                                   
+------------- ------------- ------------- ------------- -------------                                                                                                                                   
+            4             2             7             6             1                                                                                                                                   
+
+SQL> REM 5 JAN_MAR_MAY_SUM_SAL     FEB_SEP_DEC_MAX_SAL     JUN_JUL_AUG_AVG_SAL
+SQL> 
+SQL> SELECT SUM(CASE WHEN HIRE LIKE '%A%' THEN SALARY END JAN_MAR_MAY_SUM_SAL,
+  2         MAX(CASE WHEN HIRE LIKE '%E%' THEN SALARY END) FEB_SEP_DEC_MAX_SAL     JUN_JUL_AUG_AVG_SAL
+  3  
+SQL> 
+SQL> SELECT SUM(CASE WHEN HIRE LIKE '%A%' THEN SALARY END) JAN_MAR_MAY_SUM_SAL,
+  2  
+SQL>        MAX(CASE WHEN HIRE_DATE LIKE '%E%' THEN SALARY END) FEB_SEP_DEC_MAX_SAL     JUN_JUL_AUG_AVG_SAL
+SP2-0734: unknown command beginning "MAX(CASE W..." - rest of line ignored.
+SQL> 
+SQL> 
+SQL> SELECT SUM(CASE WHEN HIRE_DATE LIKE '%A%' THEN SALARY END) JAN_MAR_MAY_SUM_SAL,
+  2         SUM(CASE WHEN HIRE_DATE LIKE '%E%' THEN SALARY END) FEB_SEP_DEC_MAX_SAL,
+  3         AVG(CASE WHEN HIRE_DATE LIKE '%U%' THEN SALARY END) JUN_JUL_AUG_AVG_SAL
+  4  FROM EMPLOYEES;
+
+JAN_MAR_MAY_SUM_SAL FEB_SEP_DEC_MAX_SAL JUN_JUL_AUG_AVG_SAL                                                                                                                                             
+------------------- ------------------- -------------------                                                                                                                                             
+              80800               38600               10560                                                                                                                                             
+
+SQL> SELECT SUM(CASE WHEN HIRE_DATE LIKE '%-_A%' THEN SALARY END) JAN_MAR_MAY_SUM_SAL,
+  2         MAX(CASE WHEN HIRE_DATE LIKE '%E%' THEN SALARY END) FEB_SEP_DEC_MAX_SAL,
+  3         AVG(CASE WHEN HIRE_DATE LIKE '%U%' THEN SALARY END) JUN_JUL_AUG_AVG_SAL
+  4  FROM EMPLOYEES;
+
+JAN_MAR_MAY_SUM_SAL FEB_SEP_DEC_MAX_SAL JUN_JUL_AUG_AVG_SAL                                                                                                                                             
+------------------- ------------------- -------------------                                                                                                                                             
+              74800               17000               10560                                                                                                                                             
+
+SQL> /*
+SQL> 
+SQL> DEPARTMENT_ID     Q1_CNT     Q2_CNT     Q3_CNT     Q4_CNT
+SQL> -------------     ------     ------     ------     ------
+SQL>            10          0          1          0          0
+SQL>            20          1          0          1          0
+SQL>            50          0          1          2          2
+SQL> 
+SQL> 
+SQL> */
+SQL> 
+SQL> SELECT DEPARTMENT_ID , COUNT(DECODE(TO_CHAR(HIRE_DATE,'Q'),1,'*')) Q1_CNT,
+  2                         COUNT(DECODE(TO_CHAR(HIRE_DATE,'Q'),2,'*')) Q2_CNT,
+  3                         COUNT(DECODE(TO_CHAR(HIRE_DATE,'Q'),3,'*')) Q3_CNT,
+  4                         COUNT(DECODE(TO_CHAR(HIRE_DATE,'Q'),4,'*')) Q4_CNT
+  5  FROM EMPLOYEES
+  6  GROUP BY DEPARTMENT_ID
+  7  ORDER BY 1;
+
+DEPARTMENT_ID     Q1_CNT     Q2_CNT     Q3_CNT     Q4_CNT                                                                                                                                               
+------------- ---------- ---------- ---------- ----------                                                                                                                                               
+           10          0          0          1          0                                                                                                                                               
+           20          1          0          1          0                                                                                                                                               
+           50          2          0          1          2                                                                                                                                               
+           60          2          1          0          0                                                                                                                                               
+           80          2          1          0          0                                                                                                                                               
+           90          1          0          2          0                                                                                                                                               
+          110          0          2          0          0                                                                                                                                               
+                       0          1          0          0                                                                                                                                               
+
+8 rows selected.
+
+SQL> REM 1 HIRE_WEEK_OF_MONTH   CNT_SAL_UPTO_6000     CNT_SAL_6001_9000    CNT_SAL_9001_13000     CNT_SAL_13001_ONWARDS
+SQL> 
+SQL> REM 2 HIRE_QTR    MONTH_1_MIN_SAL   MONTH_2_AVG_SAL   MONTH_3_MAX_SAL
+SQL> 
+SQL> 
+SQL> REM 1 HIRE_WEEK_OF_MONTH   CNT_SAL_UPTO_6000     CNT_SAL_6001_9000    CNT_SAL_9001_13000     CNT_SAL_13001_ONWARDS
+SQL> 
+SQL> SELECT TO_CHAR(HIRE_dATE,'W') HIRE_WEEK_OF_MONTH , COUNT(CASE WHEN SALARY <= 6000 THEN '*' END) CNT_SAL_UPTO_6000,
+  2                                                     COUNT(CASE WHEN SALARY > 6000 AND SALARY <= 9000 THEN '*' END) CNT_SAL_6001_9000,
+  3                                                     COUNT(CASE WHEN SALARY BETWEEN 9001 AND 13000 THEN '*' END) CNT_SAL_9001_13000,
+  4                                                     COUNT(CASE WHEN SALARY > 13001 THEN '*' END) CNT_SAL_13001_ONWARDS
+  5  FROM EMPLOYEES
+  6  GROUP BY TO_CHAR(HIRE_dATE,'W')
+  7  ORDER BY 1;
+
+H CNT_SAL_UPTO_6000 CNT_SAL_6001_9000 CNT_SAL_9001_13000 CNT_SAL_13001_ONWARDS                                                                                                                          
+- ----------------- ----------------- ------------------ ---------------------                                                                                                                          
+1                 1                 2                  1                     0                                                                                                                          
+2                 1                 0                  1                     1                                                                                                                          
+3                 6                 0                  1                     2                                                                                                                          
+4                 0                 2                  0                     0                                                                                                                          
+5                 1                 0                  1                     0                                                                                                                          
+
+SQL> REM 2 HIRE_QTR    MONTH_1_MIN_SAL   MONTH_2_AVG_SAL   MONTH_3_MAX_SAL
+SQL> 
+SQL> SELECT TO_CHAR(HIRE_DATE,'Q') QTR , MIN(CASE WHEN MOD(TO_CHAR(HIRE_DATE,'MM'),3) = 1 THEN SALARY END) MONTH_1_MIN_SAL,
+  2                                      AVG(CASE WHEN MOD(TO_CHAR(HIRE_DATE,'MM'),3) = 2 THEN SALARY END) MONTH_2_AVG_SAL,
+  3                                      AVG(CASE WHEN MOD(TO_CHAR(HIRE_DATE,'MM'),3) = 0 THEN SALARY END) MONTH_3_MAX_SAL
+  4  FROM EMPLOYEES
+  5  GROUP BY TO_CHAR(HIRE_DATE,'Q')
+  6  ORDER BY 1;
+
+Q MONTH_1_MIN_SAL MONTH_2_AVG_SAL MONTH_3_MAX_SAL                                                                                                                                                       
+- --------------- --------------- ---------------                                                                                                                                                       
+1            3100            8600            5600                                                                                                                                                       
+2                            8000           10150                                                                                                                                                       
+3            2500            6000           10700                                                                                                                                                       
+4            3500            5800                                                                                                                                                                       
+
+SQL> SELECT TO_CHAR(HIRE_DATE,'Q') QTR , MIN(CASE WHEN MOD(TO_CHAR(HIRE_DATE,'MM'),3) = 1 THEN SALARY END) MONTH_1_MIN_SAL,
+  2                                      AVG(CASE WHEN MOD(TO_CHAR(HIRE_DATE,'MM'),3) = 2 THEN SALARY END) MONTH_2_AVG_SAL,
+  3                                      MAX(CASE WHEN MOD(TO_CHAR(HIRE_DATE,'MM'),3) = 0 THEN SALARY END) MONTH_3_MAX_SAL
+  4  FROM EMPLOYEES
+  5  GROUP BY TO_CHAR(HIRE_DATE,'Q')
+  6  ORDER BY 1;
+
+Q MONTH_1_MIN_SAL MONTH_2_AVG_SAL MONTH_3_MAX_SAL                                                                                                                                                       
+- --------------- --------------- ---------------                                                                                                                                                       
+1            3100            8600            8600                                                                                                                                                       
+2                            8000           12000                                                                                                                                                       
+3            2500            6000           17000                                                                                                                                                       
+4            3500            5800                                                                                                                                                                       
+
+SQL> SELECT FIRST_NAME FROM EMPLOYEES;
+
+FIRST_NAME                                                                                                                                                                                              
+---------------                                                                                                                                                                                         
+Steven                                                                                                                                                                                                  
+Neena                                                                                                                                                                                                   
+Lex                                                                                                                                                                                                     
+Alexander                                                                                                                                                                                               
+Bruce                                                                                                                                                                                                   
+Diana                                                                                                                                                                                                   
+Kevin                                                                                                                                                                                                   
+Trenna                                                                                                                                                                                                  
+Curtis                                                                                                                                                                                                  
+Randall                                                                                                                                                                                                 
+Peter                                                                                                                                                                                                   
+Eleni                                                                                                                                                                                                   
+Ellen                                                                                                                                                                                                   
+Jonathon                                                                                                                                                                                                
+Kimerely                                                                                                                                                                                                
+Jennifer                                                                                                                                                                                                
+Michael                                                                                                                                                                                                 
+Pat                                                                                                                                                                                                     
+Shelley                                                                                                                                                                                                 
+William                                                                                                                                                                                                 
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME FROM EMPLOYEES ORDER BY 1;
+
+FIRST_NAME                                                                                                                                                                                              
+---------------                                                                                                                                                                                         
+Alexander                                                                                                                                                                                               
+Bruce                                                                                                                                                                                                   
+Curtis                                                                                                                                                                                                  
+Diana                                                                                                                                                                                                   
+Eleni                                                                                                                                                                                                   
+Ellen                                                                                                                                                                                                   
+Jennifer                                                                                                                                                                                                
+Jonathon                                                                                                                                                                                                
+Kevin                                                                                                                                                                                                   
+Kimerely                                                                                                                                                                                                
+Lex                                                                                                                                                                                                     
+Michael                                                                                                                                                                                                 
+Neena                                                                                                                                                                                                   
+Pat                                                                                                                                                                                                     
+Peter                                                                                                                                                                                                   
+Randall                                                                                                                                                                                                 
+Shelley                                                                                                                                                                                                 
+Steven                                                                                                                                                                                                  
+Trenna                                                                                                                                                                                                  
+William                                                                                                                                                                                                 
+
+20 rows selected.
+
+SQL> REM A-D , E-H , I-N , O-T , U-Z
+SQL> 
+SQL> SELECT FIRST_NAME , CASE WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'A' AND 'D' THEN 'A-D'
+  2                           WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'E' AND 'H' THEN 'E-H'
+  3                           WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'I' AND 'N' THEN 'I-N'
+  4                           WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'O' AND 'T' THEN 'O-T'
+  5                           WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'U' AND 'Z' THEN 'U-Z' END LABEL
+  6  FROM EMPLOYEES
+  7  ORDER BY 1;
+
+FIRST_NAME      LAB                                                                                                                                                                                     
+--------------- ---                                                                                                                                                                                     
+Alexander       A-D                                                                                                                                                                                     
+Bruce           A-D                                                                                                                                                                                     
+Curtis          A-D                                                                                                                                                                                     
+Diana           A-D                                                                                                                                                                                     
+Eleni           E-H                                                                                                                                                                                     
+Ellen           E-H                                                                                                                                                                                     
+Jennifer        I-N                                                                                                                                                                                     
+Jonathon        I-N                                                                                                                                                                                     
+Kevin           I-N                                                                                                                                                                                     
+Kimerely        I-N                                                                                                                                                                                     
+Lex             I-N                                                                                                                                                                                     
+Michael         I-N                                                                                                                                                                                     
+Neena           I-N                                                                                                                                                                                     
+Pat             O-T                                                                                                                                                                                     
+Peter           O-T                                                                                                                                                                                     
+Randall         O-T                                                                                                                                                                                     
+Shelley         O-T                                                                                                                                                                                     
+Steven          O-T                                                                                                                                                                                     
+Trenna          O-T                                                                                                                                                                                     
+William         U-Z                                                                                                                                                                                     
+
+20 rows selected.
+
+SQL> /*
+SQL> 
+SQL> FN_RANGE    HIRED_UPTO_YR_92_CNT      HIRED_YR_93_96_CNT     HIRE_YR_97_ONWARDS
+SQL> A-D
+SQL> E-H
+SQL> I-N
+SQL> O-T
+SQL> U-Z
+SQL> 
+SQL> */
+SQL> 
+SQL> SELECT CASE WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'A' AND 'D' THEN 'A-D'
+  2       WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'E' AND 'H' THEN 'E-H'
+  3       WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'I' AND 'N' THEN 'I-N'
+  4       WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'O' AND 'T' THEN 'O-T'
+  5       WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'U' AND 'Z' THEN 'U-Z' END LABEL ,
+  6       COUNT(CASE WHEN HIRE_DATE <= '31DEC92' THEN '*' END) HIRED_UPTO_YR_92_CNT,
+  7       COUNT(CASE WHEN HIRE_DATE BETWEEN '1JAN93' AND '31DEC96' THEN '*' END) HIRED_YR_93_96_CNT,
+  8       COUNT(CASE WHEN HIRE_DATE >= '1JAN97' THEN '*' END) HIRE_YR_97_ONWARDS
+  9  FROM EMPLOYEES
+ 10  CASE WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'A' AND 'D' THEN 'A-D'
+ 11       WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'E' AND 'H' THEN 'E-H'
+ 12       WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'I' AND 'N' THEN 'I-N'
+ 13       WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'O' AND 'T' THEN 'O-T'
+ 14       WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'U' AND 'Z' THEN 'U-Z' END
+ 15  
+SQL> 
+SQL> /*
+SQL> 
+SQL> FN_RANGE    HIRED_UPTO_YR_92_CNT      HIRED_YR_93_96_CNT     HIRE_YR_97_ONWARDS
+SQL> A-D
+SQL> E-H
+SQL> I-N
+SQL> O-T
+SQL> U-Z
+SQL> 
+SQL> */
+SQL> 
+SQL> SELECT CASE WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'A' AND 'D' THEN 'A-D'
+  2       WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'E' AND 'H' THEN 'E-H'
+  3       WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'I' AND 'N' THEN 'I-N'
+  4       WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'O' AND 'T' THEN 'O-T'
+  5       WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'U' AND 'Z' THEN 'U-Z' END LABEL ,
+  6       COUNT(CASE WHEN HIRE_DATE <= '31DEC92' THEN '*' END) HIRED_UPTO_YR_92_CNT,
+  7       COUNT(CASE WHEN HIRE_DATE BETWEEN '1JAN93' AND '31DEC96' THEN '*' END) HIRED_YR_93_96_CNT,
+  8       COUNT(CASE WHEN HIRE_DATE >= '1JAN97' THEN '*' END) HIRE_YR_97_ONWARDS
+  9  FROM EMPLOYEES
+ 10  GROUP BY CASE WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'A' AND 'D' THEN 'A-D'
+ 11       WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'E' AND 'H' THEN 'E-H'
+ 12       WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'I' AND 'N' THEN 'I-N'
+ 13       WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'O' AND 'T' THEN 'O-T'
+ 14       WHEN SUBSTR(FIRST_NAME,1,1) BETWEEN 'U' AND 'Z' THEN 'U-Z' END
+ 15  ORDER BY 1;
+
+LAB HIRED_UPTO_YR_92_CNT HIRED_YR_93_96_CNT HIRE_YR_97_ONWARDS                                                                                                                                          
+--- -------------------- ------------------ ------------------                                                                                                                                          
+A-D                    2                  0                  2                                                                                                                                          
+E-H                    0                  1                  1                                                                                                                                          
+I-N                    2                  2                  3                                                                                                                                          
+O-T                    1                  2                  3                                                                                                                                          
+U-Z                    0                  1                  0                                                                                                                                          
+
+SQL> /*
+SQL> 
+SQL> FN_RANGE    HIRED_UPTO_YR_92_CNT      HIRED_YR_93_96_CNT     HIRE_YR_97_ONWARDS
+SQL> A-D
+SQL> E-H
+SQL> I-N
+SQL> O-T
+SQL> U-Z
+SQL> 
+SQL> */
+SQL> 
+SQL> /*
+SQL> 
+SQL> REM 4
+SQL> 
+SQL> SALARY_RANGE     Q1_CNT    Q2_CNT    Q3_CNT    Q4_CNT
+SQL> 00000-06000
+SQL> 06001-11000
+SQL> 11001-14000
+SQL> 14001-24000
+SQL> 
+SQL> REM 5
+SQL> 
+SQL> HY_RANGE   SAL_0_6000_CNT     SAL_6001_9000_CNT      SAL_9001_13000_CNT     SAL_13001_ONWARDS_CNT
+SQL> 1980-1989
+SQL> 1990-1994
+SQL> 1995-2000
+SQL> 
+SQL> */
+SQL> 
+SQL> SELECT CASE WHEN SALARY BETWEEN 0 AND 6000 THEN '00000-06000'
+  2              WHEN SALARY BETWEEN 6001 AND 11000 THEN '06001-11000'
+  3              WHEN SALARY BETWEEN 11001 AND 14000 THEN '11001-14000'
+  4              WHEN SALARY BETWEEN 14001 AND 24000 THEN '14001-24000' END SALARY_RANGE,
+  5              COUNT(CASE WHEN TO_CHAR(HIRE_DATE,'Q') = 1 THEN '*' END) Q1_CNT,
+  6              COUNT(CASE WHEN TO_CHAR(HIRE_DATE,'Q') = 2 THEN '*' END) Q2_CNT,
+  7              COUNT(CASE WHEN TO_CHAR(HIRE_DATE,'Q') = 3 THEN '*' END) Q3_CNT,
+  8              COUNT(CASE WHEN TO_CHAR(HIRE_DATE,'Q') = 4 THEN '*' END) Q4_CNT
+  9  FROM EMPLOYEES
+ 10  GROUP BY CASE WHEN SALARY BETWEEN 0 AND 6000 THEN '00000-06000'
+ 11       WHEN SALARY BETWEEN 6001 AND 11000 THEN '06001-11000'
+ 12       WHEN SALARY BETWEEN 11001 AND 14000 THEN '11001-14000'
+ 13       WHEN SALARY BETWEEN 14001 AND 24000 THEN '14001-24000' END
+ 14  ORDER BY 1;
+
+SALARY_RANG     Q1_CNT     Q2_CNT     Q3_CNT     Q4_CNT                                                                                                                                                 
+----------- ---------- ---------- ---------- ----------                                                                                                                                                 
+00000-06000          3          1          3          2                                                                                                                                                 
+06001-11000          3          3          0          0                                                                                                                                                 
+11001-14000          1          1          0          0                                                                                                                                                 
+14001-24000          1          0          2          0                                                                                                                                                 
+
+SQL> SELECT CASE WHEN TO_CHAR(HIRE_DATE,'RRRR') BETWEEN '1980' AND '1989' THEN '1980-1989'
+  2                        WHEN TO_CHAR(HIRE_DATE,'RRRR') BETWEEN '1990' AND '1994' THEN '1990-1994'
+  3                        WHEN TO_CHAR(HIRE_DATE,'RRRR') BETWEEN '1995' AND '2000' THEN '1995-2000' END HY_RANGE ,
+  4  COUNT(CASE WHEN SALARY <= '6000' THEN '*' END) SAL_0_6000_CNT ,
+  5  COUNT(CASE WHEN SALARY BETWEEN '6001' AND '9000' THEN '*' END) SAL_6001_9000_CNT ,
+  6  COUNT(CASE WHEN SALARY BETWEEN '9001' AND '13000' THEN '*' END) SAL_9001_13000_CNT ,
+  7  COUNT(CASE WHEN SALARY >= '13001' THEN '*' END) SAL_13001_ONWARDS_CNT
+  8  FROM EMPLOYEES
+  9  GROUP BY  CASE WHEN TO_CHAR(HIRE_DATE,'RRRR') BETWEEN '1980' AND '1989' THEN '1980-1989'
+ 10                               WHEN TO_CHAR(HIRE_DATE,'RRRR') BETWEEN '1990' AND '1994' THEN '1990-1994'
+ 11                               WHEN TO_CHAR(HIRE_DATE,'RRRR') BETWEEN '1995' AND '2000' THEN '1995-2000' END
+ 12  ORDER BY 1;
+
+HY_RANGE  SAL_0_6000_CNT SAL_6001_9000_CNT SAL_9001_13000_CNT SAL_13001_ONWARDS_CNT                                                                                                                     
+--------- -------------- ----------------- ------------------ ---------------------                                                                                                                     
+1980-1989              1                 0                  0                     2                                                                                                                     
+1990-1994              1                 2                  1                     1                                                                                                                     
+1995-2000              7                 2                  3                     0                                                                                                                     
+
+SQL> SPOOL OFF

@@ -1,0 +1,858 @@
+SQL> 
+SQL> REM HYBRID JOIN : WHEN WE USE MULTIPLE TYPES OF JOINS WITHIN SINGLE COMMAND.
+SQL> 
+SQL> REM NATURAL + CROSS , NATURAL + INNER , CROSS + INNER ...
+SQL> 
+SQL> REM WE SHOULD USE NATURAL JOIN AHEAD OF ANY OTHER JOIN.
+SQL> 
+SQL> REM IF WE USE NATURAL JOIN AFTERWARDS, WE MUST LIST COMMON COLUMN REQUIRED FOR NATURAL JOIN.
+SQL> 
+SQL> SELECT * FROM DEPARTMENTS;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID                                                                                                                                     
+------------- ------------------------------ ---------- -----------                                                                                                                                     
+           10 Administration                        200        1700                                                                                                                                     
+           20 Marketing                             201        1800                                                                                                                                     
+           50 Shiping                               124        1500                                                                                                                                     
+           60 IT                                    103        1400                                                                                                                                     
+           80 Sales                                 149        2500                                                                                                                                     
+           90 Executive                             100        1700                                                                                                                                     
+          110 Accounting                            205        1700                                                                                                                                     
+          190 Contracting                                      1700                                                                                                                                     
+
+8 rows selected.
+
+SQL> SELECT * FROM LOCATIONS;
+
+LOCATION_ID STREET_ADRESS                            POSTAL_CODE  CITY                           STATE_PROVINCE            CO                                                                           
+----------- ---------------------------------------- ------------ ------------------------------ ------------------------- --                                                                           
+       1400 2014 Jabberwocky Rd                      26192        Southlake                      Texas                     US                                                                           
+       1500 2011 Interiors Blvd                      99236        South San Francisco            California                US                                                                           
+       1700 2004 Charade Rd                          98199        Seattle                        Washington                US                                                                           
+       1800 460 Bloor St. W.                         ON M5S 1X8   Toronto                        Ontario                   CA                                                                           
+       2500 Magdalen Centre, The Oxford Science Park OX9 9ZB      Oxford                         Oxford                    UK                                                                           
+
+SQL> SELECT * FROM COUNTRIES;
+
+CO COUNTRY_NAME                              REGION_ID                                                                                                                                                  
+-- ---------------------------------------- ----------                                                                                                                                                  
+CA Canada                                            2                                                                                                                                                  
+DE Germany                                           1                                                                                                                                                  
+UK United Kingdom                                    1                                                                                                                                                  
+US United States of America                          2                                                                                                                                                  
+
+SQL> SELECT DEPARTMENT_NAME , CITY , COUNTRY_NAME
+  2  FROM DEPARTMENTS
+  3  NATURAL JOIN LOCATIONS
+  4  CROSS   JOIN COUNTRIES;
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                                                                                                                              
+------------------------------ ------------------------------ ----------------------------------------                                                                                                  
+Administration                 Seattle                        Canada                                                                                                                                    
+Administration                 Seattle                        Germany                                                                                                                                   
+Administration                 Seattle                        United Kingdom                                                                                                                            
+Administration                 Seattle                        United States of America                                                                                                                  
+Marketing                      Toronto                        Canada                                                                                                                                    
+Marketing                      Toronto                        Germany                                                                                                                                   
+Marketing                      Toronto                        United Kingdom                                                                                                                            
+Marketing                      Toronto                        United States of America                                                                                                                  
+Shiping                        South San Francisco            Canada                                                                                                                                    
+Shiping                        South San Francisco            Germany                                                                                                                                   
+Shiping                        South San Francisco            United Kingdom                                                                                                                            
+Shiping                        South San Francisco            United States of America                                                                                                                  
+IT                             Southlake                      Canada                                                                                                                                    
+IT                             Southlake                      Germany                                                                                                                                   
+IT                             Southlake                      United Kingdom                                                                                                                            
+IT                             Southlake                      United States of America                                                                                                                  
+Sales                          Oxford                         Canada                                                                                                                                    
+Sales                          Oxford                         Germany                                                                                                                                   
+Sales                          Oxford                         United Kingdom                                                                                                                            
+Sales                          Oxford                         United States of America                                                                                                                  
+Executive                      Seattle                        Canada                                                                                                                                    
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                                                                                                                              
+------------------------------ ------------------------------ ----------------------------------------                                                                                                  
+Executive                      Seattle                        Germany                                                                                                                                   
+Executive                      Seattle                        United Kingdom                                                                                                                            
+Executive                      Seattle                        United States of America                                                                                                                  
+Accounting                     Seattle                        Canada                                                                                                                                    
+Accounting                     Seattle                        Germany                                                                                                                                   
+Accounting                     Seattle                        United Kingdom                                                                                                                            
+Accounting                     Seattle                        United States of America                                                                                                                  
+Contracting                    Seattle                        Canada                                                                                                                                    
+Contracting                    Seattle                        Germany                                                                                                                                   
+Contracting                    Seattle                        United Kingdom                                                                                                                            
+Contracting                    Seattle                        United States of America                                                                                                                  
+
+32 rows selected.
+
+SQL> SELECT DEPARTMENT_NAME , CITY , COUNTRY_NAME
+  2  FROM DEPARTMENTS
+  3  CROSS   JOIN LOCATIONS
+  4  NATURAL JOIN COUNTRIES;
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                                                                                                                              
+------------------------------ ------------------------------ ----------------------------------------                                                                                                  
+Administration                 Southlake                      Canada                                                                                                                                    
+Marketing                      Southlake                      Canada                                                                                                                                    
+Shiping                        Southlake                      Canada                                                                                                                                    
+IT                             Southlake                      Canada                                                                                                                                    
+Sales                          Southlake                      Canada                                                                                                                                    
+Executive                      Southlake                      Canada                                                                                                                                    
+Accounting                     Southlake                      Canada                                                                                                                                    
+Contracting                    Southlake                      Canada                                                                                                                                    
+Administration                 South San Francisco            Canada                                                                                                                                    
+Marketing                      South San Francisco            Canada                                                                                                                                    
+Shiping                        South San Francisco            Canada                                                                                                                                    
+IT                             South San Francisco            Canada                                                                                                                                    
+Sales                          South San Francisco            Canada                                                                                                                                    
+Executive                      South San Francisco            Canada                                                                                                                                    
+Accounting                     South San Francisco            Canada                                                                                                                                    
+Contracting                    South San Francisco            Canada                                                                                                                                    
+Administration                 Seattle                        Canada                                                                                                                                    
+Marketing                      Seattle                        Canada                                                                                                                                    
+Shiping                        Seattle                        Canada                                                                                                                                    
+IT                             Seattle                        Canada                                                                                                                                    
+Sales                          Seattle                        Canada                                                                                                                                    
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                                                                                                                              
+------------------------------ ------------------------------ ----------------------------------------                                                                                                  
+Executive                      Seattle                        Canada                                                                                                                                    
+Accounting                     Seattle                        Canada                                                                                                                                    
+Contracting                    Seattle                        Canada                                                                                                                                    
+Administration                 Toronto                        Canada                                                                                                                                    
+Marketing                      Toronto                        Canada                                                                                                                                    
+Shiping                        Toronto                        Canada                                                                                                                                    
+IT                             Toronto                        Canada                                                                                                                                    
+Sales                          Toronto                        Canada                                                                                                                                    
+Executive                      Toronto                        Canada                                                                                                                                    
+Accounting                     Toronto                        Canada                                                                                                                                    
+Contracting                    Toronto                        Canada                                                                                                                                    
+Administration                 Oxford                         Canada                                                                                                                                    
+Marketing                      Oxford                         Canada                                                                                                                                    
+Shiping                        Oxford                         Canada                                                                                                                                    
+IT                             Oxford                         Canada                                                                                                                                    
+Sales                          Oxford                         Canada                                                                                                                                    
+Executive                      Oxford                         Canada                                                                                                                                    
+Accounting                     Oxford                         Canada                                                                                                                                    
+Contracting                    Oxford                         Canada                                                                                                                                    
+Administration                 Southlake                      Germany                                                                                                                                   
+Marketing                      Southlake                      Germany                                                                                                                                   
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                                                                                                                              
+------------------------------ ------------------------------ ----------------------------------------                                                                                                  
+Shiping                        Southlake                      Germany                                                                                                                                   
+IT                             Southlake                      Germany                                                                                                                                   
+Sales                          Southlake                      Germany                                                                                                                                   
+Executive                      Southlake                      Germany                                                                                                                                   
+Accounting                     Southlake                      Germany                                                                                                                                   
+Contracting                    Southlake                      Germany                                                                                                                                   
+Administration                 South San Francisco            Germany                                                                                                                                   
+Marketing                      South San Francisco            Germany                                                                                                                                   
+Shiping                        South San Francisco            Germany                                                                                                                                   
+IT                             South San Francisco            Germany                                                                                                                                   
+Sales                          South San Francisco            Germany                                                                                                                                   
+Executive                      South San Francisco            Germany                                                                                                                                   
+Accounting                     South San Francisco            Germany                                                                                                                                   
+Contracting                    South San Francisco            Germany                                                                                                                                   
+Administration                 Seattle                        Germany                                                                                                                                   
+Marketing                      Seattle                        Germany                                                                                                                                   
+Shiping                        Seattle                        Germany                                                                                                                                   
+IT                             Seattle                        Germany                                                                                                                                   
+Sales                          Seattle                        Germany                                                                                                                                   
+Executive                      Seattle                        Germany                                                                                                                                   
+Accounting                     Seattle                        Germany                                                                                                                                   
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                                                                                                                              
+------------------------------ ------------------------------ ----------------------------------------                                                                                                  
+Contracting                    Seattle                        Germany                                                                                                                                   
+Administration                 Toronto                        Germany                                                                                                                                   
+Marketing                      Toronto                        Germany                                                                                                                                   
+Shiping                        Toronto                        Germany                                                                                                                                   
+IT                             Toronto                        Germany                                                                                                                                   
+Sales                          Toronto                        Germany                                                                                                                                   
+Executive                      Toronto                        Germany                                                                                                                                   
+Accounting                     Toronto                        Germany                                                                                                                                   
+Contracting                    Toronto                        Germany                                                                                                                                   
+Administration                 Oxford                         Germany                                                                                                                                   
+Marketing                      Oxford                         Germany                                                                                                                                   
+Shiping                        Oxford                         Germany                                                                                                                                   
+IT                             Oxford                         Germany                                                                                                                                   
+Sales                          Oxford                         Germany                                                                                                                                   
+Executive                      Oxford                         Germany                                                                                                                                   
+Accounting                     Oxford                         Germany                                                                                                                                   
+Contracting                    Oxford                         Germany                                                                                                                                   
+Administration                 Southlake                      United Kingdom                                                                                                                            
+Marketing                      Southlake                      United Kingdom                                                                                                                            
+Shiping                        Southlake                      United Kingdom                                                                                                                            
+IT                             Southlake                      United Kingdom                                                                                                                            
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                                                                                                                              
+------------------------------ ------------------------------ ----------------------------------------                                                                                                  
+Sales                          Southlake                      United Kingdom                                                                                                                            
+Executive                      Southlake                      United Kingdom                                                                                                                            
+Accounting                     Southlake                      United Kingdom                                                                                                                            
+Contracting                    Southlake                      United Kingdom                                                                                                                            
+Administration                 South San Francisco            United Kingdom                                                                                                                            
+Marketing                      South San Francisco            United Kingdom                                                                                                                            
+Shiping                        South San Francisco            United Kingdom                                                                                                                            
+IT                             South San Francisco            United Kingdom                                                                                                                            
+Sales                          South San Francisco            United Kingdom                                                                                                                            
+Executive                      South San Francisco            United Kingdom                                                                                                                            
+Accounting                     South San Francisco            United Kingdom                                                                                                                            
+Contracting                    South San Francisco            United Kingdom                                                                                                                            
+Administration                 Seattle                        United Kingdom                                                                                                                            
+Marketing                      Seattle                        United Kingdom                                                                                                                            
+Shiping                        Seattle                        United Kingdom                                                                                                                            
+IT                             Seattle                        United Kingdom                                                                                                                            
+Sales                          Seattle                        United Kingdom                                                                                                                            
+Executive                      Seattle                        United Kingdom                                                                                                                            
+Accounting                     Seattle                        United Kingdom                                                                                                                            
+Contracting                    Seattle                        United Kingdom                                                                                                                            
+Administration                 Toronto                        United Kingdom                                                                                                                            
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                                                                                                                              
+------------------------------ ------------------------------ ----------------------------------------                                                                                                  
+Marketing                      Toronto                        United Kingdom                                                                                                                            
+Shiping                        Toronto                        United Kingdom                                                                                                                            
+IT                             Toronto                        United Kingdom                                                                                                                            
+Sales                          Toronto                        United Kingdom                                                                                                                            
+Executive                      Toronto                        United Kingdom                                                                                                                            
+Accounting                     Toronto                        United Kingdom                                                                                                                            
+Contracting                    Toronto                        United Kingdom                                                                                                                            
+Administration                 Oxford                         United Kingdom                                                                                                                            
+Marketing                      Oxford                         United Kingdom                                                                                                                            
+Shiping                        Oxford                         United Kingdom                                                                                                                            
+IT                             Oxford                         United Kingdom                                                                                                                            
+Sales                          Oxford                         United Kingdom                                                                                                                            
+Executive                      Oxford                         United Kingdom                                                                                                                            
+Accounting                     Oxford                         United Kingdom                                                                                                                            
+Contracting                    Oxford                         United Kingdom                                                                                                                            
+Administration                 Southlake                      United States of America                                                                                                                  
+Marketing                      Southlake                      United States of America                                                                                                                  
+Shiping                        Southlake                      United States of America                                                                                                                  
+IT                             Southlake                      United States of America                                                                                                                  
+Sales                          Southlake                      United States of America                                                                                                                  
+Executive                      Southlake                      United States of America                                                                                                                  
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                                                                                                                              
+------------------------------ ------------------------------ ----------------------------------------                                                                                                  
+Accounting                     Southlake                      United States of America                                                                                                                  
+Contracting                    Southlake                      United States of America                                                                                                                  
+Administration                 South San Francisco            United States of America                                                                                                                  
+Marketing                      South San Francisco            United States of America                                                                                                                  
+Shiping                        South San Francisco            United States of America                                                                                                                  
+IT                             South San Francisco            United States of America                                                                                                                  
+Sales                          South San Francisco            United States of America                                                                                                                  
+Executive                      South San Francisco            United States of America                                                                                                                  
+Accounting                     South San Francisco            United States of America                                                                                                                  
+Contracting                    South San Francisco            United States of America                                                                                                                  
+Administration                 Seattle                        United States of America                                                                                                                  
+Marketing                      Seattle                        United States of America                                                                                                                  
+Shiping                        Seattle                        United States of America                                                                                                                  
+IT                             Seattle                        United States of America                                                                                                                  
+Sales                          Seattle                        United States of America                                                                                                                  
+Executive                      Seattle                        United States of America                                                                                                                  
+Accounting                     Seattle                        United States of America                                                                                                                  
+Contracting                    Seattle                        United States of America                                                                                                                  
+Administration                 Toronto                        United States of America                                                                                                                  
+Marketing                      Toronto                        United States of America                                                                                                                  
+Shiping                        Toronto                        United States of America                                                                                                                  
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                                                                                                                              
+------------------------------ ------------------------------ ----------------------------------------                                                                                                  
+IT                             Toronto                        United States of America                                                                                                                  
+Sales                          Toronto                        United States of America                                                                                                                  
+Executive                      Toronto                        United States of America                                                                                                                  
+Accounting                     Toronto                        United States of America                                                                                                                  
+Contracting                    Toronto                        United States of America                                                                                                                  
+Administration                 Oxford                         United States of America                                                                                                                  
+Marketing                      Oxford                         United States of America                                                                                                                  
+Shiping                        Oxford                         United States of America                                                                                                                  
+IT                             Oxford                         United States of America                                                                                                                  
+Sales                          Oxford                         United States of America                                                                                                                  
+Executive                      Oxford                         United States of America                                                                                                                  
+Accounting                     Oxford                         United States of America                                                                                                                  
+Contracting                    Oxford                         United States of America                                                                                                                  
+
+160 rows selected.
+
+SQL> SELECT DEPARTMENT_NAME , CITY , COUNTRY_NAME , COUNTRY_ID
+  2  FROM DEPARTMENTS
+  3  CROSS   JOIN LOCATIONS
+  4  NATURAL JOIN COUNTRIES;
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                             CO                                                                                               
+------------------------------ ------------------------------ ---------------------------------------- --                                                                                               
+Administration                 Southlake                      United States of America                 US                                                                                               
+Marketing                      Southlake                      United States of America                 US                                                                                               
+Shiping                        Southlake                      United States of America                 US                                                                                               
+IT                             Southlake                      United States of America                 US                                                                                               
+Sales                          Southlake                      United States of America                 US                                                                                               
+Executive                      Southlake                      United States of America                 US                                                                                               
+Accounting                     Southlake                      United States of America                 US                                                                                               
+Contracting                    Southlake                      United States of America                 US                                                                                               
+Administration                 South San Francisco            United States of America                 US                                                                                               
+Marketing                      South San Francisco            United States of America                 US                                                                                               
+Shiping                        South San Francisco            United States of America                 US                                                                                               
+IT                             South San Francisco            United States of America                 US                                                                                               
+Sales                          South San Francisco            United States of America                 US                                                                                               
+Executive                      South San Francisco            United States of America                 US                                                                                               
+Accounting                     South San Francisco            United States of America                 US                                                                                               
+Contracting                    South San Francisco            United States of America                 US                                                                                               
+Administration                 Seattle                        United States of America                 US                                                                                               
+Marketing                      Seattle                        United States of America                 US                                                                                               
+Shiping                        Seattle                        United States of America                 US                                                                                               
+IT                             Seattle                        United States of America                 US                                                                                               
+Sales                          Seattle                        United States of America                 US                                                                                               
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                             CO                                                                                               
+------------------------------ ------------------------------ ---------------------------------------- --                                                                                               
+Executive                      Seattle                        United States of America                 US                                                                                               
+Accounting                     Seattle                        United States of America                 US                                                                                               
+Contracting                    Seattle                        United States of America                 US                                                                                               
+Administration                 Toronto                        Canada                                   CA                                                                                               
+Marketing                      Toronto                        Canada                                   CA                                                                                               
+Shiping                        Toronto                        Canada                                   CA                                                                                               
+IT                             Toronto                        Canada                                   CA                                                                                               
+Sales                          Toronto                        Canada                                   CA                                                                                               
+Executive                      Toronto                        Canada                                   CA                                                                                               
+Accounting                     Toronto                        Canada                                   CA                                                                                               
+Contracting                    Toronto                        Canada                                   CA                                                                                               
+Administration                 Oxford                         United Kingdom                           UK                                                                                               
+Marketing                      Oxford                         United Kingdom                           UK                                                                                               
+Shiping                        Oxford                         United Kingdom                           UK                                                                                               
+IT                             Oxford                         United Kingdom                           UK                                                                                               
+Sales                          Oxford                         United Kingdom                           UK                                                                                               
+Executive                      Oxford                         United Kingdom                           UK                                                                                               
+Accounting                     Oxford                         United Kingdom                           UK                                                                                               
+Contracting                    Oxford                         United Kingdom                           UK                                                                                               
+
+40 rows selected.
+
+SQL> SELECT DEPARTMENT_NAME , CITY , COUNTRY_NAME
+  2  FROM DEPARTMENTS
+  3  CROSS   JOIN LOCATIONS
+  4  NATURAL JOIN COUNTRIES
+  5  WHERE COUNTRY_ID IS NOT NULL;
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                                                                                                                              
+------------------------------ ------------------------------ ----------------------------------------                                                                                                  
+Administration                 Southlake                      United States of America                                                                                                                  
+Marketing                      Southlake                      United States of America                                                                                                                  
+Shiping                        Southlake                      United States of America                                                                                                                  
+IT                             Southlake                      United States of America                                                                                                                  
+Sales                          Southlake                      United States of America                                                                                                                  
+Executive                      Southlake                      United States of America                                                                                                                  
+Accounting                     Southlake                      United States of America                                                                                                                  
+Contracting                    Southlake                      United States of America                                                                                                                  
+Administration                 South San Francisco            United States of America                                                                                                                  
+Marketing                      South San Francisco            United States of America                                                                                                                  
+Shiping                        South San Francisco            United States of America                                                                                                                  
+IT                             South San Francisco            United States of America                                                                                                                  
+Sales                          South San Francisco            United States of America                                                                                                                  
+Executive                      South San Francisco            United States of America                                                                                                                  
+Accounting                     South San Francisco            United States of America                                                                                                                  
+Contracting                    South San Francisco            United States of America                                                                                                                  
+Administration                 Seattle                        United States of America                                                                                                                  
+Marketing                      Seattle                        United States of America                                                                                                                  
+Shiping                        Seattle                        United States of America                                                                                                                  
+IT                             Seattle                        United States of America                                                                                                                  
+Sales                          Seattle                        United States of America                                                                                                                  
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                                                                                                                              
+------------------------------ ------------------------------ ----------------------------------------                                                                                                  
+Executive                      Seattle                        United States of America                                                                                                                  
+Accounting                     Seattle                        United States of America                                                                                                                  
+Contracting                    Seattle                        United States of America                                                                                                                  
+Administration                 Toronto                        Canada                                                                                                                                    
+Marketing                      Toronto                        Canada                                                                                                                                    
+Shiping                        Toronto                        Canada                                                                                                                                    
+IT                             Toronto                        Canada                                                                                                                                    
+Sales                          Toronto                        Canada                                                                                                                                    
+Executive                      Toronto                        Canada                                                                                                                                    
+Accounting                     Toronto                        Canada                                                                                                                                    
+Contracting                    Toronto                        Canada                                                                                                                                    
+Administration                 Oxford                         United Kingdom                                                                                                                            
+Marketing                      Oxford                         United Kingdom                                                                                                                            
+Shiping                        Oxford                         United Kingdom                                                                                                                            
+IT                             Oxford                         United Kingdom                                                                                                                            
+Sales                          Oxford                         United Kingdom                                                                                                                            
+Executive                      Oxford                         United Kingdom                                                                                                                            
+Accounting                     Oxford                         United Kingdom                                                                                                                            
+Contracting                    Oxford                         United Kingdom                                                                                                                            
+
+40 rows selected.
+
+SQL> REM DEPARTMENT_ID , DEPARTMENT_NAME , LOCATION_ID , CITY , COUNTRY_ID , COUNTRY_NAME , REGION_ID , REGION_NAME
+SQL> 
+SQL> REM 1 NJ
+SQL> 
+SQL> REM 2 IJU
+SQL> 
+SQL> REM 3 IJO
+SQL> 
+SQL> REM 1 NJ
+SQL> 
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME , LOCATION_ID , CITY , COUNTRY_ID , COUNTRY_NAME , REGION_ID , REGION_NAME
+  2  FROM DEPARTMENTS
+  3  NATURAL JOIN LOCATIONS
+  4  NATURAL JOIN COUNTRIES
+  5  NATURAL JOIN REGIONS;
+
+DEPARTMENT_ID DEPARTMENT_NAME                LOCATION_ID CITY                           CO COUNTRY_NAME                              REGION_ID REGION_NAME                                              
+------------- ------------------------------ ----------- ------------------------------ -- ---------------------------------------- ---------- -------------------------                                
+           10 Administration                        1700 Seattle                        US United States of America                          2 Americas                                                 
+           20 Marketing                             1800 Toronto                        CA Canada                                            2 Americas                                                 
+           50 Shiping                               1500 South San Francisco            US United States of America                          2 Americas                                                 
+           60 IT                                    1400 Southlake                      US United States of America                          2 Americas                                                 
+           80 Sales                                 2500 Oxford                         UK United Kingdom                                    1 Europe                                                   
+           90 Executive                             1700 Seattle                        US United States of America                          2 Americas                                                 
+          110 Accounting                            1700 Seattle                        US United States of America                          2 Americas                                                 
+          190 Contracting                           1700 Seattle                        US United States of America                          2 Americas                                                 
+
+8 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME , LOCATION_ID , CITY , COUNTRY_ID , COUNTRY_NAME , REGION_ID , REGION_NAME
+  2  FROM DEPARTMENTS
+  3  JOIN LOCATIONS USING (LOCATION_ID)
+  4  JOIN COUNTRIES USING (COUNTRY_ID)
+  5  JOIN REGIONS   USING (REGION_ID);
+
+DEPARTMENT_ID DEPARTMENT_NAME                LOCATION_ID CITY                           CO COUNTRY_NAME                              REGION_ID REGION_NAME                                              
+------------- ------------------------------ ----------- ------------------------------ -- ---------------------------------------- ---------- -------------------------                                
+           10 Administration                        1700 Seattle                        US United States of America                          2 Americas                                                 
+           20 Marketing                             1800 Toronto                        CA Canada                                            2 Americas                                                 
+           50 Shiping                               1500 South San Francisco            US United States of America                          2 Americas                                                 
+           60 IT                                    1400 Southlake                      US United States of America                          2 Americas                                                 
+           80 Sales                                 2500 Oxford                         UK United Kingdom                                    1 Europe                                                   
+           90 Executive                             1700 Seattle                        US United States of America                          2 Americas                                                 
+          110 Accounting                            1700 Seattle                        US United States of America                          2 Americas                                                 
+          190 Contracting                           1700 Seattle                        US United States of America                          2 Americas                                                 
+
+8 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME , L.LOCATION_ID , CITY , C.COUNTRY_ID , COUNTRY_NAME , R.REGION_ID , REGION_NAME
+  2  FROM DEPARTMENTS D
+  3  JOIN LOATIONS    L ON D.LOCATION_ID = L.LOCATION_ID
+  4  JOIN COUNTRIES   C ON L.COUNTRY_ID  = C.COUNTRY_ID
+  5  JOIN REGIONS     R ON C.REGION_ID   = R.REGION_ID
+  6  
+SQL> 
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME , L.LOCATION_ID , CITY , C.COUNTRY_ID , COUNTRY_NAME , R.REGION_ID , REGION_NAME
+  2  FROM DEPARTMENTS D
+  3  JOIN LOCATIONS   L ON D.LOCATION_ID = L.LOCATION_ID
+  4  JOIN COUNTRIES   C ON L.COUNTRY_ID  = C.COUNTRY_ID
+  5  JOIN REGIONS     R ON C.REGION_ID   = R.REGION_ID;
+
+DEPARTMENT_ID DEPARTMENT_NAME                LOCATION_ID CITY                           CO COUNTRY_NAME                              REGION_ID REGION_NAME                                              
+------------- ------------------------------ ----------- ------------------------------ -- ---------------------------------------- ---------- -------------------------                                
+           10 Administration                        1700 Seattle                        US United States of America                          2 Americas                                                 
+           20 Marketing                             1800 Toronto                        CA Canada                                            2 Americas                                                 
+           50 Shiping                               1500 South San Francisco            US United States of America                          2 Americas                                                 
+           60 IT                                    1400 Southlake                      US United States of America                          2 Americas                                                 
+           80 Sales                                 2500 Oxford                         UK United Kingdom                                    1 Europe                                                   
+           90 Executive                             1700 Seattle                        US United States of America                          2 Americas                                                 
+          110 Accounting                            1700 Seattle                        US United States of America                          2 Americas                                                 
+          190 Contracting                           1700 Seattle                        US United States of America                          2 Americas                                                 
+
+8 rows selected.
+
+SQL> REM EMPLOYEE_ID , DEPARTMENT_ID , MANAGER_ID , FIRST_NAME , DEPARTMENT_NAME
+SQL> 
+SQL> REM 1 NJ
+SQL> 
+SQL> REM 2 IJU
+SQL> 
+SQL> REM 3 IJO
+SQL> 
+SQL> 
+SQL> REM 1 NJ : NO COLUMNS
+SQL> 
+SQL> REM 2 IJU : MANAGER_ID
+SQL> 
+SQL> REM 3 IJO : DEPARTMENT_ID , MANAGER_ID
+SQL> 
+SQL> 
+SQL> SELECT EMPLOYEE_ID , DEPARTMENT_ID , MANAGER_ID , FIRST_NAME , DEPARTMENT_NAME
+  2  FROM EMPLOYEES
+  3  NATURAL JOIN DEPARTMENTS;
+
+EMPLOYEE_ID DEPARTMENT_ID MANAGER_ID FIRST_NAME      DEPARTMENT_NAME                                                                                                                                    
+----------- ------------- ---------- --------------- ------------------------------                                                                                                                     
+        101            90        100 Neena           Executive                                                                                                                                          
+        102            90        100 Lex             Executive                                                                                                                                          
+        104            60        103 Bruce           IT                                                                                                                                                 
+        107            60        103 Diana           IT                                                                                                                                                 
+        141            50        124 Trenna          Shiping                                                                                                                                            
+        142            50        124 Curtis          Shiping                                                                                                                                            
+        143            50        124 Randall         Shiping                                                                                                                                            
+        144            50        124 Peter           Shiping                                                                                                                                            
+        174            80        149 Ellen           Sales                                                                                                                                              
+        176            80        149 Jonathon        Sales                                                                                                                                              
+        202            20        201 Pat             Marketing                                                                                                                                          
+        206           110        205 William         Accounting                                                                                                                                         
+
+12 rows selected.
+
+SQL> SELECT EMPLOYEE_ID , DEPARTMENT_ID , E.MANAGER_ID , FIRST_NAME , DEPARTMENT_NAME
+  2  FROM EMPLOYEES
+  3  E JOIN DEPARTMENTS USING (DEPARTMENT_ID);
+
+EMPLOYEE_ID DEPARTMENT_ID MANAGER_ID FIRST_NAME      DEPARTMENT_NAME                                                                                                                                    
+----------- ------------- ---------- --------------- ------------------------------                                                                                                                     
+        200            10        101 Jennifer        Administration                                                                                                                                     
+        201            20        100 Michael         Marketing                                                                                                                                          
+        202            20        201 Pat             Marketing                                                                                                                                          
+        124            50        100 Kevin           Shiping                                                                                                                                            
+        144            50        124 Peter           Shiping                                                                                                                                            
+        143            50        124 Randall         Shiping                                                                                                                                            
+        142            50        124 Curtis          Shiping                                                                                                                                            
+        141            50        124 Trenna          Shiping                                                                                                                                            
+        107            60        103 Diana           IT                                                                                                                                                 
+        104            60        103 Bruce           IT                                                                                                                                                 
+        103            60        102 Alexander       IT                                                                                                                                                 
+        174            80        149 Ellen           Sales                                                                                                                                              
+        149            80        100 Eleni           Sales                                                                                                                                              
+        176            80        149 Jonathon        Sales                                                                                                                                              
+        102            90        100 Lex             Executive                                                                                                                                          
+        100            90            Steven          Executive                                                                                                                                          
+        101            90        100 Neena           Executive                                                                                                                                          
+        206           110        205 William         Accounting                                                                                                                                         
+        205           110        101 Shelley         Accounting                                                                                                                                         
+
+19 rows selected.
+
+SQL> SELECT EMPLOYEE_ID , E.DEPARTMENT_ID , E.MANAGER_ID , FIRST_NAME , DEPARTMENT_NAME
+  2  FROM EMPLOYEES E
+  3  JOIN DEPARTMENTS D ON E.DEPARTMENT_ID = D.DEPARTMENT_ID;
+
+EMPLOYEE_ID DEPARTMENT_ID MANAGER_ID FIRST_NAME      DEPARTMENT_NAME                                                                                                                                    
+----------- ------------- ---------- --------------- ------------------------------                                                                                                                     
+        200            10        101 Jennifer        Administration                                                                                                                                     
+        201            20        100 Michael         Marketing                                                                                                                                          
+        202            20        201 Pat             Marketing                                                                                                                                          
+        124            50        100 Kevin           Shiping                                                                                                                                            
+        144            50        124 Peter           Shiping                                                                                                                                            
+        143            50        124 Randall         Shiping                                                                                                                                            
+        142            50        124 Curtis          Shiping                                                                                                                                            
+        141            50        124 Trenna          Shiping                                                                                                                                            
+        107            60        103 Diana           IT                                                                                                                                                 
+        104            60        103 Bruce           IT                                                                                                                                                 
+        103            60        102 Alexander       IT                                                                                                                                                 
+        174            80        149 Ellen           Sales                                                                                                                                              
+        149            80        100 Eleni           Sales                                                                                                                                              
+        176            80        149 Jonathon        Sales                                                                                                                                              
+        102            90        100 Lex             Executive                                                                                                                                          
+        100            90            Steven          Executive                                                                                                                                          
+        101            90        100 Neena           Executive                                                                                                                                          
+        206           110        205 William         Accounting                                                                                                                                         
+        205           110        101 Shelley         Accounting                                                                                                                                         
+
+19 rows selected.
+
+SQL> REM EMPLOYEE_ID , FIRST_NAME , DEPARTMENT_ID , MANAGER_ID , CITY , COUNTRY_ID , REGION_NAME , REGION_ID
+SQL> 
+SQL> REM 1 NJ 2 IJU 3 IJO
+SQL> 
+SQL> SELECT EMPLOYEE_ID , FIRST_NAME , DEPARTMENT_ID , MANAGER_ID , CITY , COUNTRY_ID , REGION_NAME , REGION_ID
+    FROM EMPLOYEES
+    NATURAL JOIN DEPARTMENTS
+    NATURAL JOIN LOCATIONS
+    NATURAL JOIN COUNTRIES
+    NATURAL JOIN REGIONS
+    ;
+
+EMPLOYEE_ID FIRST_NAME      DEPARTMENT_ID MANAGER_ID CITY                           CO REGION_NAME                REGION_ID                                                                             
+----------- --------------- ------------- ---------- ------------------------------ -- ------------------------- ----------                                                                             
+        101 Neena                      90        100 Seattle                        US Americas                           2                                                                             
+        102 Lex                        90        100 Seattle                        US Americas                           2                                                                             
+        104 Bruce                      60        103 Southlake                      US Americas                           2                                                                             
+        107 Diana                      60        103 Southlake                      US Americas                           2                                                                             
+        141 Trenna                     50        124 South San Francisco            US Americas                           2                                                                             
+        142 Curtis                     50        124 South San Francisco            US Americas                           2                                                                             
+        143 Randall                    50        124 South San Francisco            US Americas                           2                                                                             
+        144 Peter                      50        124 South San Francisco            US Americas                           2                                                                             
+        174 Ellen                      80        149 Oxford                         UK Europe                             1                                                                             
+        176 Jonathon                   80        149 Oxford                         UK Europe                             1                                                                             
+        202 Pat                        20        201 Toronto                        CA Americas                           2                                                                             
+        206 William                   110        205 Seattle                        US Americas                           2                                                                             
+
+12 rows selected.
+
+SQL> SELECT EMPLOYEE_ID , FIRST_NAME , DEPARTMENT_ID , MANAGER_ID , CITY , COUNTRY_ID , REGION_NAME , REGION_ID
+  2  FROM
+  3  
+SQL> SELECT EMPLOYEE_ID , FIRST_NAME , DEPARTMENT_ID , E.MANAGER_ID , CITY , COUNTRY_ID , REGION_NAME , REGION_ID
+  2  FROM EMPLOYEES E
+  3  JOIN DEPARTMENTS USING (DEPARTMENT_ID)
+  4  JOIN LOCATIONS   USING (LOCATION_ID)
+  5  JOIN COUNTRIES   USING (COUNTRY_ID)
+  6  JOIN REGIONS     USING (REGION_ID);
+
+EMPLOYEE_ID FIRST_NAME      DEPARTMENT_ID MANAGER_ID CITY                           CO REGION_NAME                REGION_ID                                                                             
+----------- --------------- ------------- ---------- ------------------------------ -- ------------------------- ----------                                                                             
+        174 Ellen                      80        149 Oxford                         UK Europe                             1                                                                             
+        149 Eleni                      80        100 Oxford                         UK Europe                             1                                                                             
+        176 Jonathon                   80        149 Oxford                         UK Europe                             1                                                                             
+        201 Michael                    20        100 Toronto                        CA Americas                           2                                                                             
+        202 Pat                        20        201 Toronto                        CA Americas                           2                                                                             
+        107 Diana                      60        103 Southlake                      US Americas                           2                                                                             
+        104 Bruce                      60        103 Southlake                      US Americas                           2                                                                             
+        103 Alexander                  60        102 Southlake                      US Americas                           2                                                                             
+        124 Kevin                      50        100 South San Francisco            US Americas                           2                                                                             
+        144 Peter                      50        124 South San Francisco            US Americas                           2                                                                             
+        143 Randall                    50        124 South San Francisco            US Americas                           2                                                                             
+        142 Curtis                     50        124 South San Francisco            US Americas                           2                                                                             
+        141 Trenna                     50        124 South San Francisco            US Americas                           2                                                                             
+        200 Jennifer                   10        101 Seattle                        US Americas                           2                                                                             
+        102 Lex                        90        100 Seattle                        US Americas                           2                                                                             
+        100 Steven                     90            Seattle                        US Americas                           2                                                                             
+        101 Neena                      90        100 Seattle                        US Americas                           2                                                                             
+        206 William                   110        205 Seattle                        US Americas                           2                                                                             
+        205 Shelley                   110        101 Seattle                        US Americas                           2                                                                             
+
+19 rows selected.
+
+SQL> SELECT EMPLOYEE_ID , FIRST_NAME , E.DEPARTMENT_ID , E.MANAGER_ID , CITY , C.COUNTRY_ID , REGION_NAME , R.REGION_ID
+  2  FROM EMPLOYEES E
+  3  JOIN DEPARTMENTS D ON E.DEPARTMENT_ID =D.DEPARMENT_ID
+  4  JOIN LOCATIONS   L ON D.LOCATION_ID = L.LOCATION_ID
+  5  JOIN COUTNRIES   C ON L.COUNTRY_ID = C.COUNTRY_ID
+  6  JOIN REGIONS     R ON C.REGION_ID = R.REGION_ID
+  7  
+SQL> SELECT EMPLOYEE_ID , FIRST_NAME , E.DEPARTMENT_ID , E.MANAGER_ID , CITY , C.COUNTRY_ID , REGION_NAME , R.REGION_ID
+  2  FROM EMPLOYEES E
+  3  JOIN DEPARTMENTS D ON E.DEPARTMENT_ID =D.DEPARMENT_ID
+  4  JOIN LOCATIONS   L ON D.LOCATION_ID = L.LOCATION_ID
+  5  JOIN COUTNRIES   C ON L.COUNTRY_ID = C.COUNTRY_ID
+  6  
+SQL> 
+SQL> SELECT EMPLOYEE_ID , FIRST_NAME , E.DEPARTMENT_ID , E.MANAGER_ID , CITY , C.COUNTRY_ID , REGION_NAME , R.REGION_ID
+  2  FROM EMPLOYEES E
+  3  JOIN DEPARTMENTS D ON E.DEPARTMENT_ID =D.DEPARTMENT_ID
+  4  JOIN LOCATIONS   L ON D.LOCATION_ID = L.LOCATION_ID
+  5  JOIN COUNTRIES   C ON L.COUNTRY_ID = C.COUNTRY_ID
+  6  JOIN REGIONS     R ON C.REGION_ID = R.REGION_ID;
+
+EMPLOYEE_ID FIRST_NAME      DEPARTMENT_ID MANAGER_ID CITY                           CO REGION_NAME                REGION_ID                                                                             
+----------- --------------- ------------- ---------- ------------------------------ -- ------------------------- ----------                                                                             
+        174 Ellen                      80        149 Oxford                         UK Europe                             1                                                                             
+        149 Eleni                      80        100 Oxford                         UK Europe                             1                                                                             
+        176 Jonathon                   80        149 Oxford                         UK Europe                             1                                                                             
+        201 Michael                    20        100 Toronto                        CA Americas                           2                                                                             
+        202 Pat                        20        201 Toronto                        CA Americas                           2                                                                             
+        107 Diana                      60        103 Southlake                      US Americas                           2                                                                             
+        104 Bruce                      60        103 Southlake                      US Americas                           2                                                                             
+        103 Alexander                  60        102 Southlake                      US Americas                           2                                                                             
+        124 Kevin                      50        100 South San Francisco            US Americas                           2                                                                             
+        144 Peter                      50        124 South San Francisco            US Americas                           2                                                                             
+        143 Randall                    50        124 South San Francisco            US Americas                           2                                                                             
+        142 Curtis                     50        124 South San Francisco            US Americas                           2                                                                             
+        141 Trenna                     50        124 South San Francisco            US Americas                           2                                                                             
+        200 Jennifer                   10        101 Seattle                        US Americas                           2                                                                             
+        102 Lex                        90        100 Seattle                        US Americas                           2                                                                             
+        100 Steven                     90            Seattle                        US Americas                           2                                                                             
+        101 Neena                      90        100 Seattle                        US Americas                           2                                                                             
+        206 William                   110        205 Seattle                        US Americas                           2                                                                             
+        205 Shelley                   110        101 Seattle                        US Americas                           2                                                                             
+
+19 rows selected.
+
+SQL> REM NATURAL JOIN , CROSS JOIN SUPPORTS TABLE LISTING IN ANY RANDOM ORDER.
+SQL> 
+SQL> 
+SQL> SELECT DEPARTMENT_NAME , CITY , COUNTRY_NAME
+  2  
+SQL> 
+SQL> SELECT DEPARTMENT_NAME , CITY , COUNTRY_NAME , REGION_NAME
+  2  FROM DEPARTMENTS
+  3  NATURAL JOIN LOCATIONS
+  4  NATURAL JOIN COUNTRIES
+  5  NATURAL JOIN REGIONS;
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                             REGION_NAME                                                                                      
+------------------------------ ------------------------------ ---------------------------------------- -------------------------                                                                        
+Administration                 Seattle                        United States of America                 Americas                                                                                         
+Marketing                      Toronto                        Canada                                   Americas                                                                                         
+Shiping                        South San Francisco            United States of America                 Americas                                                                                         
+IT                             Southlake                      United States of America                 Americas                                                                                         
+Sales                          Oxford                         United Kingdom                           Europe                                                                                           
+Executive                      Seattle                        United States of America                 Americas                                                                                         
+Accounting                     Seattle                        United States of America                 Americas                                                                                         
+Contracting                    Seattle                        United States of America                 Americas                                                                                         
+
+8 rows selected.
+
+SQL> FROM DEPARTMENTS
+SP2-0734: unknown command beginning "FROM DEPAR..." - rest of line ignored.
+SQL> 
+SQL> SELECT DEPARTMENT_NAME , CITY , COUNTRY_NAME , REGION_NAME
+  2  FROM REGIONS
+  3  NATURAL JOIN COUNTRIES
+  4  NATURAL JOIN LOCATIONS
+  5  NATURAL JOIN DEPARTMENTS;
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                             REGION_NAME                                                                                      
+------------------------------ ------------------------------ ---------------------------------------- -------------------------                                                                        
+Administration                 Seattle                        United States of America                 Americas                                                                                         
+Marketing                      Toronto                        Canada                                   Americas                                                                                         
+Shiping                        South San Francisco            United States of America                 Americas                                                                                         
+IT                             Southlake                      United States of America                 Americas                                                                                         
+Sales                          Oxford                         United Kingdom                           Europe                                                                                           
+Executive                      Seattle                        United States of America                 Americas                                                                                         
+Accounting                     Seattle                        United States of America                 Americas                                                                                         
+Contracting                    Seattle                        United States of America                 Americas                                                                                         
+
+8 rows selected.
+
+SQL> SELECT DEPARTMENT_NAME , CITY , COUNTRY_NAME , REGION_NAME
+  2  FROM COUNTRIES
+  3  NATURAL JOIN DEPARTMENTS
+  4  NATURAL JOIN REGIONS
+  5  NATURAL JOIN COUNTRIES;
+SELECT DEPARTMENT_NAME , CITY , COUNTRY_NAME , REGION_NAME
+                         *
+ERROR at line 1:
+ORA-00904: "CITY": invalid identifier 
+
+
+SQL> SELECT DEPARTMENT_NAME , CITY , COUNTRY_NAME , REGION_NAME
+  2  FROM COUNTRIES
+  3  NATURAL JOIN DEPARTMENTS
+  4  NATURAL JOIN REGIONS
+  5  NATURAL JOIN LOCATIONS;
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                             REGION_NAME                                                                                      
+------------------------------ ------------------------------ ---------------------------------------- -------------------------                                                                        
+Administration                 Seattle                        United States of America                 Americas                                                                                         
+Marketing                      Toronto                        Canada                                   Americas                                                                                         
+Shiping                        South San Francisco            United States of America                 Americas                                                                                         
+IT                             Southlake                      United States of America                 Americas                                                                                         
+Sales                          Oxford                         United Kingdom                           Europe                                                                                           
+Executive                      Seattle                        United States of America                 Americas                                                                                         
+Accounting                     Seattle                        United States of America                 Americas                                                                                         
+Contracting                    Seattle                        United States of America                 Americas                                                                                         
+
+8 rows selected.
+
+SQL> REM 1 LEFT TO RIGHT : D L C R
+SQL> 
+SQL> REM 2 RIGHT TO LEFT : R C L D
+SQL> 
+SQL> REM 3 RANDOM 1      : L D C R
+SQL> 
+SQL> REM 4 RANDOM 2      : L C D R
+SQL> 
+SQL> REM 5 RANDOM 3      : L C R D
+SQL> 
+SQL> REM 6 RANDOM 4      : C R L D
+SQL> 
+SQL> REM 7 RANDOM 5      : C L D R
+SQL> 
+SQL> REM 8 RANDOM 6      : C L R D
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+-+LEFT+--+LEFT+--+LEFT+--+LEFT+--+LEFT+--+LEFT+--+LEFT+--+LEFT-+LEFT+--+LEFT+--+LEFT+--+LEFT+-
+SQL> 
+SQL> REM 1 D L C R
+SQL> 
+SQL> REM 2 C R L D
+SQL> 
+SQL> 
+SQL> 
+SQL> REM 1 LEFT TO RIGHT
+SQL> 
+SQL> REM 2 RIGHT TO LEFT
+SQL> 
+SQL> REM 3 RANDOM : LOCATIONS
+SQL> 
+SQL> REM 4 RANDOM : COUNTRIES
+SQL> 
+SQL> 
+SQL> REM DEPARTMENT_NAME , CITY , COUNTRY_NAME , REGION_NAME
+SQL> 
+SQL> REM 1 USING
+SQL> 
+SQL> 
+SQL> SELECT DEPARTMENT_NAME , CITY , COUNTRY_NAME , REGION_NAME
+  2  FROM DEPARTMENTS
+  3  JOIN LOCATIONS USING (LOCATION_ID)
+  4  JOIN COUNTRIES USING (COUNTRY_ID)
+  5  JOIN REGIONS   USING (REGION_ID);
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                             REGION_NAME                                                                                      
+------------------------------ ------------------------------ ---------------------------------------- -------------------------                                                                        
+Administration                 Seattle                        United States of America                 Americas                                                                                         
+Marketing                      Toronto                        Canada                                   Americas                                                                                         
+Shiping                        South San Francisco            United States of America                 Americas                                                                                         
+IT                             Southlake                      United States of America                 Americas                                                                                         
+Sales                          Oxford                         United Kingdom                           Europe                                                                                           
+Executive                      Seattle                        United States of America                 Americas                                                                                         
+Accounting                     Seattle                        United States of America                 Americas                                                                                         
+Contracting                    Seattle                        United States of America                 Americas                                                                                         
+
+8 rows selected.
+
+SQL> SELECT DEPARTMENT_NAME , CITY , COUNTRY_NAME , REGION_NAME
+  2  FROM REGIONS
+  3  JOIN COUNTRIES USING (REGION_ID)
+  4  JOIN LOCATIONS USING (COUNTRY_ID)
+  5  JOIN DEPARTMENTS USING (LOCATION_ID);
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                             REGION_NAME                                                                                      
+------------------------------ ------------------------------ ---------------------------------------- -------------------------                                                                        
+Administration                 Seattle                        United States of America                 Americas                                                                                         
+Marketing                      Toronto                        Canada                                   Americas                                                                                         
+Shiping                        South San Francisco            United States of America                 Americas                                                                                         
+IT                             Southlake                      United States of America                 Americas                                                                                         
+Sales                          Oxford                         United Kingdom                           Europe                                                                                           
+Executive                      Seattle                        United States of America                 Americas                                                                                         
+Accounting                     Seattle                        United States of America                 Americas                                                                                         
+Contracting                    Seattle                        United States of America                 Americas                                                                                         
+
+8 rows selected.
+
+SQL> SELECT DEPARTMENT_NAME , CITY , COUNTRY_NAME , REGION_NAME
+  2  
+SQL> SELECT DEPARTMENT_NAME , CITY , COUNTRY_NAME , REGION_NAME
+  2  FROM LOCATIONS
+  3  JOIN DEPARTMENTS USING (LOCATION_ID)
+  4  JOIN COUNTRIES   USING (COUNTRY_ID)
+  5  JOIN REGIONS     USING (REGION_ID);
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                             REGION_NAME                                                                                      
+------------------------------ ------------------------------ ---------------------------------------- -------------------------                                                                        
+Administration                 Seattle                        United States of America                 Americas                                                                                         
+Marketing                      Toronto                        Canada                                   Americas                                                                                         
+Shiping                        South San Francisco            United States of America                 Americas                                                                                         
+IT                             Southlake                      United States of America                 Americas                                                                                         
+Sales                          Oxford                         United Kingdom                           Europe                                                                                           
+Executive                      Seattle                        United States of America                 Americas                                                                                         
+Accounting                     Seattle                        United States of America                 Americas                                                                                         
+Contracting                    Seattle                        United States of America                 Americas                                                                                         
+
+8 rows selected.
+
+SQL> SELECT DEPARTMENT_NAME , CITY , COUNTRY_NAME , REGION_NAME
+  2  FROM COUNTRIES
+  3  JOIN LOCATIONS USING (COUNTRY_ID)
+  4  JOIN REGIONS   USING (REGION_ID)
+  5  JOIN DEPARTMENTS USING (LOCATION_ID);
+
+DEPARTMENT_NAME                CITY                           COUNTRY_NAME                             REGION_NAME                                                                                      
+------------------------------ ------------------------------ ---------------------------------------- -------------------------                                                                        
+Administration                 Seattle                        United States of America                 Americas                                                                                         
+Marketing                      Toronto                        Canada                                   Americas                                                                                         
+Shiping                        South San Francisco            United States of America                 Americas                                                                                         
+IT                             Southlake                      United States of America                 Americas                                                                                         
+Sales                          Oxford                         United Kingdom                           Europe                                                                                           
+Executive                      Seattle                        United States of America                 Americas                                                                                         
+Accounting                     Seattle                        United States of America                 Americas                                                                                         
+Contracting                    Seattle                        United States of America                 Americas                                                                                         
+
+8 rows selected.
+
+SQL> SPOOL OFF

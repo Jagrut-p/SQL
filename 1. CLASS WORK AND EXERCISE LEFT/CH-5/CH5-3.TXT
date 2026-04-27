@@ -1,0 +1,466 @@
+SQL> 
+SQL> CL SCR
+
+SQL> REM PCM : PIVOT / CROSS TAB / MATRIX REPORTS
+SQL> 
+SQL> REM DISPLAY AVERAGE SALARY PAID BY COMPANY
+SQL> 
+SQL> SELECT AVG(SALARY) FROM EMPLOYEES;
+
+AVG(SALARY)                                                                                                                                                                                             
+-----------                                                                                                                                                                                             
+       8775                                                                                                                                                                                             
+
+SQL> REM DISPLAY AVERAGE SALARY PAID BY COMPANY TO DEPARTMENT 80
+SQL> 
+SQL> SELECT AVG(SALARY) FROM EMPLOYEES WHERE DEPARTMENT_ID = 80;
+
+AVG(SALARY)                                                                                                                                                                                             
+-----------                                                                                                                                                                                             
+ 10033.3333                                                                                                                                                                                             
+
+SQL> REM DISPLAY AVERAGE SALARY PAID BY COMPANY TO EACH DEPARTMENT
+SQL> 
+SQL> SELECT DEPARTMENT_ID , AVG(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID;
+
+DEPARTMENT_ID AVG(SALARY)                                                                                                                                                                               
+------------- -----------                                                                                                                                                                               
+                     7000                                                                                                                                                                               
+           90  19333.3333                                                                                                                                                                               
+           20        9500                                                                                                                                                                               
+          110       10150                                                                                                                                                                               
+           50        3500                                                                                                                                                                               
+           80  10033.3333                                                                                                                                                                               
+           60        6400                                                                                                                                                                               
+           10        4400                                                                                                                                                                               
+
+8 rows selected.
+
+SQL> REM DISPLAY AVERAGE SALARY PAID BY COMPANY TO DEPARTMENT 80 , 20 AND 110
+SQL> 
+SQL> SELECT AVG(SALARY) FROM EMPLOYEES WHERE DEPARTMENT_ID IN ( 80 , 20, 110);
+
+AVG(SALARY)                                                                                                                                                                                             
+-----------                                                                                                                                                                                             
+ 9914.28571                                                                                                                                                                                             
+
+SQL> REM DISPLAY AVERAGE SALARY PAID BY COMPANY TO DEPARTMENT 80 , 20 AND 110 (DISPLAY INDIVIDUALLY)
+SQL> 
+SQL> SELECT DEPARTMENT_ID , AVG(SALARY) FROM EMPLOYEES WHERE (20,80,110) GROUP BY DEPARTMENT_ID;
+SELECT DEPARTMENT_ID , AVG(SALARY) FROM EMPLOYEES WHERE (20,80,110) GROUP BY DEPARTMENT_ID
+                                                                    *
+ERROR at line 1:
+ORA-00920: invalid relational operator 
+
+
+SQL> SELECT DEPARTMENT_ID , AVG(SALARY) FROM EMPLOYEES WHERE DEPARTMENT_ID IN (20,80,110) GROUP BY DEPARTMENT_ID;
+
+DEPARTMENT_ID AVG(SALARY)                                                                                                                                                                               
+------------- -----------                                                                                                                                                                               
+           20        9500                                                                                                                                                                               
+          110       10150                                                                                                                                                                               
+           80  10033.3333                                                                                                                                                                               
+
+SQL> /*
+SQL> 
+SQL> DEPT_20_AVG_SAL     DEPT_80_AVG_SAL    DEPT_110_AVG_SAL
+SQL> ---------------     ---------------    ----------------
+SQL>            9500               10150          10033.3333
+SQL> 
+SQL> */
+SQL> 
+SQL> 
+SQL> -- AVG(SALARY) , AVG(SALARY) , AVG(SALARY)
+SQL> 
+SQL> SELECT DEPARTMENT_ID , SALARY FROM EMPLOYEES ORDER BY 1;
+
+DEPARTMENT_ID     SALARY                                                                                                                                                                                
+------------- ----------                                                                                                                                                                                
+           10       4400                                                                                                                                                                                
+           20      13000                                                                                                                                                                                
+           20       6000                                                                                                                                                                                
+           50       5800                                                                                                                                                                                
+           50       2500                                                                                                                                                                                
+           50       2600                                                                                                                                                                                
+           50       3100                                                                                                                                                                                
+           50       3500                                                                                                                                                                                
+           60       4200                                                                                                                                                                                
+           60       6000                                                                                                                                                                                
+           60       9000                                                                                                                                                                                
+           80      11000                                                                                                                                                                                
+           80      10500                                                                                                                                                                                
+           80       8600                                                                                                                                                                                
+           90      17000                                                                                                                                                                                
+           90      24000                                                                                                                                                                                
+           90      17000                                                                                                                                                                                
+          110       8300                                                                                                                                                                                
+          110      12000                                                                                                                                                                                
+                    7000                                                                                                                                                                                
+
+20 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , CASE WHEN DEPARTMENT_ID = 80 THEN SALARY END NEW_SALARY FROM EMPLOYEES;
+
+DEPARTMENT_ID NEW_SALARY                                                                                                                                                                                
+------------- ----------                                                                                                                                                                                
+           90                                                                                                                                                                                           
+           90                                                                                                                                                                                           
+           90                                                                                                                                                                                           
+           60                                                                                                                                                                                           
+           60                                                                                                                                                                                           
+           60                                                                                                                                                                                           
+           50                                                                                                                                                                                           
+           50                                                                                                                                                                                           
+           50                                                                                                                                                                                           
+           50                                                                                                                                                                                           
+           50                                                                                                                                                                                           
+           80      10500                                                                                                                                                                                
+           80      11000                                                                                                                                                                                
+           80       8600                                                                                                                                                                                
+                                                                                                                                                                                                        
+           10                                                                                                                                                                                           
+           20                                                                                                                                                                                           
+           20                                                                                                                                                                                           
+          110                                                                                                                                                                                           
+          110                                                                                                                                                                                           
+
+20 rows selected.
+
+SQL> SELECT AVG(CASE WHEN DEPARTMENT_ID = 20 THEN SALARY END) DEPT_20_AVG_SAL,
+  2         AVG(CASE WHEN DEPARTMENT_ID = 80 THEN SALARY END) DEPT_80_AVG_SAL,
+  3         AVG(CASE WHEN DEPARTMENT_ID = 110 THEN SALARY END) DEPT_110_AVG_SAL
+  4  FROM EMPLOYEES;
+
+DEPT_20_AVG_SAL DEPT_80_AVG_SAL DEPT_110_AVG_SAL                                                                                                                                                        
+--------------- --------------- ----------------                                                                                                                                                        
+           9500      10033.3333            10150                                                                                                                                                        
+
+SQL> SELECT DEPARTMENT_ID , AVG(SALARY) FROM EMPLOYEES WHERE DEPARTMENT_ID IN (20,80,110) GROUP BY DEPARTMENT_ID;
+
+DEPARTMENT_ID AVG(SALARY)                                                                                                                                                                               
+------------- -----------                                                                                                                                                                               
+           20        9500                                                                                                                                                                               
+          110       10150                                                                                                                                                                               
+           80  10033.3333                                                                                                                                                                               
+
+SQL> SELECT AVG(DECODE(DEPARTMENT_ID , 20 , SALARY) DEPT_20_AVG_SAL,
+  2         AVG(DECODE(DEPARTMENT_ID , 60 , SALARY) DEPT_60_AVG_SAL,
+  3         AVG(DECODE(DEPARTMENT_ID , 110 , SALARY) DEPT_110_AVG_SAL
+  4  
+SQL> 
+SQL> SELECT AVG(DECODE(DEPARTMENT_ID , 20 , SALARY)) DEPT_20_AVG_SAL,
+  2         AVG(DECODE(DEPARTMENT_ID , 60 , SALARY)) DEPT_60_AVG_SAL,
+  3         AVG(DECODE(DEPARTMENT_ID , 110 , SALARY)) DEPT_110_AVG_SAL
+  4  FROM EMPLOYEES;
+
+DEPT_20_AVG_SAL DEPT_60_AVG_SAL DEPT_110_AVG_SAL                                                                                                                                                        
+--------------- --------------- ----------------                                                                                                                                                        
+           9500            6400            10150                                                                                                                                                        
+
+SQL> REM 1 MGR_100_MIN_SAL    MGR_124_MIN_SAL     MGR_149_MIN_SAL
+SQL> 
+SQL> REM 2 IT_PROG_SUM_SAL    ST_CLERK_AVG_SAL    SA_REP_MAX_SAL
+SQL> 
+SQL> REM 3 DEPT_20_CNT        DEPT_50_CNT         DEPT_90_CNT
+SQL> 
+SQL> REM 4 HQ1_SUM_SAL        HQ2_MAX_SAL         HQ3_MIN_SAL       HQ4_AVG_SAL
+SQL> 
+SQL> REM 5 HWM1_CNT           HWM2_CNT            HWM3_CNT          HWM4_CNT            HWM5_CNT
+SQL> 
+SQL> 
+SQL> SELECT MIN(DECODE(MANAGER_ID,100,SALARY)) MGR_100_MIN_SAL,
+  2         MIN(DECODE(MANAGER_ID,124,SALARY)) MGR_124_MIN_SAL,
+  3         MIN(DECODE(MANAGER_ID,149,SALARY)) MGR_149_MIN_SAL
+  4  FROM EMPLOYEES;
+
+MGR_100_MIN_SAL MGR_124_MIN_SAL MGR_149_MIN_SAL                                                                                                                                                         
+--------------- --------------- ---------------                                                                                                                                                         
+           5800            2500            7000                                                                                                                                                         
+
+SQL> SELECT SUM(DECODE(JOB_ID,'IT_PROG',SALARY)) IT_PROG_SUM_SAL,
+  2         SUM(DECODE(JOB_ID,'ST_CLERK',SALARY)) ST_CLERK_SUM_SAL,
+  3         SUM(DECODE(JOB_ID,'SA_REP',SALARY)) SA_REP_SUM_SAL
+  4  FROM EMPLOYEES;
+
+IT_PROG_SUM_SAL ST_CLERK_SUM_SAL SA_REP_SUM_SAL                                                                                                                                                         
+--------------- ---------------- --------------                                                                                                                                                         
+          19200            11700          26600                                                                                                                                                         
+
+SQL> SELECT COUNT(DECODE(DEPARTMENT_ID,20,SALARY)) DEPT_20_CNT,
+  2         COUNT(DECODE(DEPARTMENT_ID,50,SALARY)) DEPT_50_CNT,
+  3         COUNT(DECODE(DEPARTMENT_ID,50,SALARY)) DEPT_50_CNT
+  4  FROM EMPLOYEES;
+
+DEPT_20_CNT DEPT_50_CNT DEPT_50_CNT                                                                                                                                                                     
+----------- ----------- -----------                                                                                                                                                                     
+          2           5           5                                                                                                                                                                     
+
+SQL> 
+SQL> REM 4 HQ1_SUM_SAL        HQ2_MAX_SAL         HQ3_MIN_SAL       HQ4_AVG_SAL
+SQL> 
+SQL> SELECT SUM(DECODE(TO_CHAR(HIRE_DATE,'Q'),1,SALARY) HQ1_SUM_SAL,
+  2         MAX(DECODE(TO_CHAR(HIRE_DATE,'Q'),2,SALARY) HQ_MAX_SAL,
+  3         MIN(DECODE(TO_CHAR(HIRE_DATE,'Q'),3,SALARY) HQ3_MIN_SAL,
+  4         AVG(DECODE(TO_CHAR(HIRE_DATE,'Q'),4,SALARY) HQ3_AVG_SAL
+  5  
+SQL> 
+SQL> SELECT SUM(DECODE(TO_CHAR(HIRE_DATE,'Q'),1,SALARY) HQ1_SUM_SAL,
+  2         MAX(DECODE(TO_CHAR(HIRE_DATE,'Q'),2,SALARY) HQ2_MAX_SAL,
+  3         MIN(DECODE(TO_CHAR(HIRE_DATE,'Q'),3,SALARY) HQ3_MIN_SAL,
+  4         AVG(DECODE(TO_CHAR(HIRE_DATE,'Q'),4,SALARY) HQ3_AVG_SAL
+  5  FROM EMPLOYEES;
+SELECT SUM(DECODE(TO_CHAR(HIRE_DATE,'Q'),1,SALARY) HQ1_SUM_SAL,
+                                                   *
+ERROR at line 1:
+ORA-00907: missing right parenthesis 
+
+
+SQL> SELECT SUM(DECODE(TO_CHAR(HIRE_DATE,'Q'),1,SALARY)) HQ1_SUM_SAL,
+  2         MAX(DECODE(TO_CHAR(HIRE_DATE,'Q'),2,SALARY)) HQ2_MAX_SAL,
+  3         AVG(DECODE(TO_CHAR(HIRE_DATE,'Q'),4,SALARY)) HQ3_AVG_SAL
+  4         AVG(DECODE(TO_CHAR(HIRE_DATE,'Q'),4,SALARY)) HQ3_AVG_SAL
+  5  
+SQL> 
+SQL> REM 4 HQ1_SUM_SAL        HQ2_MAX_SAL         HQ3_MIN_SAL       HQ4_AVG_SAL
+SQL> 
+SQL> 
+SQL> SELECT SUM(DECODE(TO_CHAR(HIRE_DATE,'Q'),1,SALARY)) HQ1_SUM_SAL,
+  2         MAX(DECODE(TO_CHAR(HIRE_DATE,'Q'),2,SALARY)) HQ2_MAX_SAL,
+  3         MIN(DECODE(TO_CHAR(HIRE_DATE,'Q'),3,SALARY)) HQ3_MIN_SAL,
+  4         AVG(DECODE(TO_CHAR(HIRE_DATE,'Q'),4,SALARY)) HQ3_AVG_SAL
+  5  FROM EMPLOYEES;
+
+HQ1_SUM_SAL HQ2_MAX_SAL HQ3_MIN_SAL HQ3_AVG_SAL                                                                                                                                                         
+----------- ----------- ----------- -----------                                                                                                                                                         
+      68000       12000        2500        4650                                                                                                                                                         
+
+SQL> SELECT SUM(DECODE(JOB_ID,'IT_PROG',SALARY)) IT_PROG_SUM_SAL,
+  2         AVG(DECODE(JOB_ID,'ST_CLERK',SALARY)) ST_CLERK_AVG_SAL,
+  3         MAX(DECODE(JOB_ID,'SA_REP',SALARY)) SA_REP_MAX_SAL
+  4  FROM EMPLOYEES;
+
+IT_PROG_SUM_SAL ST_CLERK_AVG_SAL SA_REP_MAX_SAL                                                                                                                                                         
+--------------- ---------------- --------------                                                                                                                                                         
+          19200             2925          11000                                                                                                                                                         
+
+SQL> SELECT COUNT(DECODE(DEPARTMENT_ID,20,SALARY)) DEPT_20_CNT,
+  2         COUNT(DECODE(DEPARTMENT_ID,50,SALARY)) DEPT_50_CNT,
+  3         COUNT(DECODE(DEPARTMENT_ID,90,SALARY)) DEPT_90_CNT
+  4  FROM EMPLOYEES;
+
+DEPT_20_CNT DEPT_50_CNT DEPT_90_CNT                                                                                                                                                                     
+----------- ----------- -----------                                                                                                                                                                     
+          2           5           3                                                                                                                                                                     
+
+SQL> REM 5 HWM1_CNT           HWM2_CNT            HWM3_CNT          HWM4_CNT            HWM5_CNT
+SQL> 
+SQL> SELECT COUNT(DECODE(TO_CHAR(HIRE_DATE,'W'),1,'*')) HWM1_CNT,
+  2         COUNT(DECODE(TO_CHAR(HIRE_DATE,'W'),2,'*')) HWM2_CNT,
+  3         COUNT(DECODE(TO_CHAR(HIRE_DATE,'W'),3,'*')) HWM3_CNT,
+  4         COUNT(DECODE(TO_CHAR(HIRE_DATE,'W'),4,'*')) HWM4_CNT,
+  5         COUNT(DECODE(TO_CHAR(HIRE_DATE,'W'),5,'*')) HWM5_CNT
+  6  FROM EMPLOYEES;
+
+  HWM1_CNT   HWM2_CNT   HWM3_CNT   HWM4_CNT   HWM5_CNT                                                                                                                                                  
+---------- ---------- ---------- ---------- ----------                                                                                                                                                  
+         4          3          9          2          2                                                                                                                                                  
+
+SQL> SELECT COUNT(DECODE(TO_CHAR(HIRE_DATE,'W'),1,'*')) HWM1_CNT,
+  2         COUNT(DECODE(TO_CHAR(HIRE_DATE,'W'),2,SALARY)) HWM2_CNT,
+  3         COUNT(DECODE(TO_CHAR(HIRE_DATE,'W'),3,SYSDATE)) HWM3_CNT,
+  4         COUNT(DECODE(TO_CHAR(HIRE_DATE,'W'),4,'OM NAMAH SHIVAYA')) HWM4_CNT,
+  5         COUNT(DECODE(TO_CHAR(HIRE_DATE,'W'),5,'*')) HWM5_CNT
+  6  FROM EMPLOYEES;
+
+  HWM1_CNT   HWM2_CNT   HWM3_CNT   HWM4_CNT   HWM5_CNT                                                                                                                                                  
+---------- ---------- ---------- ---------- ----------                                                                                                                                                  
+         4          3          9          2          2                                                                                                                                                  
+
+SQL> REM IT_PROG_CNT    ST_CLERK_CNT   AD_VP_CNT
+SQL> 
+SQL> SELECT COUNT(CASE JOB_ID WHEN 'IT_PROG' THEN '*' END) IT_PROG_CNT,
+  2         COUNT(CASE JOB_ID WHEN 'ST_CLERK' THEN '*' END) ST_CLERK_CNT,
+  3         COUNT(CASE JOB_ID WHEN 'AD_VP' THEN '*' END) AD_VP_CNT
+  4  FROM EMPLOYEES;
+
+IT_PROG_CNT ST_CLERK_CNT  AD_VP_CNT                                                                                                                                                                     
+----------- ------------ ----------                                                                                                                                                                     
+          3            4          2                                                                                                                                                                     
+
+SQL> REM MIN_SAL_MGR_124 , MAX_SAL_MGR_149
+SQL> 
+SQL> REM Q1_MIN_SAL , Q2_MAX_SAL
+SQL> 
+SQL> SELECT MIN(CASE TO_CHAR(HIRE_DATE,'Q') WHEN 1 THEN '*' END Q1_MIN_SAL,
+  2         MAX(CASE TO_CHAR(HIRE_DATE,'Q') WHEN '2' THEN '*' END Q2_MAX_SAL
+  3  FROM EMPLOYEES;
+SELECT MIN(CASE TO_CHAR(HIRE_DATE,'Q') WHEN 1 THEN '*' END Q1_MIN_SAL,
+                                                           *
+ERROR at line 1:
+ORA-00907: missing right parenthesis 
+
+
+SQL> SELECT MIN(CASE TO_CHAR(HIRE_DATE,'Q') WHEN '1' THEN '*' END Q1_MIN_SAL,
+  2         MAX(CASE TO_CHAR(HIRE_DATE,'Q') WHEN '2' THEN '*' END Q2_MAX_SAL
+  3  FROM EMPLOYEES;
+SELECT MIN(CASE TO_CHAR(HIRE_DATE,'Q') WHEN '1' THEN '*' END Q1_MIN_SAL,
+                                                             *
+ERROR at line 1:
+ORA-00907: missing right parenthesis 
+
+
+SQL> SELECT MIN(CASE TO_CHAR(HIRE_DATE,'Q') WHEN 1 THEN '*' END) Q1_MIN_SAL,
+  2         MAX(CASE TO_CHAR(HIRE_DATE,'Q') WHEN '2' THEN '*' END) Q2_MAX_SAL
+  3  FROM EMPLOYEES;
+SELECT MIN(CASE TO_CHAR(HIRE_DATE,'Q') WHEN 1 THEN '*' END) Q1_MIN_SAL,
+                                            *
+ERROR at line 1:
+ORA-00932: inconsistent datatypes: expected CHAR got NUMBER 
+
+
+SQL> SELECT MIN(CASE TO_CHAR(HIRE_DATE,'Q') WHEN '1' THEN '*' END) Q1_MIN_SAL,
+  2         MAX(CASE TO_CHAR(HIRE_DATE,'Q') WHEN '2' THEN '*' END) Q2_MAX_SAL
+  3  FROM EMPLOYEES;
+
+Q Q                                                                                                                                                                                                     
+- -                                                                                                                                                                                                     
+* *                                                                                                                                                                                                     
+
+SQL> SELECT MIN(CASE TO_CHAR(HIRE_DATE,'Q') WHEN '1' THEN SALARY END) Q1_MIN_SAL,
+  2         MAX(CASE TO_CHAR(HIRE_DATE,'Q') WHEN '2' THEN SALARY END) Q2_MAX_SAL
+  3  FROM EMPLOYEES;
+
+Q1_MIN_SAL Q2_MAX_SAL                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+      2600      12000                                                                                                                                                                                   
+
+SQL> REM 1 HY_99_CNT     HY_98_CNT     HY_96_CNT
+SQL> 
+SQL> REM 2 LMVA_SUM_SAL     LMVE_SUM-SAL    LMVI_SUM_SAL     LMVO_SUM_SAL    LMVU_SUM_SAL
+SQL> 
+SQL> REM 3 CNT_VOWEL_2_SUM_SAL      CNT_VOWEL_3_SUM_SAL
+SQL> 
+SQL> REM 4 ODD_MONTH_SUM_SAL        EVEN_MONTH_SUM_SAL
+SQL> 
+SQL> REM 5 FH_OF_YEAR_CNT           SH_OF_YEAR_CNT
+SQL> 
+SQL> 
+SQL> 
+SQL> REM 1 HY_99_CNT     HY_98_CNT     HY_96_CNT
+SQL> 
+SQL> SELECT COUNT(CASE TO_CHAR(HIRE_DATE,'RR'),'00','*') HY_99_CNT FROM EMPLOYEES;
+SELECT COUNT(CASE TO_CHAR(HIRE_DATE,'RR'),'00','*') HY_99_CNT FROM EMPLOYEES
+                  *
+ERROR at line 1:
+ORA-00907: missing right parenthesis 
+
+
+SQL> SELECT COUNT(CASE TO_CHAR(HIRE_DATE,'RR') WHEN '00' THEN '*' END) HY_99_CNT FROM EMPLOYEES;
+
+ HY_99_CNT                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+         1                                                                                                                                                                                              
+
+SQL> REM 2 LMVA_SUM_SAL     LMVE_SUM-SAL    LMVI_SUM_SAL     LMVO_SUM_SAL    LMVU_SUM_SAL
+SQL> 
+SQL> SELECT LAST_NAME , SUBSTR(LTRIM(UPPER(FIRST_NAME),'QWRTYPSDFGHJKLZXCVBNM'),1,1) FROM EMPLOYEES;
+
+LAST_NAME       SUBS                                                                                                                                                                                    
+--------------- ----                                                                                                                                                                                    
+King            E                                                                                                                                                                                       
+Kochhar         E                                                                                                                                                                                       
+De Haan         E                                                                                                                                                                                       
+Hunold          A                                                                                                                                                                                       
+Ernst           U                                                                                                                                                                                       
+Lorentz         I                                                                                                                                                                                       
+Mourgos         E                                                                                                                                                                                       
+Rajs            E                                                                                                                                                                                       
+Davies          U                                                                                                                                                                                       
+Matos           A                                                                                                                                                                                       
+Vargas          E                                                                                                                                                                                       
+Zlotkey         E                                                                                                                                                                                       
+Abel            E                                                                                                                                                                                       
+Taylor          O                                                                                                                                                                                       
+Grant           I                                                                                                                                                                                       
+Whalen          E                                                                                                                                                                                       
+Hartstein       I                                                                                                                                                                                       
+Fay             A                                                                                                                                                                                       
+Higgins         E                                                                                                                                                                                       
+Gietz           I                                                                                                                                                                                       
+
+20 rows selected.
+
+SQL> SELECT LAST_NAME , SUBSTR(LTRIM(UPPER(LAST_NAME),'QWRTYPSDFGHJKLZXCVBNM'),1,1) FROM EMPLOYEES;
+
+LAST_NAME       SUBS                                                                                                                                                                                    
+--------------- ----                                                                                                                                                                                    
+King            I                                                                                                                                                                                       
+Kochhar         O                                                                                                                                                                                       
+De Haan         E                                                                                                                                                                                       
+Hunold          U                                                                                                                                                                                       
+Ernst           E                                                                                                                                                                                       
+Lorentz         O                                                                                                                                                                                       
+Mourgos         O                                                                                                                                                                                       
+Rajs            A                                                                                                                                                                                       
+Davies          A                                                                                                                                                                                       
+Matos           A                                                                                                                                                                                       
+Vargas          A                                                                                                                                                                                       
+Zlotkey         O                                                                                                                                                                                       
+Abel            A                                                                                                                                                                                       
+Taylor          A                                                                                                                                                                                       
+Grant           A                                                                                                                                                                                       
+Whalen          A                                                                                                                                                                                       
+Hartstein       A                                                                                                                                                                                       
+Fay             A                                                                                                                                                                                       
+Higgins         I                                                                                                                                                                                       
+Gietz           I                                                                                                                                                                                       
+
+20 rows selected.
+
+SQL> SELECT SUM(CASE SUBSTR(LTRIM(UPPER(LAST_NAME),'QWRTYPSDFGHJKLZXCVBNM'),1,1) WHEN 'A' THEN SALARY END) LMVA_SUM_SAL FROM EMPLOYEES;
+
+LMVA_SUM_SAL                                                                                                                                                                                            
+------------                                                                                                                                                                                            
+       61700                                                                                                                                                                                            
+
+SQL> REM 3 CNT_VOWEL_2_SUM_SAL      CNT_VOWEL_3_SUM_SAL
+SQL> 
+SQL> REM 4 ODD_MONTH_SUM_SAL        EVEN_MONTH_SUM_SAL
+SQL> 
+SQL> REM 5 FH_OF_YEAR_CNT           SH_OF_YEAR_CNT
+SQL> 
+SQL> 
+SQL> 
+SQL> REM 3 CNT_VOWEL_2_SUM_SAL      CNT_VOWEL_3_SUM_SAL
+SQL> 
+SQL> SELECT SUM(CASE LENGTH(TRANSLATE(UPPER(FIRST_NAME),'#QWRTYPSDFGHJKLZXCVBNM','#')) WHEN 2 THEN SALARY END) CNT_VOWEL_2_SUM_SAL FROM EMPLOYEES;
+
+CNT_VOWEL_2_SUM_SAL                                                                                                                                                                                     
+-------------------                                                                                                                                                                                     
+              70500                                                                                                                                                                                     
+
+SQL> REM 4 ODD_MONTH_SUM_SAL        EVEN_MONTH_SUM_SAL
+SQL> 
+SQL> 
+SQL> SELECT SUM(CASE MOD(TO_CHAR(HIRE_DATE,'MM'),2) WHEN 1 THEN SALARY END) ODD_MONTH_SUM_SALFROM EMPLOYEES;
+SELECT SUM(CASE MOD(TO_CHAR(HIRE_DATE,'MM'),2) WHEN 1 THEN SALARY END) ODD_MONTH_SUM_SALFROM EMPLOYEES
+                                                                                             *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> SELECT SUM(CASE MOD(TO_CHAR(HIRE_DATE,'MM'),2) WHEN 1 THEN SALARY END) ODD_MONTH_SUM_SAL FROM EMPLOYEES;
+
+ODD_MONTH_SUM_SAL                                                                                                                                                                                       
+-----------------                                                                                                                                                                                       
+           128500                                                                                                                                                                                       
+
+SQL> REM 5 FH_OF_YEAR_CNT           SH_OF_YEAR_CNT
+SQL> 
+SQL> SELECT COUNT(CASE CEIL(TO_CHAR(HIRE_DATE,'MM')/6) WHEN 1 THEN '*' END) FH_OF_YEAR_CNT FROM EMPLOYEES;
+
+FH_OF_YEAR_CNT                                                                                                                                                                                          
+--------------                                                                                                                                                                                          
+            13                                                                                                                                                                                          
+
+SQL> SPOOL OFF
