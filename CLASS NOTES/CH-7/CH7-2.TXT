@@ -1,0 +1,527 @@
+SQL> 
+SQL> CL SCR
+
+SQL> REM 5 DISPLAY THOSE WHO GET HIGHER SALARY THAN AVERAGE SALARY PAID TO THOSE WHO WERE HIRED IN 3rd QUARTER. (EXCLUDE ALL WHO WERE HIRED IN 3rd QTR.)
+SQL> 
+SQL> SELECT FIRST_NAME, HIRE_DATE FROM EMPLOYEES WHERE SALARY > (SELECT AVG(SALARY) FROM EMPLOYEES WHERE TO_CHAR(HIRE_DATE,'Q') = 3) AND TO_CHAR(HIRE_dATE,'Q') <> 3;
+
+FIRST_NAME      HIRE_DATE                                                                                                                                                                               
+--------------- ---------                                                                                                                                                                               
+Lex             13-JAN-93                                                                                                                                                                               
+Ellen           11-MAY-96                                                                                                                                                                               
+Michael         17-FEB-96                                                                                                                                                                               
+Shelley         07-JUN-94                                                                                                                                                                               
+
+SQL> SELECT FIRST_NAME, SALARY , HIRE_DATE FROM EMPLOYEES WHERE SALARY > (SELECT AVG(SALARY) FROM EMPLOYEES WHERE TO_CHAR(HIRE_DATE,'Q') = 3) AND TO_CHAR(HIRE_dATE,'Q') <> 3;
+
+FIRST_NAME          SALARY HIRE_DATE                                                                                                                                                                    
+--------------- ---------- ---------                                                                                                                                                                    
+Lex                  17000 13-JAN-93                                                                                                                                                                    
+Ellen                11000 11-MAY-96                                                                                                                                                                    
+Michael              13000 17-FEB-96                                                                                                                                                                    
+Shelley              12000 07-JUN-94                                                                                                                                                                    
+
+SQL> SELECT AVG(SALARY) FROM EMPLOYEES WHERE TO_CHAR(HIRE_DATE,'Q') = 3;
+
+AVG(SALARY)                                                                                                                                                                                             
+-----------                                                                                                                                                                                             
+      10780                                                                                                                                                                                             
+
+SQL> SELECT FIRST_NAME, SALARY , HIRE_DATE FROM EMPLOYEES WHERE SALARY > (SELECT AVG(SALARY) FROM EMPLOYEES WHERE TO_CHAR(HIRE_DATE,'Q') = 3);
+
+FIRST_NAME          SALARY HIRE_DATE                                                                                                                                                                    
+--------------- ---------- ---------                                                                                                                                                                    
+Steven               24000 17-JUL-87                                                                                                                                                                    
+Neena                17000 21-SEP-89                                                                                                                                                                    
+Lex                  17000 13-JAN-93                                                                                                                                                                    
+Ellen                11000 11-MAY-96                                                                                                                                                                    
+Michael              13000 17-FEB-96                                                                                                                                                                    
+Shelley              12000 07-JUN-94                                                                                                                                                                    
+
+6 rows selected.
+
+SQL> REM 1 DISPLAY THOSE WHO GET HIGHEST SALARY FOR THEIR MANAGER
+SQL> 
+SQL> REM 2 DISPLAY THOSE WHO WERE HIRED FIRST FOR THEIR DEPARTMENT
+SQL> 
+SQL> REM 3 DISPLAY ALL EXCEPT THOSE WHO GET LOWEST SALARY FOR THEIR JOB_ID
+SQL> 
+SQL> REM 4 DISPLAY ALL WHO GET EITHER LOWEST OR HIGHEST SALARY FOR THEIR HIRE QUARTER
+SQL> 
+SQL> REM 5 DISPLAY ALL EXCEPT THOSE WHO WERE HIRED FIRST OR LAST FOR THEIR HIRE YEAR
+SQL> 
+SQL> 
+SQL> SELECT FIRST_NAME , MANAGER_ID, SALARY FROM EMPLOYEES WHERE (NVL(MANAGER_ID,0), SALARY ) IN (SELECT NVL(MANAGER_ID,0),MAX(SALARY) FROM EMPLOYEES GROUP BY MANAGER_ID);
+
+FIRST_NAME      MANAGER_ID     SALARY                                                                                                                                                                   
+--------------- ---------- ----------                                                                                                                                                                   
+Steven                          24000                                                                                                                                                                   
+Neena                  100      17000                                                                                                                                                                   
+Lex                    100      17000                                                                                                                                                                   
+Ellen                  149      11000                                                                                                                                                                   
+William                205       8300                                                                                                                                                                   
+Alexander              102       9000                                                                                                                                                                   
+Pat                    201       6000                                                                                                                                                                   
+Shelley                101      12000                                                                                                                                                                   
+Trenna                 124       3500                                                                                                                                                                   
+Bruce                  103       6000                                                                                                                                                                   
+
+10 rows selected.
+
+SQL> 
+SQL> SELECT FIRST_NAME, HIRE_DATE, DEPARTMENT_ID FROM EMPLOYEES WHERE (NVL(DEPARTMENT_ID,0),HIRE_DATE) IN (SELECT NVL(DEPARTMENT_ID,0),MIN(HIRE_DATE) FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+
+FIRST_NAME      HIRE_DATE DEPARTMENT_ID                                                                                                                                                                 
+--------------- --------- -------------                                                                                                                                                                 
+Kimerely        24-MAY-99                                                                                                                                                                               
+Steven          17-JUL-87            90                                                                                                                                                                 
+Michael         17-FEB-96            20                                                                                                                                                                 
+Shelley         07-JUN-94           110                                                                                                                                                                 
+William         07-JUN-94           110                                                                                                                                                                 
+Trenna          17-OCT-95            50                                                                                                                                                                 
+Ellen           11-MAY-96            80                                                                                                                                                                 
+Alexander       03-JAN-90            60                                                                                                                                                                 
+Jennifer        17-SEP-87            10                                                                                                                                                                 
+
+9 rows selected.
+
+SQL> 
+SQL> SELECT FIRST_NAME, SALARY, JOB_ID FROM EMPLOYEES WHERE (NVL(JOB_ID,0),SALARY) IN (SELECT NVL(JOB_ID,0),MIN(SALARY) FROM EMPLOYEES GROUP BY JOB_ID);
+
+FIRST_NAME          SALARY JOB_ID                                                                                                                                                                       
+--------------- ---------- ----------                                                                                                                                                                   
+Diana                 4200 IT_PROG                                                                                                                                                                      
+Shelley              12000 AC_MGR                                                                                                                                                                       
+William               8300 AC_ACCOUNT                                                                                                                                                                   
+Kevin                 5800 ST_MAN                                                                                                                                                                       
+Jennifer              4400 AD_ASST                                                                                                                                                                      
+Neena                17000 AD_VP                                                                                                                                                                        
+Lex                  17000 AD_VP                                                                                                                                                                        
+Eleni                10500 SA_MAN                                                                                                                                                                       
+Michael              13000 MK_MAN                                                                                                                                                                       
+Steven               24000 AD_PRES                                                                                                                                                                      
+Kimerely              7000 SA_REP                                                                                                                                                                       
+Pat                   6000 MK_REP                                                                                                                                                                       
+Peter                 2500 ST_CLERK                                                                                                                                                                     
+
+13 rows selected.
+
+SQL> REM 4 DISPLAY ALL WHO GET EITHER LOWEST OR HIGHEST SALARY FOR THEIR HIRE QUARTER
+SQL> 
+SQL> SELECT FIRST_NAME, TO_CHAR(HIRE_dATE,'Q') , SALARY
+  2  FROM EMPLOYEES
+  3  WHERE (TO_CHAR(HIRE_DATE,'Q'),SALARY) IN (SELECT TO_CHAR(HIRE_DATE,'Q') , MIN(SALARY) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'Q'))
+  4  OR    (TO_CHAR(HIRE_DATE,'Q'),SALARY) IN (SELECT TO_CHAR(HIRE_DATE,'Q') , MAX(SALARY) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'Q'));
+
+FIRST_NAME      T     SALARY                                                                                                                                                                            
+--------------- - ----------                                                                                                                                                                            
+Steven          3      24000                                                                                                                                                                            
+Lex             1      17000                                                                                                                                                                            
+Bruce           2       6000                                                                                                                                                                            
+Kevin           4       5800                                                                                                                                                                            
+Trenna          4       3500                                                                                                                                                                            
+Randall         1       2600                                                                                                                                                                            
+Peter           3       2500                                                                                                                                                                            
+Shelley         2      12000                                                                                                                                                                            
+
+8 rows selected.
+
+SQL> SELECT FIRST_NAME, TO_CHAR(HIRE_dATE,'Q') , SALARY
+  2  FROM EMPLOYEES
+  3  WHERE (TO_CHAR(HIRE_DATE,'Q'),SALARY) IN (SELECT TO_CHAR(HIRE_DATE,'Q') , MIN(SALARY) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'Q'))
+  4  OR    (TO_CHAR(HIRE_DATE,'Q'),SALARY) IN (SELECT TO_CHAR(HIRE_DATE,'Q') , MAX(SALARY) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'Q'))
+  5  ORDER BY 2,3;
+
+FIRST_NAME      T     SALARY                                                                                                                                                                            
+--------------- - ----------                                                                                                                                                                            
+Randall         1       2600                                                                                                                                                                            
+Lex             1      17000                                                                                                                                                                            
+Bruce           2       6000                                                                                                                                                                            
+Shelley         2      12000                                                                                                                                                                            
+Peter           3       2500                                                                                                                                                                            
+Steven          3      24000                                                                                                                                                                            
+Trenna          4       3500                                                                                                                                                                            
+Kevin           4       5800                                                                                                                                                                            
+
+8 rows selected.
+
+SQL> REM 5 DISPLAY ALL EXCEPT THOSE WHO WERE HIRED FIRST OR LAST FOR THEIR HIRE YEAR
+SQL> 
+SQL> SELECT FIRST_NAME , TO_CHAR(HIRE_DATE,'RRRR') , HIRE_DATE
+  2  FROM EMPLOYEES
+  3  WHERE (TO_CHAR(HIRE_DATE,'RRRR'),HIRE_DATE) IN (SELECT TO_CHAR(HIRE_DATE,'RRRR') , MIN(HIRE_DATE) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'RRRR'))
+  4  
+SQL> 
+SQL> REM 5 DISPLAY ALL EXCEPT THOSE WHO WERE HIRED FIRST OR LAST FOR THEIR HIRE YEAR
+SQL> 
+SQL> SELECT FIRST_NAME , TO_CHAR(HIRE_DATE,'RRRR') , HIRE_DATE
+  2  FROM EMPLOYEES
+  3  WHERE (TO_CHAR(HIRE_DATE,'RRRR'),HIRE_DATE) NOT IN (SELECT TO_CHAR(HIRE_DATE,'RRRR') , MIN(HIRE_DATE) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'RRRR'))
+  4  AND   (TO_CHAR(HIRE_DATE,'RRRR'),HIRE_DATE) NOT IN (SELECT TO_CHAR(HIRE_DATE,'RRRR') , MAX(HIRE_DATE) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'RRRR'))
+  5  ;
+
+FIRST_NAME      TO_C HIRE_DATE                                                                                                                                                                          
+--------------- ---- ---------                                                                                                                                                                          
+Kimerely        1999 24-MAY-99                                                                                                                                                                          
+Jonathon        1998 24-MAR-98                                                                                                                                                                          
+
+SQL> REM SINGLE ROW OPERATORS : = < > <= >=   <> != ^=
+SQL> 
+SQL> REM MULTI ROW OPERATORS : ANY/SOME ALL
+SQL> 
+SQL> 
+SQL> /*
+SQL> 
+SQL> = ANY
+SQL> 
+SQL> = ALL
+SQL> 
+SQL> <> ANY
+SQL> 
+SQL> <> ALL
+SQL> 
+SQL> < ALL
+SQL> 
+SQL> < ANY
+SQL> 
+SQL> > ALL
+SQL> 
+SQL> > ANY
+SQL> 
+SQL> <= ALL
+SQL> 
+SQL> <= ANY
+SQL> 
+SQL> >= ALL
+SQL> 
+SQL> >= ANY
+SQL> 
+SQL> */
+SQL> 
+SQL> REM SINGLE ROW OPERATORS : IT CAN COMPARE SINGLE VALUE WITHIN SINGLE CONDITION
+SQL> 
+SQL> REM MULTI ROW OPERATORS : IT CAN COMPARE SINGLE OR MULTIPLE VALUES WITHIN SINGLE CONDITION
+SQL> 
+SQL> REM DISPLAY THSOE WHO WORK IN DEPARTMENT 20 60 90
+SQL> 
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID FROM EMPLOYEES WHERE DEPARTMENT_ID = 20 60 90;
+SELECT FIRST_NAME , DEPARTMENT_ID FROM EMPLOYEES WHERE DEPARTMENT_ID = 20 60 90
+                                                                          *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID FROM EMPLOYEES WHERE DEPARTMENT_ID = (20 60 90);
+SELECT FIRST_NAME , DEPARTMENT_ID FROM EMPLOYEES WHERE DEPARTMENT_ID = (20 60 90)
+                                                                           *
+ERROR at line 1:
+ORA-00907: missing right parenthesis 
+
+
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID FROM EMPLOYEES WHERE DEPARTMENT_ID = (20, 60, 90);
+SELECT FIRST_NAME , DEPARTMENT_ID FROM EMPLOYEES WHERE DEPARTMENT_ID = (20, 60, 90)
+                                                                     *
+ERROR at line 1:
+ORA-01797: this operator must be followed by ANY or ALL 
+
+
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID FROM EMPLOYEES WHERE DEPARTMENT_ID = ANY (20, 60, 90);
+
+FIRST_NAME      DEPARTMENT_ID                                                                                                                                                                           
+--------------- -------------                                                                                                                                                                           
+Steven                     90                                                                                                                                                                           
+Neena                      90                                                                                                                                                                           
+Lex                        90                                                                                                                                                                           
+Alexander                  60                                                                                                                                                                           
+Bruce                      60                                                                                                                                                                           
+Diana                      60                                                                                                                                                                           
+Michael                    20                                                                                                                                                                           
+Pat                        20                                                                                                                                                                           
+
+8 rows selected.
+
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID FROM EMPLOYEES WHERE DEPARTMENT_ID = SOME (20, 60, 90);
+
+FIRST_NAME      DEPARTMENT_ID                                                                                                                                                                           
+--------------- -------------                                                                                                                                                                           
+Steven                     90                                                                                                                                                                           
+Neena                      90                                                                                                                                                                           
+Lex                        90                                                                                                                                                                           
+Alexander                  60                                                                                                                                                                           
+Bruce                      60                                                                                                                                                                           
+Diana                      60                                                                                                                                                                           
+Michael                    20                                                                                                                                                                           
+Pat                        20                                                                                                                                                                           
+
+8 rows selected.
+
+SQL> REM DISPLAY ALL EXCEPT THSOE WHO WORK IN DEPARTMENT 20 60 90
+SQL> 
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID FROM EMPLOYEES WHERE DEPARTMENT_ID != ALL (20, 60, 90);
+
+FIRST_NAME      DEPARTMENT_ID                                                                                                                                                                           
+--------------- -------------                                                                                                                                                                           
+Kevin                      50                                                                                                                                                                           
+Trenna                     50                                                                                                                                                                           
+Curtis                     50                                                                                                                                                                           
+Randall                    50                                                                                                                                                                           
+Peter                      50                                                                                                                                                                           
+Eleni                      80                                                                                                                                                                           
+Ellen                      80                                                                                                                                                                           
+Jonathon                   80                                                                                                                                                                           
+Jennifer                   10                                                                                                                                                                           
+Shelley                   110                                                                                                                                                                           
+William                   110                                                                                                                                                                           
+
+11 rows selected.
+
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID FROM EMPLOYEES WHERE DEPARTMENT_ID ^= ALL (20, 60, 90);
+
+FIRST_NAME      DEPARTMENT_ID                                                                                                                                                                           
+--------------- -------------                                                                                                                                                                           
+Kevin                      50                                                                                                                                                                           
+Trenna                     50                                                                                                                                                                           
+Curtis                     50                                                                                                                                                                           
+Randall                    50                                                                                                                                                                           
+Peter                      50                                                                                                                                                                           
+Eleni                      80                                                                                                                                                                           
+Ellen                      80                                                                                                                                                                           
+Jonathon                   80                                                                                                                                                                           
+Jennifer                   10                                                                                                                                                                           
+Shelley                   110                                                                                                                                                                           
+William                   110                                                                                                                                                                           
+
+11 rows selected.
+
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID FROM EMPLOYEES WHERE DEPARTMENT_ID <> ALL (20, 60, 90);
+
+FIRST_NAME      DEPARTMENT_ID                                                                                                                                                                           
+--------------- -------------                                                                                                                                                                           
+Kevin                      50                                                                                                                                                                           
+Trenna                     50                                                                                                                                                                           
+Curtis                     50                                                                                                                                                                           
+Randall                    50                                                                                                                                                                           
+Peter                      50                                                                                                                                                                           
+Eleni                      80                                                                                                                                                                           
+Ellen                      80                                                                                                                                                                           
+Jonathon                   80                                                                                                                                                                           
+Jennifer                   10                                                                                                                                                                           
+Shelley                   110                                                                                                                                                                           
+William                   110                                                                                                                                                                           
+
+11 rows selected.
+
+SQL> /*
+SQL> 
+SQL> < ALL
+SQL> 
+SQL> < ANY
+SQL> 
+SQL> > ALL
+SQL> 
+SQL> > ANY
+SQL> 
+SQL> <= ALL
+SQL> 
+SQL> <= ANY
+SQL> 
+SQL> >= ALL
+SQL> 
+SQL> >= ANY
+SQL> 
+SQL> */
+SQL> 
+SQL> REM DISPLAY THOSE WHO GET HIGHER SALARY THAN ALL IT_PROG
+SQL> 
+SQL> SELECT SALARY FROM EMPLOYEES WHERE JOB_ID = 'IT_PROG';
+
+    SALARY                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+      9000                                                                                                                                                                                              
+      6000                                                                                                                                                                                              
+      4200                                                                                                                                                                                              
+
+SQL> REM 7000
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY , JOB_ID FROM EMPLOYEES WHERE SALARY > (SELECT MAX(SALARY) FROM EMPLOYEES WHERE JOB_ID = 'IT_PROG');
+
+FIRST_NAME          SALARY JOB_ID                                                                                                                                                                       
+--------------- ---------- ----------                                                                                                                                                                   
+Steven               24000 AD_PRES                                                                                                                                                                      
+Neena                17000 AD_VP                                                                                                                                                                        
+Lex                  17000 AD_VP                                                                                                                                                                        
+Eleni                10500 SA_MAN                                                                                                                                                                       
+Ellen                11000 SA_REP                                                                                                                                                                       
+Michael              13000 MK_MAN                                                                                                                                                                       
+Shelley              12000 AC_MGR                                                                                                                                                                       
+
+7 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY , JOB_ID FROM EMPLOYEES WHERE SALARY > (SELECT SALARY FROM EMPLOYEES WHERE JOB_ID = 'IT_PROG');
+SELECT FIRST_NAME , SALARY , JOB_ID FROM EMPLOYEES WHERE SALARY > (SELECT SALARY FROM EMPLOYEES WHERE JOB_ID = 'IT_PROG')
+                                                                   *
+ERROR at line 1:
+ORA-01427: single-row subquery returns more than one row 
+
+
+SQL> SELECT FIRST_NAME , SALARY , JOB_ID FROM EMPLOYEES WHERE SALARY > ALL (SELECT SALARY FROM EMPLOYEES WHERE JOB_ID = 'IT_PROG');
+
+FIRST_NAME          SALARY JOB_ID                                                                                                                                                                       
+--------------- ---------- ----------                                                                                                                                                                   
+Eleni                10500 SA_MAN                                                                                                                                                                       
+Ellen                11000 SA_REP                                                                                                                                                                       
+Shelley              12000 AC_MGR                                                                                                                                                                       
+Michael              13000 MK_MAN                                                                                                                                                                       
+Neena                17000 AD_VP                                                                                                                                                                        
+Lex                  17000 AD_VP                                                                                                                                                                        
+Steven               24000 AD_PRES                                                                                                                                                                      
+
+7 rows selected.
+
+SQL> REM DISPLAY THOSE WHO GET HIGHER SALARY THAN ANY IT_PROG
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY , JOB_ID FROM EMPLOYEES WHERE SALARY > ANY (SELECT SALARY FROM EMPLOYEES WHERE JOB_ID = 'IT_PROG');
+
+FIRST_NAME          SALARY JOB_ID                                                                                                                                                                       
+--------------- ---------- ----------                                                                                                                                                                   
+Steven               24000 AD_PRES                                                                                                                                                                      
+Neena                17000 AD_VP                                                                                                                                                                        
+Lex                  17000 AD_VP                                                                                                                                                                        
+Michael              13000 MK_MAN                                                                                                                                                                       
+Shelley              12000 AC_MGR                                                                                                                                                                       
+Ellen                11000 SA_REP                                                                                                                                                                       
+Eleni                10500 SA_MAN                                                                                                                                                                       
+Alexander             9000 IT_PROG                                                                                                                                                                      
+Jonathon              8600 SA_REP                                                                                                                                                                       
+William               8300 AC_ACCOUNT                                                                                                                                                                   
+Kimerely              7000 SA_REP                                                                                                                                                                       
+Bruce                 6000 IT_PROG                                                                                                                                                                      
+Pat                   6000 MK_REP                                                                                                                                                                       
+Kevin                 5800 ST_MAN                                                                                                                                                                       
+Jennifer              4400 AD_ASST                                                                                                                                                                      
+
+15 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY , JOB_ID FROM EMPLOYEES WHERE SALARY > (SELECT MIN(SALARY) FROM EMPLOYEES WHERE JOB_ID = 'IT_PROG');
+
+FIRST_NAME          SALARY JOB_ID                                                                                                                                                                       
+--------------- ---------- ----------                                                                                                                                                                   
+Steven               24000 AD_PRES                                                                                                                                                                      
+Neena                17000 AD_VP                                                                                                                                                                        
+Lex                  17000 AD_VP                                                                                                                                                                        
+Alexander             9000 IT_PROG                                                                                                                                                                      
+Bruce                 6000 IT_PROG                                                                                                                                                                      
+Kevin                 5800 ST_MAN                                                                                                                                                                       
+Eleni                10500 SA_MAN                                                                                                                                                                       
+Ellen                11000 SA_REP                                                                                                                                                                       
+Jonathon              8600 SA_REP                                                                                                                                                                       
+Kimerely              7000 SA_REP                                                                                                                                                                       
+Jennifer              4400 AD_ASST                                                                                                                                                                      
+Michael              13000 MK_MAN                                                                                                                                                                       
+Pat                   6000 MK_REP                                                                                                                                                                       
+Shelley              12000 AC_MGR                                                                                                                                                                       
+William               8300 AC_ACCOUNT                                                                                                                                                                   
+
+15 rows selected.
+
+SQL> REM SOLVE BELOW QUESTION USING TWO STYLES : 1 SUMMARY FUNCTION 2 MULTI ROW OPERATORS
+SQL> 
+SQL> REM 1 DISPLAY THOSE WHO GET HIGHER SALARY THAN LOWEST SALARY PAID TO SA_REP
+SQL> 
+SQL> REM 2 DISPLAY THOSE WHO HAVE JOINED BEFORE ALL DEPARTMENT_ID 60s EMPLOYEES
+SQL> 
+SQL> REM 3 DISPLAY THOSE WHO GET LOWER SALARY THAN ALL WHO REPORTS TO 103
+SQL> 
+SQL> REM 4 DISPLAY THOSE WHO HAVE JOINED BEFORE ALL WHO GET SALARY IN THE RANGE OF 6000 TO 11000
+SQL> 
+SQL> REM 5 DISPLAY THOSE WHO HAVE JOINED IN THOSE QUARTERS IN WHICH ALL AD_VP HAS JOINED
+SQL> 
+SQL> SELECT FIRST_NAME, SALARY
+  2  FROM EMPLOYEES
+  3  WHERE SALARY > (SELECT MIN(SALARY) FROM EMPLOYEES WHERE JOB_ID = 'SA_REP');
+
+FIRST_NAME          SALARY                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Steven               24000                                                                                                                                                                              
+Neena                17000                                                                                                                                                                              
+Lex                  17000                                                                                                                                                                              
+Alexander             9000                                                                                                                                                                              
+Eleni                10500                                                                                                                                                                              
+Ellen                11000                                                                                                                                                                              
+Jonathon              8600                                                                                                                                                                              
+Michael              13000                                                                                                                                                                              
+Shelley              12000                                                                                                                                                                              
+William               8300                                                                                                                                                                              
+
+10 rows selected.
+
+SQL> 
+SQL> SELECT FIRST_NAME, SALARY
+  2  FROM EMPLOYEES
+  3  WHERE SALARY > ANY (SELECT SALARY FROM EMPLOYEES WHERE JOB_ID = 'SA_REP');
+
+FIRST_NAME          SALARY                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Steven               24000                                                                                                                                                                              
+Neena                17000                                                                                                                                                                              
+Lex                  17000                                                                                                                                                                              
+Michael              13000                                                                                                                                                                              
+Shelley              12000                                                                                                                                                                              
+Ellen                11000                                                                                                                                                                              
+Eleni                10500                                                                                                                                                                              
+Alexander             9000                                                                                                                                                                              
+Jonathon              8600                                                                                                                                                                              
+William               8300                                                                                                                                                                              
+
+10 rows selected.
+
+SQL> 
+SQL> SELECT FIRST_NAME, HIRE_DATE
+  2  FROM EMPLOYEES
+  3  WHERE HIRE_DATE < (SELECT MIN(HIRE_DATE) FROM EMPLOYEES WHERE DEPARTMENT_ID = 60);
+
+FIRST_NAME      HIRE_DATE                                                                                                                                                                               
+--------------- ---------                                                                                                                                                                               
+Steven          17-JUL-87                                                                                                                                                                               
+Neena           21-SEP-89                                                                                                                                                                               
+Jennifer        17-SEP-87                                                                                                                                                                               
+
+SQL> 
+SQL> SELECT FIRST_NAME, HIRE_DATE
+  2  FROM EMPLOYEES
+  3  WHERE HIRE_DATE < ALL (SELECT HIRE_DATE FROM EMPLOYEES WHERE DEPARTMENT_ID = 60);
+
+FIRST_NAME      HIRE_DATE                                                                                                                                                                               
+--------------- ---------                                                                                                                                                                               
+Neena           21-SEP-89                                                                                                                                                                               
+Jennifer        17-SEP-87                                                                                                                                                                               
+Steven          17-JUL-87                                                                                                                                                                               
+
+SQL> 
+SQL> SELECT FIRST_NAME, SALARY
+  2  FROM EMPLOYEES
+  3  WHERE SALARY < (SELECT MIN(SALARY) FROM EMPLOYEES WHERE MANAGER_ID = 103);
+
+FIRST_NAME          SALARY                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Trenna                3500                                                                                                                                                                              
+Curtis                3100                                                                                                                                                                              
+Randall               2600                                                                                                                                                                              
+Peter                 2500                                                                                                                                                                              
+
+SQL> 
+SQL> SELECT FIRST_NAME, SALARY
+  2  FROM EMPLOYEES
+  3  WHERE SALARY < ALL (SELECT SALARY FROM EMPLOYEES WHERE MANAGER_ID = 103);
+
+FIRST_NAME          SALARY                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Trenna                3500                                                                                                                                                                              
+Curtis                3100                                                                                                                                                                              
+Randall               2600                                                                                                                                                                              
+Peter                 2500                                                                                                                                                                              
+
+SQL> SELECT FIRST_NAME, HIRE_DATE
+  2  FROM EMPLOYEES
+  3  WHERE HIRE_DATE < (SELECT MIN(HIRE_DATE) FROM EMPLOYEES WHERE SALARY BETWEEN 6000 AND 11000);
+

@@ -1,0 +1,410 @@
+SQL> 19. COMPANY PAYS BONUS TWO TIMES PER YEAR ON LAST DATE OF 2nd AND 4th QUARTER OF CALENDER YEAR. FIND FIRST BONUS DATE.
+SP2-0734: unknown command beginning "19. COMPAN..." - rest of line ignored.
+SQL> 
+SQL> REM 19. COMPANY PAYS BONUS TWO TIMES PER YEAR ON LAST DATE OF 2nd AND 4th QUARTER OF CALENDER YEAR. FIND FIRST BONUS DATE.
+SQL> 
+SQL> SELECT HIRE_DATE , TRUNC(HIRE_DATE,'RRRR'), ROUND(HIRE_DATE,'RRRR') FROM EMPLOYEES;
+
+HIRE_DATE TRUNC(HIR ROUND(HIR                                                                                                                                                                           
+--------- --------- ---------                                                                                                                                                                           
+17-JUL-87 01-JAN-87 01-JAN-88                                                                                                                                                                           
+21-SEP-89 01-JAN-89 01-JAN-90                                                                                                                                                                           
+13-JAN-93 01-JAN-93 01-JAN-93                                                                                                                                                                           
+03-JAN-90 01-JAN-90 01-JAN-90                                                                                                                                                                           
+21-MAY-91 01-JAN-91 01-JAN-91                                                                                                                                                                           
+07-FEB-99 01-JAN-99 01-JAN-99                                                                                                                                                                           
+16-NOV-99 01-JAN-99 01-JAN-00                                                                                                                                                                           
+17-OCT-95 01-JAN-95 01-JAN-96                                                                                                                                                                           
+29-JAN-97 01-JAN-97 01-JAN-97                                                                                                                                                                           
+15-MAR-98 01-JAN-98 01-JAN-98                                                                                                                                                                           
+09-JUL-98 01-JAN-98 01-JAN-99                                                                                                                                                                           
+29-JAN-00 01-JAN-00 01-JAN-00                                                                                                                                                                           
+11-MAY-96 01-JAN-96 01-JAN-96                                                                                                                                                                           
+24-MAR-98 01-JAN-98 01-JAN-98                                                                                                                                                                           
+24-MAY-99 01-JAN-99 01-JAN-99                                                                                                                                                                           
+17-SEP-87 01-JAN-87 01-JAN-88                                                                                                                                                                           
+17-FEB-96 01-JAN-96 01-JAN-96                                                                                                                                                                           
+17-AUG-97 01-JAN-97 01-JAN-98                                                                                                                                                                           
+07-JUN-94 01-JAN-94 01-JAN-94                                                                                                                                                                           
+07-JUN-94 01-JAN-94 01-JAN-94                                                                                                                                                                           
+
+20 rows selected.
+
+SQL> SELECT HIRE_DATE , NVL2(NULLIF(TRUNC(HIRE_DATE,'RRRR'), ROUND(HIRE_DATE,'RRRR')),ROUND(HIRE_DATE,'RRRR')-1,ADD_MONTHS(TRUNC(HIRE_DATE,'RRRR'),6)-1) BONUS_DATE FROM EMPLOYEES;
+
+HIRE_DATE BONUS_DAT                                                                                                                                                                                     
+--------- ---------                                                                                                                                                                                     
+17-JUL-87 31-DEC-87                                                                                                                                                                                     
+21-SEP-89 31-DEC-89                                                                                                                                                                                     
+13-JAN-93 30-JUN-93                                                                                                                                                                                     
+03-JAN-90 30-JUN-90                                                                                                                                                                                     
+21-MAY-91 30-JUN-91                                                                                                                                                                                     
+07-FEB-99 30-JUN-99                                                                                                                                                                                     
+16-NOV-99 31-DEC-99                                                                                                                                                                                     
+17-OCT-95 31-DEC-95                                                                                                                                                                                     
+29-JAN-97 30-JUN-97                                                                                                                                                                                     
+15-MAR-98 30-JUN-98                                                                                                                                                                                     
+09-JUL-98 31-DEC-98                                                                                                                                                                                     
+29-JAN-00 30-JUN-00                                                                                                                                                                                     
+11-MAY-96 30-JUN-96                                                                                                                                                                                     
+24-MAR-98 30-JUN-98                                                                                                                                                                                     
+24-MAY-99 30-JUN-99                                                                                                                                                                                     
+17-SEP-87 31-DEC-87                                                                                                                                                                                     
+17-FEB-96 30-JUN-96                                                                                                                                                                                     
+17-AUG-97 31-DEC-97                                                                                                                                                                                     
+07-JUN-94 30-JUN-94                                                                                                                                                                                     
+07-JUN-94 30-JUN-94                                                                                                                                                                                     
+
+20 rows selected.
+
+SQL> 
+SQL> REM COMPANY PAYS IN NEXT MONTH ON FIRST WEDNESDAY AFTER DATE 10. DISPLAY FIRST PAYMENT DATE.
+SQL> 
+SQL> REM COMPANY PAYS IN NEXT MONTH ON FIRST WEDNESDAY AFTER DATE 10. DISPLAY LAST PAYMENT DATE.
+SQL> 
+SQL> SELECT SYSDATE , NEXT_DAY(TRUNC(SYSDATE,'MONTH') + 10,'WED') FROM DUAL;
+
+SYSDATE   NEXT_DAY(                                                             
+--------- ---------                                                             
+05-MAY-26 13-MAY-26                                                             
+
+SQL> ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MON-RRRR DAY';
+
+Session altered.
+
+SQL> SELECT SYSDATE , NEXT_DAY(TRUNC(SYSDATE,'MONTH') + 10,'WED') FROM DUAL;
+
+SYSDATE               NEXT_DAY(TRUNC(SYSDAT                                     
+--------------------- ---------------------                                     
+05-MAY-2026 TUESDAY   13-MAY-2026 WEDNESDAY                                     
+
+SQL> SELECT SYSDATE+10 , NEXT_DAY(TRUNC(SYSDATE,'MONTH') + 20,'WED') FROM DUAL;
+
+SYSDATE+10            NEXT_DAY(TRUNC(SYSDAT                                     
+--------------------- ---------------------                                     
+15-MAY-2026 FRIDAY    27-MAY-2026 WEDNESDAY                                     
+
+SQL> SELECT TO_DATE('25-MAY-26') , NEXT_DAY(TRUNC(TO_DATE('25-MAY-26'),'MONTH') + 10,'WED') FROM DUAL;
+SELECT TO_DATE('25-MAY-26') , NEXT_DAY(TRUNC(TO_DATE('25-MAY-26'),'MONTH') + 10,'WED') FROM DUAL
+               *
+ERROR at line 1:
+ORA-01840: input value not long enough for date format 
+
+
+SQL> CONN SCOTT/TIGER
+Connected.
+SQL> 
+SQL> SELECT TO_DATE('25-MAY-26') , NEXT_DAY(TRUNC(TO_DATE('25-MAY-26'),'MONTH') + 10,'WED') FROM DUAL;
+
+TO_DATE(' NEXT_DAY(                                                             
+--------- ---------                                                             
+25-MAY-26 13-MAY-26                                                             
+
+SQL> SELECT SYSDATE+10 , NEXT_DAY(TRUNC(SYSDATE,'MONTH') + 20,'WED') FROM DUAL;
+
+SYSDATE+1 NEXT_DAY(                                                             
+--------- ---------                                                             
+15-MAY-26 27-MAY-26                                                             
+
+SQL> SELECT SYSDATE+10 , CASE WHEN SYSDATE <= TRUNC(SYSDATE,'MONTH')+10 THEN NEXT_DAY(TRUNC(ADD_MONTHS(SYSDATE,-1),'MONTH') + 10,'WED') ELSE NEXT_DAY(TRUNC(SYSDATE,'MONTH') + 10,'WED') FROM DUAL;
+SELECT SYSDATE+10 , CASE WHEN SYSDATE <= TRUNC(SYSDATE,'MONTH')+10 THEN NEXT_DAY(TRUNC(ADD_MONTHS(SYSDATE,-1),'MONTH') + 10,'WED') ELSE NEXT_DAY(TRUNC(SYSDATE,'MONTH') + 10,'WED') FROM DUAL
+                                                                                                                                                                                    *
+ERROR at line 1:
+ORA-00905: missing keyword 
+
+
+SQL> SELECT SYSDATE+10 , CASE WHEN SYSDATE <= TRUNC(SYSDATE,'MONTH')+10 THEN NEXT_DAY(TRUNC(ADD_MONTHS(SYSDATE,-1),'MONTH') + 10,'WED') ELSE NEXT_DAY(TRUNC(SYSDATE,'MONTH') + 10,'WED') END LAST_PAYMENT_DATE FROM DUAL;
+
+SYSDATE+1 LAST_PAYM                                                             
+--------- ---------                                                             
+15-MAY-26 15-APR-26                                                             
+
+SQL> SELECT SYSDATE+10 , CASE WHEN SYSDATE <= TRUNC(SYSDATE,'MONTH')+10 THEN NEXT_DAY(TRUNC(ADD_MONTHS(SYSDATE,-1),'MONTH') + 10,'WED') ELSE NEXT_DAY(TRUNC(SYSDATE,'MONTH') + 10,'WED') END LAST_PAYMENT_DATE FROM DUAL;
+
+SYSDATE+1 LAST_PAYM                                                             
+--------- ---------                                                             
+30-MAY-26 13-MAY-26                                                             
+
+SQL> SELECT SYSDATE , CASE WHEN SYSDATE <= TRUNC(SYSDATE,'MONTH')+10 THEN NEXT_DAY(TRUNC(ADD_MONTHS(SYSDATE,-1),'MONTH') + 10,'WED') ELSE NEXT_DAY(TRUNC(SYSDATE,'MONTH') + 10,'WED') END LAST_PAYMENT_DATE FROM DUAL;
+
+SYSDATE   LAST_PAYM                                                             
+--------- ---------                                                             
+20-MAY-26 13-MAY-26                                                             
+
+SQL> SELECT SYSDATE , CASE WHEN SYSDATE <= TRUNC(SYSDATE,'MONTH')+10 THEN NEXT_DAY(TRUNC(ADD_MONTHS(SYSDATE,-1),'MONTH') + 10,'WED') ELSE NEXT_DAY(TRUNC(SYSDATE,'MONTH') + 10,'WED') END LAST_PAYMENT_DATE FROM DUAL;
+
+SYSDATE   LAST_PAYM                                                             
+--------- ---------                                                             
+05-MAY-26 15-APR-26                                                             
+
+SQL> SELECT FIRST_NAME, HIRE_DATE, SYSDATE, NEXT_DAY(ADD_MONTHS(LAST_DAY(SYSDATE),-1)+10,'WED') FROM EMPLOYEES;
+
+FIRST_NAME      HIRE_DATE SYSDATE   NEXT_DAY(                                   
+--------------- --------- --------- ---------                                   
+Steven          17-JUL-87 05-MAY-26 13-MAY-26                                   
+Neena           21-SEP-89 05-MAY-26 13-MAY-26                                   
+Lex             13-JAN-93 05-MAY-26 13-MAY-26                                   
+Alexander       03-JAN-90 05-MAY-26 13-MAY-26                                   
+Bruce           21-MAY-91 05-MAY-26 13-MAY-26                                   
+Diana           07-FEB-99 05-MAY-26 13-MAY-26                                   
+Kevin           16-NOV-99 05-MAY-26 13-MAY-26                                   
+Trenna          17-OCT-95 05-MAY-26 13-MAY-26                                   
+Curtis          29-JAN-97 05-MAY-26 13-MAY-26                                   
+Randall         15-MAR-98 05-MAY-26 13-MAY-26                                   
+Peter           09-JUL-98 05-MAY-26 13-MAY-26                                   
+
+FIRST_NAME      HIRE_DATE SYSDATE   NEXT_DAY(                                   
+--------------- --------- --------- ---------                                   
+Eleni           29-JAN-00 05-MAY-26 13-MAY-26                                   
+Ellen           11-MAY-96 05-MAY-26 13-MAY-26                                   
+Jonathon        24-MAR-98 05-MAY-26 13-MAY-26                                   
+Kimerely        24-MAY-99 05-MAY-26 13-MAY-26                                   
+Jennifer        17-SEP-87 05-MAY-26 13-MAY-26                                   
+Michael         17-FEB-96 05-MAY-26 13-MAY-26                                   
+Pat             17-AUG-97 05-MAY-26 13-MAY-26                                   
+Shelley         07-JUN-94 05-MAY-26 13-MAY-26                                   
+William         07-JUN-94 05-MAY-26 13-MAY-26                                   
+
+20 rows selected.
+
+
+SQL> REM COMPANY PAYS MONTHLY SALARY ON LAST WEDNESDAY OF NEXT MONTH. FIND 3rd MONTHLY SALARY DATE.
+SQL> ANS: SELECT HIRE_DATE, NEXT_DAY(ADD_MONTHS(LAST_DAY(HIRE_DATE),3),'WED')
+SP2-0734: unknown command beginning "ANS: SELEC..." - rest of line ignored.
+SQL> 
+SQL> SELECT HIRE_DATE, NEXT_DAY(ADD_MONTHS(LAST_DAY(HIRE_DATE),3),'WED')-7  FROM EMPLOYEES;
+
+HIRE_DATE NEXT_DAY(                                                                                                                                                                                     
+--------- ---------                                                                                                                                                                                     
+17-JUL-87 28-OCT-87                                                                                                                                                                                     
+21-SEP-89 27-DEC-89                                                                                                                                                                                     
+13-JAN-93 28-APR-93                                                                                                                                                                                     
+03-JAN-90 25-APR-90                                                                                                                                                                                     
+21-MAY-91 28-AUG-91                                                                                                                                                                                     
+07-FEB-99 26-MAY-99                                                                                                                                                                                     
+16-NOV-99 23-FEB-00                                                                                                                                                                                     
+17-OCT-95 31-JAN-96                                                                                                                                                                                     
+29-JAN-97 30-APR-97                                                                                                                                                                                     
+15-MAR-98 24-JUN-98                                                                                                                                                                                     
+09-JUL-98 28-OCT-98                                                                                                                                                                                     
+29-JAN-00 26-APR-00                                                                                                                                                                                     
+11-MAY-96 28-AUG-96                                                                                                                                                                                     
+24-MAR-98 24-JUN-98                                                                                                                                                                                     
+24-MAY-99 25-AUG-99                                                                                                                                                                                     
+17-SEP-87 30-DEC-87                                                                                                                                                                                     
+17-FEB-96 29-MAY-96                                                                                                                                                                                     
+17-AUG-97 26-NOV-97                                                                                                                                                                                     
+07-JUN-94 28-SEP-94                                                                                                                                                                                     
+07-JUN-94 28-SEP-94                                                                                                                                                                                     
+
+20 rows selected.
+
+SQL> ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MON-RRRR DAY';
+
+Session altered.
+
+SQL> SELECT HIRE_DATE, NEXT_DAY(ADD_MONTHS(LAST_DAY(HIRE_DATE),3),'WED')-7  FROM EMPLOYEES;
+
+HIRE_DATE             NEXT_DAY(ADD_MONTHS(L                                                                                                                                                             
+--------------------- ---------------------                                                                                                                                                             
+17-JUL-1987 FRIDAY    28-OCT-1987 WEDNESDAY                                                                                                                                                             
+21-SEP-1989 THURSDAY  27-DEC-1989 WEDNESDAY                                                                                                                                                             
+13-JAN-1993 WEDNESDAY 28-APR-1993 WEDNESDAY                                                                                                                                                             
+03-JAN-1990 WEDNESDAY 25-APR-1990 WEDNESDAY                                                                                                                                                             
+21-MAY-1991 TUESDAY   28-AUG-1991 WEDNESDAY                                                                                                                                                             
+07-FEB-1999 SUNDAY    26-MAY-1999 WEDNESDAY                                                                                                                                                             
+16-NOV-1999 TUESDAY   23-FEB-2000 WEDNESDAY                                                                                                                                                             
+17-OCT-1995 TUESDAY   31-JAN-1996 WEDNESDAY                                                                                                                                                             
+29-JAN-1997 WEDNESDAY 30-APR-1997 WEDNESDAY                                                                                                                                                             
+15-MAR-1998 SUNDAY    24-JUN-1998 WEDNESDAY                                                                                                                                                             
+09-JUL-1998 THURSDAY  28-OCT-1998 WEDNESDAY                                                                                                                                                             
+29-JAN-2000 SATURDAY  26-APR-2000 WEDNESDAY                                                                                                                                                             
+11-MAY-1996 SATURDAY  28-AUG-1996 WEDNESDAY                                                                                                                                                             
+24-MAR-1998 TUESDAY   24-JUN-1998 WEDNESDAY                                                                                                                                                             
+24-MAY-1999 MONDAY    25-AUG-1999 WEDNESDAY                                                                                                                                                             
+17-SEP-1987 THURSDAY  30-DEC-1987 WEDNESDAY                                                                                                                                                             
+17-FEB-1996 SATURDAY  29-MAY-1996 WEDNESDAY                                                                                                                                                             
+17-AUG-1997 SUNDAY    26-NOV-1997 WEDNESDAY                                                                                                                                                             
+07-JUN-1994 TUESDAY   28-SEP-1994 WEDNESDAY                                                                                                                                                             
+07-JUN-1994 TUESDAY   28-SEP-1994 WEDNESDAY                                                                                                                                                             
+
+20 rows selected.
+
+SQL> REM 1 DISPLAY THOSE WHO WERE HIRED IN FIRST HALF OF ANY MONTH. : 1 ROUND 2 TRUNC + ROUND
+SQL> 
+SQL> SELECT HIRE_DATE FROM EMPLOYEES WHERE TRUNC(HIRE_DATE,'MM') = ROUND(HIRE_DATE,'MM');
+
+HIRE_DATE                                                                                                                                                                                               
+---------------------                                                                                                                                                                                   
+13-JAN-1993 WEDNESDAY                                                                                                                                                                                   
+03-JAN-1990 WEDNESDAY                                                                                                                                                                                   
+07-FEB-1999 SUNDAY                                                                                                                                                                                      
+15-MAR-1998 SUNDAY                                                                                                                                                                                      
+09-JUL-1998 THURSDAY                                                                                                                                                                                    
+11-MAY-1996 SATURDAY                                                                                                                                                                                    
+07-JUN-1994 TUESDAY                                                                                                                                                                                     
+07-JUN-1994 TUESDAY                                                                                                                                                                                     
+
+8 rows selected.
+
+SQL> SELECT HIRE_DATE FROM EMPLOYEES WHERE ROUND(HIRE_DATE,'MM') > HIRE_DATE;
+
+HIRE_DATE                                                                                                                                                                                               
+---------------------                                                                                                                                                                                   
+17-JUL-1987 FRIDAY                                                                                                                                                                                      
+21-SEP-1989 THURSDAY                                                                                                                                                                                    
+21-MAY-1991 TUESDAY                                                                                                                                                                                     
+16-NOV-1999 TUESDAY                                                                                                                                                                                     
+17-OCT-1995 TUESDAY                                                                                                                                                                                     
+29-JAN-1997 WEDNESDAY                                                                                                                                                                                   
+29-JAN-2000 SATURDAY                                                                                                                                                                                    
+24-MAR-1998 TUESDAY                                                                                                                                                                                     
+24-MAY-1999 MONDAY                                                                                                                                                                                      
+17-SEP-1987 THURSDAY                                                                                                                                                                                    
+17-FEB-1996 SATURDAY                                                                                                                                                                                    
+17-AUG-1997 SUNDAY                                                                                                                                                                                      
+
+12 rows selected.
+
+SQL> SELECT HIRE_DATE FROM EMPLOYEES WHERE ROUND(HIRE_DATE,'MM') < HIRE_DATE;
+
+HIRE_DATE                                                                                                                                                                                               
+---------------------                                                                                                                                                                                   
+13-JAN-1993 WEDNESDAY                                                                                                                                                                                   
+03-JAN-1990 WEDNESDAY                                                                                                                                                                                   
+07-FEB-1999 SUNDAY                                                                                                                                                                                      
+15-MAR-1998 SUNDAY                                                                                                                                                                                      
+09-JUL-1998 THURSDAY                                                                                                                                                                                    
+11-MAY-1996 SATURDAY                                                                                                                                                                                    
+07-JUN-1994 TUESDAY                                                                                                                                                                                     
+07-JUN-1994 TUESDAY                                                                                                                                                                                     
+
+8 rows selected.
+
+SQL>  REM 2 DISPLAY THOSE WHO WERE HIRED IN SECOND HALF OF ANY MONTH. : 1 ROUND 2 TRUNC + ROUND 3 TRUNC + ROUND + ADD_MONTHS 4 TRUNC + ROUND + MONTHS_BETWEEN
+SQL> 
+SQL> SELECT HIRE_DATE FROM EMPLOYEES WHERE ROUND(HIRE_DATE,'MM') > HIRE_DATE;
+
+HIRE_DATE                                                                                                                                                                                               
+---------------------                                                                                                                                                                                   
+17-JUL-1987 FRIDAY                                                                                                                                                                                      
+21-SEP-1989 THURSDAY                                                                                                                                                                                    
+21-MAY-1991 TUESDAY                                                                                                                                                                                     
+16-NOV-1999 TUESDAY                                                                                                                                                                                     
+17-OCT-1995 TUESDAY                                                                                                                                                                                     
+29-JAN-1997 WEDNESDAY                                                                                                                                                                                   
+29-JAN-2000 SATURDAY                                                                                                                                                                                    
+24-MAR-1998 TUESDAY                                                                                                                                                                                     
+24-MAY-1999 MONDAY                                                                                                                                                                                      
+17-SEP-1987 THURSDAY                                                                                                                                                                                    
+17-FEB-1996 SATURDAY                                                                                                                                                                                    
+17-AUG-1997 SUNDAY                                                                                                                                                                                      
+
+12 rows selected.
+
+SQL> SELECT HIRE_DATE FROM EMPLOYEES WHERE ROUND(HIRE_DATE,'MM') > TRUNC(HIRE_DATE,'MM');
+
+HIRE_DATE                                                                                                                                                                                               
+---------------------                                                                                                                                                                                   
+17-JUL-1987 FRIDAY                                                                                                                                                                                      
+21-SEP-1989 THURSDAY                                                                                                                                                                                    
+21-MAY-1991 TUESDAY                                                                                                                                                                                     
+16-NOV-1999 TUESDAY                                                                                                                                                                                     
+17-OCT-1995 TUESDAY                                                                                                                                                                                     
+29-JAN-1997 WEDNESDAY                                                                                                                                                                                   
+29-JAN-2000 SATURDAY                                                                                                                                                                                    
+24-MAR-1998 TUESDAY                                                                                                                                                                                     
+24-MAY-1999 MONDAY                                                                                                                                                                                      
+17-SEP-1987 THURSDAY                                                                                                                                                                                    
+17-FEB-1996 SATURDAY                                                                                                                                                                                    
+17-AUG-1997 SUNDAY                                                                                                                                                                                      
+
+12 rows selected.
+
+SQL> SELECT HIRE_DATE FROM EMPLOYEES WHERE ROUND(HIRE_DATE,'MM') <> TRUNC(HIRE_DATE,'MM');
+
+HIRE_DATE                                                                                                                                                                                               
+---------------------                                                                                                                                                                                   
+17-JUL-1987 FRIDAY                                                                                                                                                                                      
+21-SEP-1989 THURSDAY                                                                                                                                                                                    
+21-MAY-1991 TUESDAY                                                                                                                                                                                     
+16-NOV-1999 TUESDAY                                                                                                                                                                                     
+17-OCT-1995 TUESDAY                                                                                                                                                                                     
+29-JAN-1997 WEDNESDAY                                                                                                                                                                                   
+29-JAN-2000 SATURDAY                                                                                                                                                                                    
+24-MAR-1998 TUESDAY                                                                                                                                                                                     
+24-MAY-1999 MONDAY                                                                                                                                                                                      
+17-SEP-1987 THURSDAY                                                                                                                                                                                    
+17-FEB-1996 SATURDAY                                                                                                                                                                                    
+17-AUG-1997 SUNDAY                                                                                                                                                                                      
+
+12 rows selected.
+
+SQL> SELECT HIRE_DATE FROM EMPLOYEES WHERE ROUND(HIRE_DATE,'MM') = ADD_MONTHS(TRUNC(HIRE_DATE,'MM'),1);
+
+HIRE_DATE                                                                                                                                                                                               
+---------------------                                                                                                                                                                                   
+17-JUL-1987 FRIDAY                                                                                                                                                                                      
+21-SEP-1989 THURSDAY                                                                                                                                                                                    
+21-MAY-1991 TUESDAY                                                                                                                                                                                     
+16-NOV-1999 TUESDAY                                                                                                                                                                                     
+17-OCT-1995 TUESDAY                                                                                                                                                                                     
+29-JAN-1997 WEDNESDAY                                                                                                                                                                                   
+29-JAN-2000 SATURDAY                                                                                                                                                                                    
+24-MAR-1998 TUESDAY                                                                                                                                                                                     
+24-MAY-1999 MONDAY                                                                                                                                                                                      
+17-SEP-1987 THURSDAY                                                                                                                                                                                    
+17-FEB-1996 SATURDAY                                                                                                                                                                                    
+17-AUG-1997 SUNDAY                                                                                                                                                                                      
+
+12 rows selected.
+
+SQL> SELECT HIRE_DATE FROM EMPLOYEES WHERE MONTHS_BETWEEN(ROUND(HIRE_DATE,'MM') , TRUNC(HIRE_DATE,'MM')) = 1;
+
+HIRE_DATE                                                                                                                                                                                               
+---------------------                                                                                                                                                                                   
+17-JUL-1987 FRIDAY                                                                                                                                                                                      
+21-SEP-1989 THURSDAY                                                                                                                                                                                    
+21-MAY-1991 TUESDAY                                                                                                                                                                                     
+16-NOV-1999 TUESDAY                                                                                                                                                                                     
+17-OCT-1995 TUESDAY                                                                                                                                                                                     
+29-JAN-1997 WEDNESDAY                                                                                                                                                                                   
+29-JAN-2000 SATURDAY                                                                                                                                                                                    
+24-MAR-1998 TUESDAY                                                                                                                                                                                     
+24-MAY-1999 MONDAY                                                                                                                                                                                      
+17-SEP-1987 THURSDAY                                                                                                                                                                                    
+17-FEB-1996 SATURDAY                                                                                                                                                                                    
+17-AUG-1997 SUNDAY                                                                                                                                                                                      
+
+12 rows selected.
+
+SQL> REM 5. DISPLAY FIRST_NAME AND OTHER COLUMN WHICH WILL REMOVE ALL VOWELS FROM RIGHT AND ALL CONSONENTS FROM LEFT.
+SQL> 
+SQL> SELECT FIRST_NAME , LTRIM(RTRIM(FIRST_NAME,'aeiou'),'QWRTYPSDFGHJKLZXCVBNMqwrtypsdfghjklzxcvbnm') FROM EMPLOYEES;
+
+FIRST_NAME      LTRIM(RTRIM(FIR                                                                                                                                                                         
+--------------- ---------------                                                                                                                                                                         
+Steven          even                                                                                                                                                                                    
+Neena           een                                                                                                                                                                                     
+Lex             ex                                                                                                                                                                                      
+Alexander       Alexander                                                                                                                                                                               
+Bruce           uc                                                                                                                                                                                      
+Diana           ian                                                                                                                                                                                     
+Kevin           evin                                                                                                                                                                                    
+Trenna          enn                                                                                                                                                                                     
+Curtis          urtis                                                                                                                                                                                   
+Randall         andall                                                                                                                                                                                  
+Peter           eter                                                                                                                                                                                    
+Eleni           Elen                                                                                                                                                                                    
+Ellen           Ellen                                                                                                                                                                                   
+Jonathon        onathon                                                                                                                                                                                 
+Kimerely        imerely                                                                                                                                                                                 
+Jennifer        ennifer                                                                                                                                                                                 
+Michael         ichael                                                                                                                                                                                  
+Pat             at                                                                                                                                                                                      
+Shelley         elley                                                                                                                                                                                   
+William         illiam                                                                                                                                                                                  
+
+20 rows selected.
+
+

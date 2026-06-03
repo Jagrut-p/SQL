@@ -1,0 +1,753 @@
+SQL> 
+SQL> CL SCR
+
+SQL> REM EXECUTION PRECEDENCE WILL BE FROM TOP-LEFT TO DOWN-RIGHT.
+SQL> 
+SQL> /*
+SQL> 
+SQL> SELECT ... UNION ALL SELECT UNION
+SQL> SELECT ... INTERSECT
+SQL> 
+SQL> SELECT
+SQL> 
+SQL> */
+SQL> 
+SQL> REM IF WE WANT WE CAN CHANGE PRECEDENCE OF EXECUTION BY PUTING STATEMENTS IN ( )
+SQL> 
+SQL> SELECT JOB FROM MPSEMP WHERE DEPTNO = 10;
+
+JOB                                                                                                                                                                                                     
+----------                                                                                                                                                                                              
+PRESIDENT                                                                                                                                                                                               
+MANAGER                                                                                                                                                                                                 
+CLERK                                                                                                                                                                                                   
+
+SQL> SELECT JOB FROM MPSEMP WHERE DEPTNO = 20;
+
+JOB                                                                                                                                                                                                     
+----------                                                                                                                                                                                              
+MANAGER                                                                                                                                                                                                 
+ANALYST                                                                                                                                                                                                 
+CLERK                                                                                                                                                                                                   
+ANALYST                                                                                                                                                                                                 
+CLERK                                                                                                                                                                                                   
+
+SQL> SELECT JOB FROM MPSEMP WHERE DEPTNO = 30;
+
+JOB                                                                                                                                                                                                     
+----------                                                                                                                                                                                              
+MANAGER                                                                                                                                                                                                 
+SALESMAN                                                                                                                                                                                                
+SALESMAN                                                                                                                                                                                                
+SALESMAN                                                                                                                                                                                                
+SALESMAN                                                                                                                                                                                                
+CLERK                                                                                                                                                                                                   
+
+6 rows selected.
+
+SQL> SELECT JOB FROM MPSEMP WHERE DEPTNO = 10
+  2  UNION
+  3  SELECT JOB FROM MPSEMP WHERE DEPTNO = 20
+  4  UNION ALL
+  5  SELECT JOB FROM MPSEMP WHERE DEPTNO = 30;
+
+JOB                                                                                                                                                                                                     
+----------                                                                                                                                                                                              
+ANALYST                                                                                                                                                                                                 
+CLERK                                                                                                                                                                                                   
+MANAGER                                                                                                                                                                                                 
+PRESIDENT                                                                                                                                                                                               
+MANAGER                                                                                                                                                                                                 
+SALESMAN                                                                                                                                                                                                
+SALESMAN                                                                                                                                                                                                
+SALESMAN                                                                                                                                                                                                
+SALESMAN                                                                                                                                                                                                
+CLERK                                                                                                                                                                                                   
+
+10 rows selected.
+
+SQL> SELECT JOB FROM MPSEMP WHERE DEPTNO = 10
+  2  UNION
+  3  (SELECT JOB FROM MPSEMP WHERE DEPTNO = 20
+  4  UNION ALL
+  5  SELECT JOB FROM MPSEMP WHERE DEPTNO = 30);
+
+JOB                                                                                                                                                                                                     
+----------                                                                                                                                                                                              
+ANALYST                                                                                                                                                                                                 
+CLERK                                                                                                                                                                                                   
+MANAGER                                                                                                                                                                                                 
+PRESIDENT                                                                                                                                                                                               
+SALESMAN                                                                                                                                                                                                
+
+SQL> REM LIFE (CAREER (EDUCATION))
+SQL> 
+SQL> SELECT JOB FROM MPSEMP WHERE DEPTNO = 10
+  2  
+SQL> SELECT JOB FROM MPSEMP WHERE DEPTNO = 10;
+
+JOB                                                                                                                                                                                                     
+----------                                                                                                                                                                                              
+PRESIDENT                                                                                                                                                                                               
+MANAGER                                                                                                                                                                                                 
+CLERK                                                                                                                                                                                                   
+
+SQL> SELECT JOB FROM MPSEMP WHERE DEPTNO = 20;
+
+JOB                                                                                                                                                                                                     
+----------                                                                                                                                                                                              
+MANAGER                                                                                                                                                                                                 
+ANALYST                                                                                                                                                                                                 
+CLERK                                                                                                                                                                                                   
+ANALYST                                                                                                                                                                                                 
+CLERK                                                                                                                                                                                                   
+
+SQL> SELECT JOB FROM MPSEMP WHERE DEPTNO = 30;
+
+JOB                                                                                                                                                                                                     
+----------                                                                                                                                                                                              
+MANAGER                                                                                                                                                                                                 
+SALESMAN                                                                                                                                                                                                
+SALESMAN                                                                                                                                                                                                
+SALESMAN                                                                                                                                                                                                
+SALESMAN                                                                                                                                                                                                
+CLERK                                                                                                                                                                                                   
+
+6 rows selected.
+
+SQL> REM 1 10 INTERSECT 20 UNION 30   : 1 COUNT :             2 FIRST ROW :                   3 LAST ROW :
+SQL> 
+SQL> REM 2 10 INTERSECT (20 UNION 30) : 1 COUNT :             2 FIRST ROW :                   3 LAST ROW :
+SQL> 
+SQL> REM 3 10 MINUS (20 UNION 30)     : 1 COUNT :             2 FIRST ROW :                   3 LAST ROW :
+SQL> 
+SQL> REM 4 10 MINUS 20 UNION 30       : 1 COUNT :             2 FIRST ROW :                   3 LAST ROW :
+SQL> 
+SQL> REM 5 10 UNION ALL 20 UNION 30   : 1 COUNT :             2 FIRST ROW :                   3 LAST ROW :
+SQL> 
+SQL> REM 6 10 UNION ALL (20 UNION 30) : 1 COUNT :             2 FIRST ROW :                   3 LAST ROW :
+SQL> 
+SQL> SELECT JOB FROM MPSEMP WHERE DEPTNO = 10;
+
+JOB                                                                                                                                                                                                     
+----------                                                                                                                                                                                              
+PRESIDENT                                                                                                                                                                                               
+MANAGER                                                                                                                                                                                                 
+CLERK                                                                                                                                                                                                   
+
+SQL> SELECT JOB FROM MPSEMP WHERE DEPTNO = 20;
+
+JOB                                                                                                                                                                                                     
+----------                                                                                                                                                                                              
+MANAGER                                                                                                                                                                                                 
+ANALYST                                                                                                                                                                                                 
+CLERK                                                                                                                                                                                                   
+ANALYST                                                                                                                                                                                                 
+CLERK                                                                                                                                                                                                   
+
+SQL> SELECT JOB FROM MPSEMP WHERE DEPTNO = 30;
+
+JOB                                                                                                                                                                                                     
+----------                                                                                                                                                                                              
+MANAGER                                                                                                                                                                                                 
+SALESMAN                                                                                                                                                                                                
+SALESMAN                                                                                                                                                                                                
+SALESMAN                                                                                                                                                                                                
+SALESMAN                                                                                                                                                                                                
+CLERK                                                                                                                                                                                                   
+
+6 rows selected.
+
+SQL> REM 1 10 INTERSECT 20 UNION 30   : 1 COUNT : 3            2 FIRST ROW : CLERK                  3 LAST ROW : SALESMAN
+SQL> 
+SQL> REM 2 10 INTERSECT (20 UNION 30) : 1 COUNT : 2            2 FIRST ROW : CLERK                  3 LAST ROW : MANAGER
+SQL> 
+SQL> REM 3 10 MINUS (20 UNION 30)     : 1 COUNT : 1            2 FIRST ROW : PRESIDENT              3 LAST ROW :
+SQL> 
+SQL> REM 4 10 MINUS 20 UNION 30       : 1 COUNT : 4            2 FIRST ROW : CLERK                  3 LAST ROW : SALESMAN
+SQL> 
+SQL> REM 5 10 UNION ALL 20 UNION 30   : 1 COUNT : 5            2 FIRST ROW : ANALYST                3 LAST ROW : SALESMAN
+SQL> 
+SQL> REM 6 10 UNION ALL (20 UNION 30) : 1 COUNT : 7            2 FIRST ROW : PRESIDENT              3 LAST ROW : SALESMAN
+SQL> 
+SQL> 
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas                     650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel            EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+
+20 rows selected.
+
+SQL> REM DISPLAY THOSE COMMON JOBS FOR WHICH COMPANY HAS HIRED EMPLOYEES IN OR BEFORE 95 AND AFTER 95.
+SQL> 
+SQL> SELECT JOB_ID FROM EMPLOYEES WHERE HIRE_DATE <= '31DEC95'
+  2  INTERSECT
+  3  SELECT JOB_ID FROM EMPLOYEES WHERE HIRE_DATE > '31DEC95';
+
+JOB_ID                                                                                                                                                                                                  
+----------                                                                                                                                                                                              
+IT_PROG                                                                                                                                                                                                 
+ST_CLERK                                                                                                                                                                                                
+
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas                     650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel            EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+
+20 rows selected.
+
+SQL> REM DISPLAY THOSE DEPARTMENT_ID FOR WHICH COMPANY PAYS SALARY 6000 OR MORE BUT NOT LESS.
+SQL> 
+SQL> SELECT DEPARTMENT_ID FROM EMPLOYEES WHERE SALARY >= 6000;
+
+DEPARTMENT_ID                                                                                                                                                                                           
+-------------                                                                                                                                                                                           
+           90                                                                                                                                                                                           
+           90                                                                                                                                                                                           
+           90                                                                                                                                                                                           
+           60                                                                                                                                                                                           
+           60                                                                                                                                                                                           
+           80                                                                                                                                                                                           
+           80                                                                                                                                                                                           
+           80                                                                                                                                                                                           
+                                                                                                                                                                                                        
+           20                                                                                                                                                                                           
+           20                                                                                                                                                                                           
+          110                                                                                                                                                                                           
+          110                                                                                                                                                                                           
+
+13 rows selected.
+
+SQL> REM DISPLAY THOSE DEPARTMENT_ID FOR WHICH COMPANY PAYS SALARY 6000 OR MORE BUT NOT LESS.
+SQL> 
+SQL> SELECT DEPARTMENT_ID FROM EMPLOYEES WHERE SALARY >= 6000
+  2  MINUS
+  3  SELECT DEPARTMENT_ID FROM EMPLOYEES WHERE SALARY < 6000;
+
+DEPARTMENT_ID                                                                                                                                                                                           
+-------------                                                                                                                                                                                           
+           20                                                                                                                                                                                           
+           80                                                                                                                                                                                           
+           90                                                                                                                                                                                           
+          110                                                                                                                                                                                           
+                                                                                                                                                                                                        
+
+SQL>  12000
+SP2-0226: Invalid line number 
+SQL>   8300
+SP2-0226: Invalid line number 
+SQL> 
+SQL> 
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas                     650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel            EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+
+20 rows selected.
+
+SQL> REM 1 DISPLAY COMMON JOB_ID FOR WHICH COMPANY HAS HIRED EMPLOYEES IN BOTH YEARS 99 AND 98
+SQL> 
+SQL> REM 2 DISPLAY ALL HIRE_DATE FOR WHICH COMPANY HAS HIRED EMPLOYEES UNDER MANAGERS 100 AND 124
+SQL> 
+SQL> REM 3 DISPLAY ALL NON-DUPLICATE MANAGER_ID FOR WHICH COMPANY HAS HIRED EMPLOYEES IN 1st AND 4th QUARTERS OF ANY YEAR
+SQL> 
+SQL> REM 4 DISPLAY DEPARTMENT_ID FOR WHICH COMPANY HAS HIRED EMPLOYEES IN YEAR 99 BUT NOT IN 98
+SQL> 
+SQL> 
+SQL> 
+SQL> REM 1 DISPLAY COMMON JOB_ID FOR WHICH COMPANY HAS HIRED EMPLOYEES IN BOTH YEARS 99 AND 98
+SQL> 
+SQL> SELECT JOB_ID FROM EMPLOYEES WHERE HIRE_DATE LIKE '%99'
+  2  INTERSECT
+  3  SELECT JOB_ID FROM EMPLOYEES WHERE HIRE_DATE LIKE '%98';
+
+JOB_ID                                                                                                                                                                                                  
+----------                                                                                                                                                                                              
+SA_REP                                                                                                                                                                                                  
+
+SQL> REM 2 DISPLAY ALL HIRE_DATE FOR WHICH COMPANY HAS HIRED EMPLOYEES UNDER MANAGERS 100 AND 124
+SQL> 
+SQL> SELECT HIRE_DATE FROM EMPLOYEES WHERE MANAGER_ID = 100
+  2  UNION ALL
+  3  SELECT HIRE_DATE FROM EMPLOYEES WHERE MANAGER_ID = 124;
+
+HIRE_DATE                                                                                                                                                                                               
+---------                                                                                                                                                                                               
+21-SEP-89                                                                                                                                                                                               
+13-JAN-93                                                                                                                                                                                               
+16-NOV-99                                                                                                                                                                                               
+29-JAN-00                                                                                                                                                                                               
+17-FEB-96                                                                                                                                                                                               
+17-OCT-95                                                                                                                                                                                               
+29-JAN-97                                                                                                                                                                                               
+15-MAR-98                                                                                                                                                                                               
+09-JUL-98                                                                                                                                                                                               
+
+9 rows selected.
+
+SQL> REM 3 DISPLAY ALL NON-DUPLICATE MANAGER_ID FOR WHICH COMPANY HAS HIRED EMPLOYEES IN 1st AND 4th QUARTERS OF ANY YEAR
+SQL> 
+SQL> SELECT MANAGER_ID FROM EMPLOYEES WHERE TO_CHAR(HIRE_DATE,'Q') IN '1'
+  2  UNION
+  3  SELECT MANAGER_ID FROM EMPLOYEES WHERE TO_CHAR(HIRE_DATE,'Q') IN '4';
+
+MANAGER_ID                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+       100                                                                                                                                                                                              
+       102                                                                                                                                                                                              
+       103                                                                                                                                                                                              
+       124                                                                                                                                                                                              
+       149                                                                                                                                                                                              
+
+SQL> REM 4 DISPLAY DEPARTMENT_ID FOR WHICH COMPANY HAS HIRED EMPLOYEES IN YEAR 99 BUT NOT IN 98
+SQL> 
+SQL> SELECT DEPARTMENT_ID FROM EMPLOYEES WHERE HIRE_DATE LIKE '%99'
+  2  MINUS
+  3  SELECT DEPARTMENT_ID FROM EMPLOYEES WHERE HIRE_DATE LIKE '%98';
+
+DEPARTMENT_ID                                                                                                                                                                                           
+-------------                                                                                                                                                                                           
+           60                                                                                                                                                                                           
+                                                                                                                                                                                                        
+
+SQL> SELECT * FROM MPSSTAFF;
+
+NAME                                                                                                                                                                                                    
+----------                                                                                                                                                                                              
+ASHWIN                                                                                                                                                                                                  
+SARITA                                                                                                                                                                                                  
+BIMAL                                                                                                                                                                                                   
+
+SQL> SELECT * FROM MPSSUBJECT;
+
+NAME                                                                                                                                                                                                    
+----------                                                                                                                                                                                              
+TOEFL                                                                                                                                                                                                   
+GMAT                                                                                                                                                                                                    
+SAT                                                                                                                                                                                                     
+GRE                                                                                                                                                                                                     
+
+SQL> SELECT * FROM MPSCANTEACH;
+
+STAFF      SUBJECT                                                                                                                                                                                      
+---------- ----------                                                                                                                                                                                   
+ASHWIN     TOEFL                                                                                                                                                                                        
+ASHWIN     GRE                                                                                                                                                                                          
+SARITA     GMAT                                                                                                                                                                                         
+BIMAL      SAT                                                                                                                                                                                          
+
+SQL> /*
+SQL> 
+SQL> 
+SQL> STAFF       SUBJECT     CAN?
+SQL> ASHWIN      TOEFL       YES
+SQL> ASHWIN      GMAT        NO
+SQL> ASHWIN      SAT         NO
+SQL> ASHWIN      GRE         YES
+SQL> SARITA
+SQL> SARITA
+SQL>   ::
+SQL>   ::
+SQL> BIMAL
+SQL> SARITA
+SQL>   ::
+SQL>   ::
+SQL> 
+SQL> */
+SQL> 
+SQL> SELECT * FROM MPSSTAFF;
+
+NAME                                                                                                                                                                                                    
+----------                                                                                                                                                                                              
+ASHWIN                                                                                                                                                                                                  
+SARITA                                                                                                                                                                                                  
+BIMAL                                                                                                                                                                                                   
+
+SQL> SELECT * FROM MPSSUBJECT;
+
+NAME                                                                                                                                                                                                    
+----------                                                                                                                                                                                              
+TOEFL                                                                                                                                                                                                   
+GMAT                                                                                                                                                                                                    
+SAT                                                                                                                                                                                                     
+GRE                                                                                                                                                                                                     
+
+SQL> SELECT * FROM MPSCANTEACH;
+
+STAFF      SUBJECT                                                                                                                                                                                      
+---------- ----------                                                                                                                                                                                   
+ASHWIN     TOEFL                                                                                                                                                                                        
+ASHWIN     GRE                                                                                                                                                                                          
+SARITA     GMAT                                                                                                                                                                                         
+BIMAL      SAT                                                                                                                                                                                          
+
+SQL> SELECT * FROM MPSSTAFF CROSS JOIN MPSSUBJECT;
+
+NAME       NAME                                                                                                                                                                                         
+---------- ----------                                                                                                                                                                                   
+ASHWIN     TOEFL                                                                                                                                                                                        
+ASHWIN     GMAT                                                                                                                                                                                         
+ASHWIN     SAT                                                                                                                                                                                          
+ASHWIN     GRE                                                                                                                                                                                          
+SARITA     TOEFL                                                                                                                                                                                        
+SARITA     GMAT                                                                                                                                                                                         
+SARITA     SAT                                                                                                                                                                                          
+SARITA     GRE                                                                                                                                                                                          
+BIMAL      TOEFL                                                                                                                                                                                        
+BIMAL      GMAT                                                                                                                                                                                         
+BIMAL      SAT                                                                                                                                                                                          
+BIMAL      GRE                                                                                                                                                                                          
+
+12 rows selected.
+
+SQL> SELECT T.NAME STAFF , B.NAME SUBJECT FROM MPSSTAFF T CROSS JOIN MPSSUBJECT B;
+
+STAFF      SUBJECT                                                                                                                                                                                      
+---------- ----------                                                                                                                                                                                   
+ASHWIN     TOEFL                                                                                                                                                                                        
+ASHWIN     GMAT                                                                                                                                                                                         
+ASHWIN     SAT                                                                                                                                                                                          
+ASHWIN     GRE                                                                                                                                                                                          
+SARITA     TOEFL                                                                                                                                                                                        
+SARITA     GMAT                                                                                                                                                                                         
+SARITA     SAT                                                                                                                                                                                          
+SARITA     GRE                                                                                                                                                                                          
+BIMAL      TOEFL                                                                                                                                                                                        
+BIMAL      GMAT                                                                                                                                                                                         
+BIMAL      SAT                                                                                                                                                                                          
+BIMAL      GRE                                                                                                                                                                                          
+
+12 rows selected.
+
+SQL> SELECT T.NAME STAFF , B.NAME SUBJECT , 'NO  ' "CAN?" FROM MPSSTAFF T CROSS JOIN MPSSUBJECT B;
+
+STAFF      SUBJECT    CAN?                                                                                                                                                                              
+---------- ---------- ----                                                                                                                                                                              
+ASHWIN     TOEFL      NO                                                                                                                                                                                
+ASHWIN     GMAT       NO                                                                                                                                                                                
+ASHWIN     SAT        NO                                                                                                                                                                                
+ASHWIN     GRE        NO                                                                                                                                                                                
+SARITA     TOEFL      NO                                                                                                                                                                                
+SARITA     GMAT       NO                                                                                                                                                                                
+SARITA     SAT        NO                                                                                                                                                                                
+SARITA     GRE        NO                                                                                                                                                                                
+BIMAL      TOEFL      NO                                                                                                                                                                                
+BIMAL      GMAT       NO                                                                                                                                                                                
+BIMAL      SAT        NO                                                                                                                                                                                
+BIMAL      GRE        NO                                                                                                                                                                                
+
+12 rows selected.
+
+SQL> SELECT T.NAME STAFF , B.NAME SUBJECT , 'NO  ' "CAN?" FROM MPSSTAFF T CROSS JOIN MPSSUBJECT B
+  2  MINUS
+  3  SELECT STAFF , SUBJECT , 'NO  ' FROM MPSCANTEACH;
+
+STAFF      SUBJECT    CAN?                                                                                                                                                                              
+---------- ---------- ----                                                                                                                                                                              
+ASHWIN     GMAT       NO                                                                                                                                                                                
+ASHWIN     SAT        NO                                                                                                                                                                                
+BIMAL      GMAT       NO                                                                                                                                                                                
+BIMAL      GRE        NO                                                                                                                                                                                
+BIMAL      TOEFL      NO                                                                                                                                                                                
+SARITA     GRE        NO                                                                                                                                                                                
+SARITA     SAT        NO                                                                                                                                                                                
+SARITA     TOEFL      NO                                                                                                                                                                                
+
+8 rows selected.
+
+SQL> SELECT T.NAME STAFF , B.NAME SUBJECT , 'NO  ' "CAN?" FROM MPSSTAFF T CROSS JOIN MPSSUBJECT B
+  2  MINUS
+  3  SELECT STAFF , SUBJECT , 'NO  ' FROM MPSCANTEACH
+  4  UNION ALL
+  5  SELECT STAFF , SUBJECT , 'YES ' FROM MPSCANTEACH;
+
+STAFF      SUBJECT    CAN?                                                                                                                                                                              
+---------- ---------- ----                                                                                                                                                                              
+ASHWIN     GMAT       NO                                                                                                                                                                                
+ASHWIN     SAT        NO                                                                                                                                                                                
+BIMAL      GMAT       NO                                                                                                                                                                                
+BIMAL      GRE        NO                                                                                                                                                                                
+BIMAL      TOEFL      NO                                                                                                                                                                                
+SARITA     GRE        NO                                                                                                                                                                                
+SARITA     SAT        NO                                                                                                                                                                                
+SARITA     TOEFL      NO                                                                                                                                                                                
+ASHWIN     TOEFL      YES                                                                                                                                                                               
+ASHWIN     GRE        YES                                                                                                                                                                               
+SARITA     GMAT       YES                                                                                                                                                                               
+BIMAL      SAT        YES                                                                                                                                                                               
+
+12 rows selected.
+
+SQL> SELECT T.NAME STAFF , B.NAME SUBJECT , 'NO  ' "CAN?" FROM MPSSTAFF T CROSS JOIN MPSSUBJECT B
+  2  MINUS
+  3  SELECT STAFF , SUBJECT , 'NO  ' FROM MPSCANTEACH
+  4  UNION
+  5  SELECT STAFF , SUBJECT , 'YES ' FROM MPSCANTEACH;
+
+STAFF      SUBJECT    CAN?                                                                                                                                                                              
+---------- ---------- ----                                                                                                                                                                              
+ASHWIN     GMAT       NO                                                                                                                                                                                
+ASHWIN     GRE        YES                                                                                                                                                                               
+ASHWIN     SAT        NO                                                                                                                                                                                
+ASHWIN     TOEFL      YES                                                                                                                                                                               
+BIMAL      GMAT       NO                                                                                                                                                                                
+BIMAL      GRE        NO                                                                                                                                                                                
+BIMAL      SAT        YES                                                                                                                                                                               
+BIMAL      TOEFL      NO                                                                                                                                                                                
+SARITA     GMAT       YES                                                                                                                                                                               
+SARITA     GRE        NO                                                                                                                                                                                
+SARITA     SAT        NO                                                                                                                                                                                
+SARITA     TOEFL      NO                                                                                                                                                                                
+
+12 rows selected.
+
+SQL> SELECT * FROM MPSSTAFF;
+
+NAME                                                                                                                                                                                                    
+----------                                                                                                                                                                                              
+ASHWIN                                                                                                                                                                                                  
+SARITA                                                                                                                                                                                                  
+BIMAL                                                                                                                                                                                                   
+
+SQL> SELECT * FROM MPSSUBJECT;
+
+NAME                                                                                                                                                                                                    
+----------                                                                                                                                                                                              
+TOEFL                                                                                                                                                                                                   
+GMAT                                                                                                                                                                                                    
+SAT                                                                                                                                                                                                     
+GRE                                                                                                                                                                                                     
+
+SQL> SELECT * FROM MPSCANTEACH;
+
+STAFF      SUBJECT                                                                                                                                                                                      
+---------- ----------                                                                                                                                                                                   
+ASHWIN     TOEFL                                                                                                                                                                                        
+ASHWIN     GRE                                                                                                                                                                                          
+SARITA     GMAT                                                                                                                                                                                         
+BIMAL      SAT                                                                                                                                                                                          
+
+SQL> 
+SQL> 
+SQL> SELECT T.NAME STAFF , B.NAME SUBJET , 'NO  ' "CAN?" FROM MPSSTAFF T CROSS JOIN MPSSUBJECT B;
+
+STAFF      SUBJET     CAN?                                                                                                                                                                              
+---------- ---------- ----                                                                                                                                                                              
+ASHWIN     TOEFL      NO                                                                                                                                                                                
+ASHWIN     GMAT       NO                                                                                                                                                                                
+ASHWIN     SAT        NO                                                                                                                                                                                
+ASHWIN     GRE        NO                                                                                                                                                                                
+SARITA     TOEFL      NO                                                                                                                                                                                
+SARITA     GMAT       NO                                                                                                                                                                                
+SARITA     SAT        NO                                                                                                                                                                                
+SARITA     GRE        NO                                                                                                                                                                                
+BIMAL      TOEFL      NO                                                                                                                                                                                
+BIMAL      GMAT       NO                                                                                                                                                                                
+BIMAL      SAT        NO                                                                                                                                                                                
+BIMAL      GRE        NO                                                                                                                                                                                
+
+12 rows selected.
+
+SQL> SELECT T.NAME STAFF , B.NAME SUBJET , 'NO  ' "CAN?" FROM MPSSTAFF T CROSS JOIN MPSSUBJECT B
+  2  MINUS
+  3  SELECT STAFF , SUBJECT , 'NO  ' FROM MPSCANTEACH;
+
+STAFF      SUBJET     CAN?                                                                                                                                                                              
+---------- ---------- ----                                                                                                                                                                              
+ASHWIN     GMAT       NO                                                                                                                                                                                
+ASHWIN     SAT        NO                                                                                                                                                                                
+BIMAL      GMAT       NO                                                                                                                                                                                
+BIMAL      GRE        NO                                                                                                                                                                                
+BIMAL      TOEFL      NO                                                                                                                                                                                
+SARITA     GRE        NO                                                                                                                                                                                
+SARITA     SAT        NO                                                                                                                                                                                
+SARITA     TOEFL      NO                                                                                                                                                                                
+
+8 rows selected.
+
+SQL> SELECT T.NAME STAFF , B.NAME SUBJET , 'NO  ' "CAN?" FROM MPSSTAFF T CROSS JOIN MPSSUBJECT B
+  2  MINUS
+  3  SELECT STAFF , SUBJECT , 'NO  ' FROM MPSCANTEACH
+  4  UNION
+  5  SELECT STAFF , SUBJECT , 'YES ' FROM MPSCANTEACH;
+
+STAFF      SUBJET     CAN?                                                                                                                                                                              
+---------- ---------- ----                                                                                                                                                                              
+ASHWIN     GMAT       NO                                                                                                                                                                                
+ASHWIN     GRE        YES                                                                                                                                                                               
+ASHWIN     SAT        NO                                                                                                                                                                                
+ASHWIN     TOEFL      YES                                                                                                                                                                               
+BIMAL      GMAT       NO                                                                                                                                                                                
+BIMAL      GRE        NO                                                                                                                                                                                
+BIMAL      SAT        YES                                                                                                                                                                               
+BIMAL      TOEFL      NO                                                                                                                                                                                
+SARITA     GMAT       YES                                                                                                                                                                               
+SARITA     GRE        NO                                                                                                                                                                                
+SARITA     SAT        NO                                                                                                                                                                                
+SARITA     TOEFL      NO                                                                                                                                                                                
+
+12 rows selected.
+
+SQL> REM 1 CROSS JOIN + SET OPERATOR
+SQL> 
+SQL> REM 2 CROSS JOIN + CONDITIONAL FUNCTION + SUB QUERY
+SQL> 
+SQL> SELECT * FROM MPSSTAFF;
+
+NAME                                                                                                                                                                                                    
+----------                                                                                                                                                                                              
+ASHWIN                                                                                                                                                                                                  
+SARITA                                                                                                                                                                                                  
+BIMAL                                                                                                                                                                                                   
+
+SQL> SELECT * FROM MPSSUBJECT;
+
+NAME                                                                                                                                                                                                    
+----------                                                                                                                                                                                              
+TOEFL                                                                                                                                                                                                   
+GMAT                                                                                                                                                                                                    
+SAT                                                                                                                                                                                                     
+GRE                                                                                                                                                                                                     
+
+SQL> SELECT * FROM MPSCANTEACH;
+
+STAFF      SUBJECT                                                                                                                                                                                      
+---------- ----------                                                                                                                                                                                   
+ASHWIN     TOEFL                                                                                                                                                                                        
+ASHWIN     GRE                                                                                                                                                                                          
+SARITA     GMAT                                                                                                                                                                                         
+BIMAL      SAT                                                                                                                                                                                          
+
+SQL> 
+SQL> SELECT T.NAME STAFF , B.NAME SUBJECT FROM MPSSTAFF T CROSS JOIN MPSSUBJECT B;
+
+STAFF      SUBJECT                                                                                                                                                                                      
+---------- ----------                                                                                                                                                                                   
+ASHWIN     TOEFL                                                                                                                                                                                        
+ASHWIN     GMAT                                                                                                                                                                                         
+ASHWIN     SAT                                                                                                                                                                                          
+ASHWIN     GRE                                                                                                                                                                                          
+SARITA     TOEFL                                                                                                                                                                                        
+SARITA     GMAT                                                                                                                                                                                         
+SARITA     SAT                                                                                                                                                                                          
+SARITA     GRE                                                                                                                                                                                          
+BIMAL      TOEFL                                                                                                                                                                                        
+BIMAL      GMAT                                                                                                                                                                                         
+BIMAL      SAT                                                                                                                                                                                          
+BIMAL      GRE                                                                                                                                                                                          
+
+12 rows selected.
+
+SQL> SELECT T.NAME STAFF , B.NAME SUBJECT , CASE WHEN (T.NAME,B.NAME) IN (SELECT * FROM MPSCANTEACH) THEN 'YES ' ELSE 'NO  ' END "CAN?" FROM MPSSTAFF T CROSS JOIN MPSSUBJECT B;
+
+STAFF      SUBJECT    CAN?                                                                                                                                                                              
+---------- ---------- ----                                                                                                                                                                              
+ASHWIN     TOEFL      YES                                                                                                                                                                               
+ASHWIN     GMAT       NO                                                                                                                                                                                
+ASHWIN     SAT        NO                                                                                                                                                                                
+ASHWIN     GRE        YES                                                                                                                                                                               
+SARITA     TOEFL      NO                                                                                                                                                                                
+SARITA     GMAT       YES                                                                                                                                                                               
+SARITA     SAT        NO                                                                                                                                                                                
+SARITA     GRE        NO                                                                                                                                                                                
+BIMAL      TOEFL      NO                                                                                                                                                                                
+BIMAL      GMAT       NO                                                                                                                                                                                
+BIMAL      SAT        YES                                                                                                                                                                               
+BIMAL      GRE        NO                                                                                                                                                                                
+
+12 rows selected.
+
+SQL> 17 DISPLAY HIRE YEAR WISE , HIRE QUARTER WISE HIGHEST AVERAGE SALARY PAID
+SQL> 
+SQL> SELECT MAX(AVG(SALARY)) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'RRRR') , TO_CHAR(HIRE_DATE,'Q');
+
+MAX(AVG(SALARY))                                                                                                                                                                                        
+----------------                                                                                                                                                                                        
+           17000                                                                                                                                                                                        
+
+SQL> REM DISPLAY -12345.67 VALUE IN SPECIFIED FORMAT : {12:345;67} (DON'T USE ALTER SESSION)
+SQL> 
+SQL> SELECT TRANSLATE(TO_CHAR(-12345.67,'99999.99PR'),'<>','{}') FROM DUAL;
+
+TRANSLATE(TO_CHAR(-12345.67,'99999.99PR'                                                                                                                                                                
+----------------------------------------                                                                                                                                                                
+{12345.67}                                                                                                                                                                                              
+
+SQL> SELECT TRANSLATE(TO_CHAR(-12345.67,'99G999D99PR','NLS_NUMERIC_CHARACTERS=';:'),'<>','{}') FROM DUAL;
+ERROR:
+ORA-01756: quoted string not properly terminated 
+
+
+SQL> SELECT TRANSLATE(TO_CHAR(-12345.67,'99G999D99PR','NLS_NUMERIC_CHARACTERS=;:'),'<>','{}') FROM DUAL;
+
+TRANSLATE(TO_CHAR(-12345.67,'99G999D99PR','N                                                                                                                                                            
+--------------------------------------------                                                                                                                                                            
+{12:345;67}                                                                                                                                                                                             
+
+SQL>  SELECT MIN(COUNT(*)), MAX(COUNT(*)) FROM EMPLOYEES GROUP BY TO_NUMBER(TO_CHAR(HIRE_DATE,'RRRR')), TO_NUMBER(TO_CHAR(HIRE_DATE,'Q'));
+
+MIN(COUNT(*)) MAX(COUNT(*))                                                                                                                                                                             
+------------- -------------                                                                                                                                                                             
+            1             2                                                                                                                                                                             
+
+SQL> SPOOL OFF

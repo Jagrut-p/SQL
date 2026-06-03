@@ -51,7 +51,7 @@ COMMISSION_PCT NEW_COMM_PCT
 
 20 rows selected.
 
-SQL> ELREM COMPANY DECLARES .12 COMMISSION_PCT FOR THOSE WHO DO NOT GET COMMISSION.
+SQL> REM COMPANY DECLARES .12 COMMISSION_PCT FOR THOSE WHO DO NOT GET COMMISSION.
 SQL> 
 SQL> SELECT COMMISSION_PCT , NVL(COMMISSION_PCT , 0.12) NEW_COMM_PCT FROM EMPLOYEES;
 
@@ -218,7 +218,7 @@ MANAGER_ID NVL(TO_CHAR(MANAGER_ID),'BOSS')
        205 205                                                                                                                                                                                          
 
 20 rows selected.
-
++++++++++++++++++++ 30 APRIL
 SQL> REM NVL2 : IT IS USED TO REPLACE NULL AS WELL AS NON-NULL VALUE.
 SQL> 
 SQL> REM IT TAKES EXACTLY 3 ARGUMENTS.

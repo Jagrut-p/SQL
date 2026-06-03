@@ -1,0 +1,218 @@
+SQL> 
+SQL> CL SCR
+
+SQL> REM 1 FIRST_NAME , JOB_ID , SALARY , JOB_MAX_SAL , DIFF  (NATURAL JOIN , WITHOUT COLUMN ALIAS)
+SQL> 
+SQL> REM 2 LAST_NAME , DEPARTMENT_ID , SALARY , DEPT_AVG_SAL , DIFF (NEGATIVE VALUE MUST BE DISPLAYED IN <>)
+SQL> --    (INNER JOIN USING , USING CASE INSENSITIVE COLUMN ALIAS)
+SQL> 
+SQL> REM 3 FULL_NAME , MANAGER_ID , SALARY , MGR_SUM_SAL , "% OF SUM SAL"  (INNER JOIN 'ON', USING CASE SENSITIVE COLUMN ALIAS)
+SQL> --    "% OF SUM SAL" MUST BE DISPLAYED LIKE THIS : 100.00% , 45.26%
+SQL> 
+SQL> SELECT FIRST_NAME || ' '|| LAST_NAME FULL_NAME , E.MANAGER_ID , SALARY , "Mgr_Sum_Sal" ,
+  2  TO_CHAR(SALARY*100/"Mgr_Sum_Sal",'999.99')||'%' "% OF SUM SAL"
+  3  FROM EMPLOYEES E
+  4  JOIN (SELECT MANAGER_ID , SUM(SALARY) "Mgr_Sum_Sal" FROM EMPLOYEES GROUP BY MANAGER_ID) M ON E.MANAGER_ID = M.MANAGER_ID;
+
+FULL_NAME                       MANAGER_ID     SALARY Mgr_Sum_Sal % OF SUM                                                                                                                              
+------------------------------- ---------- ---------- ----------- --------                                                                                                                              
+Neena Kochhar                          100      17000       63300   26.86%                                                                                                                              
+Lex De Haan                            100      17000       63300   26.86%                                                                                                                              
+Alexander Hunold                       102       9000        9000  100.00%                                                                                                                              
+Bruce Ernst                            103       6000       10200   58.82%                                                                                                                              
+Diana Lorentz                          103       4200       10200   41.18%                                                                                                                              
+Kevin Mourgos                          100       5800       63300    9.16%                                                                                                                              
+Trenna Rajs                            124       3500       11700   29.91%                                                                                                                              
+Curtis Davies                          124       3100       11700   26.50%                                                                                                                              
+Randall Matos                          124       2600       11700   22.22%                                                                                                                              
+Peter Vargas                           124       2500       11700   21.37%                                                                                                                              
+Eleni Zlotkey                          100      10500       63300   16.59%                                                                                                                              
+Ellen Abel                             149      11000       26600   41.35%                                                                                                                              
+Jonathon Taylor                        149       8600       26600   32.33%                                                                                                                              
+Kimerely Grant                         149       7000       26600   26.32%                                                                                                                              
+Jennifer Whalen                        101       4400       16400   26.83%                                                                                                                              
+Michael Hartstein                      100      13000       63300   20.54%                                                                                                                              
+Pat Fay                                201       6000        6000  100.00%                                                                                                                              
+Shelley Higgins                        101      12000       16400   73.17%                                                                                                                              
+William Gietz                          205       8300        8300  100.00%                                                                                                                              
+
+19 rows selected.
+
+SQL> REM 1 LAST_NAME , JOB_ID , SALARY , JOB_MAX_SAL , MANAGER_ID , MGR_SUM_SAL  ( USING , ON , WITHOUT ALIAS )
+SQL> 
+SQL> REM 2 FULL_NAME , DEPARTMENT_NAME , SALARY , DEPT_AVG_SAL , AVG_DIFF , JOB_ID , JOB_MIN_SAL , MIN_DIFF ( ON , USE CASE INSENSITIVE ALIAS)
+SQL> 
+SQL> REM 3 FIRST_NAME , JOB_TITLE , SALARY , JOB_SUM_SAL , "%_OF_JOB_SUM_SAL" , MANAGER_ID , MGR_SUM_SAL , "%_OF_MGR_SUM_SAL" ( NATURAL , USING , ON , USE CASE SENSITIVE ALIAS )
+SQL> 
+SQL> 
+SQL> REM 1 LAST_NAME , JOB_ID , SALARY , JOB_MAX_SAL , MANAGER_ID , MGR_SUM_SAL  ( USING , ON , WITHOUT ALIAS )
+SQL> 
+SQL> SELECT LAST_NAME , JOB_ID , SALARY , "MAX(SALARY)" JOB_MAX_SAL , E.MANAGER_ID , "SUM(SALARY)" MGR_SUM_SAL
+  2  FROM EMPLOYEES E
+  3  JOIN (SELECT JOB_ID , MIN(SALARY) FROM EMPLOYEES GROUP BY JOB_ID) USING (JOB_ID)
+  4  JOIN (SELECT MANAGER_ID , SUM(SALARY) FROM EMPLOYEES GROUP BY MANAGER_ID) M ON E.MANAGER_ID = M.MANAGER_ID;
+SELECT LAST_NAME , JOB_ID , SALARY , "MAX(SALARY)" JOB_MAX_SAL , E.MANAGER_ID , "SUM(SALARY)" MGR_SUM_SAL
+                                     *
+ERROR at line 1:
+ORA-00904: "MAX(SALARY)": invalid identifier 
+
+
+SQL> SELECT LAST_NAME , JOB_ID , SALARY , "MAX(SALARY)" JOB_MAX_SAL , E.MANAGER_ID , "SUM(SALARY)" MGR_SUM_SAL
+  2  FROM EMPLOYEES E
+  3  JOIN (SELECT JOB_ID , MAX(SALARY) FROM EMPLOYEES GROUP BY JOB_ID) USING (JOB_ID)
+  4  JOIN (SELECT MANAGER_ID , SUM(SALARY) FROM EMPLOYEES GROUP BY MANAGER_ID) M ON E.MANAGER_ID = M.MANAGER_ID;
+
+LAST_NAME       JOB_ID         SALARY JOB_MAX_SAL MANAGER_ID MGR_SUM_SAL                                                                                                                                
+--------------- ---------- ---------- ----------- ---------- -----------                                                                                                                                
+Hunold          IT_PROG          9000        9000        102        9000                                                                                                                                
+Ernst           IT_PROG          6000        9000        103       10200                                                                                                                                
+Lorentz         IT_PROG          4200        9000        103       10200                                                                                                                                
+Higgins         AC_MGR          12000       12000        101       16400                                                                                                                                
+Gietz           AC_ACCOUNT       8300        8300        205        8300                                                                                                                                
+Mourgos         ST_MAN           5800        5800        100       63300                                                                                                                                
+Whalen          AD_ASST          4400        4400        101       16400                                                                                                                                
+Kochhar         AD_VP           17000       17000        100       63300                                                                                                                                
+De Haan         AD_VP           17000       17000        100       63300                                                                                                                                
+Zlotkey         SA_MAN          10500       10500        100       63300                                                                                                                                
+Hartstein       MK_MAN          13000       13000        100       63300                                                                                                                                
+Abel            SA_REP          11000       11000        149       26600                                                                                                                                
+Taylor          SA_REP           8600       11000        149       26600                                                                                                                                
+Grant           SA_REP           7000       11000        149       26600                                                                                                                                
+Fay             MK_REP           6000        6000        201        6000                                                                                                                                
+Rajs            ST_CLERK         3500        3500        124       11700                                                                                                                                
+Davies          ST_CLERK         3100        3500        124       11700                                                                                                                                
+Matos           ST_CLERK         2600        3500        124       11700                                                                                                                                
+Vargas          ST_CLERK         2500        3500        124       11700                                                                                                                                
+
+19 rows selected.
+
+SQL> REM 2 FULL_NAME , DEPARTMENT_NAME , SALARY , DEPT_AVG_SAL , AVG_DIFF , JOB_ID , JOB_MIN_SAL , MIN_DIFF ( ON , USE CASE INSENSITIVE ALIAS)
+SQL> 
+SQL> SELECT LAST_NAME , JOB_ID , SALARY , "MAX(SALARY)" JOB_MAX_SAL , E.MANAGER_ID , "SUM(SALARY)" MGR_SUM_SAL
+  2  FROM EMPLOYEES E
+  3  JOIN (SELECT JOB_ID , MAX(SALARY) FROM EMPLOYEES GROUP BY JOB_ID) USING (JOB_ID)
+  4  JOIN (SELECT MANAGER_ID , SUM(SALARY) FROM EMPLOYEES GROUP BY MANAGER_ID) M ON E.MANAGER_ID = M.MANAGER_ID
+  5  ORDER BY MANAGER_ID;
+
+LAST_NAME       JOB_ID         SALARY JOB_MAX_SAL MANAGER_ID MGR_SUM_SAL                                                                                                                                
+--------------- ---------- ---------- ----------- ---------- -----------                                                                                                                                
+De Haan         AD_VP           17000       17000        100       63300                                                                                                                                
+Hartstein       MK_MAN          13000       13000        100       63300                                                                                                                                
+Zlotkey         SA_MAN          10500       10500        100       63300                                                                                                                                
+Mourgos         ST_MAN           5800        5800        100       63300                                                                                                                                
+Kochhar         AD_VP           17000       17000        100       63300                                                                                                                                
+Higgins         AC_MGR          12000       12000        101       16400                                                                                                                                
+Whalen          AD_ASST          4400        4400        101       16400                                                                                                                                
+Hunold          IT_PROG          9000        9000        102        9000                                                                                                                                
+Lorentz         IT_PROG          4200        9000        103       10200                                                                                                                                
+Ernst           IT_PROG          6000        9000        103       10200                                                                                                                                
+Vargas          ST_CLERK         2500        3500        124       11700                                                                                                                                
+Matos           ST_CLERK         2600        3500        124       11700                                                                                                                                
+Rajs            ST_CLERK         3500        3500        124       11700                                                                                                                                
+Davies          ST_CLERK         3100        3500        124       11700                                                                                                                                
+Abel            SA_REP          11000       11000        149       26600                                                                                                                                
+Taylor          SA_REP           8600       11000        149       26600                                                                                                                                
+Grant           SA_REP           7000       11000        149       26600                                                                                                                                
+Fay             MK_REP           6000        6000        201        6000                                                                                                                                
+Gietz           AC_ACCOUNT       8300        8300        205        8300                                                                                                                                
+
+19 rows selected.
+
+SQL> REM 2 FULL_NAME , DEPARTMENT_NAME , SALARY , DEPT_AVG_SAL , AVG_DIFF , JOB_ID , JOB_MIN_SAL , MIN_DIFF ( ON , USE CASE INSENSITIVE ALIAS)
+SQL> 
+SQL> 
+SQL> SELECT FIRST_NAME || ' ' || LAST_NAME FULL_NAME , D.DEPARTMENT_NAME , SALARY , DEPT_AVG_SAL , DEPT_AVG_SAL - SALARY AVG_DIFF , E.JOB_ID , JOB_MIN_SAL , SALARY - JOB_MIN_SAL MIN_DIFF
+  2  FROM EMPLOYEES E
+  3  JOIN DEPARTMENTS D ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+  4  JOIN (SELECT DEPARTMENT_ID , AVG(SALARY) DEPT_AVG_SAL FROM EMPLOYEES GROUP BY DEPARTMENT_ID) DA ON E.DEPARTMENT_ID = DA.DEPARTMENT_ID
+  5  JOIN (SELECT JOB_ID, MIN(SALARY) JOB_MIN_SAL FROM EMPLOYEES GROUP BY JOB_ID) J ON E.JOB_ID = J.JOB_ID;
+
+FULL_NAME                       DEPARTMENT_NAME                    SALARY DEPT_AVG_SAL   AVG_DIFF JOB_ID     JOB_MIN_SAL   MIN_DIFF                                                                     
+------------------------------- ------------------------------ ---------- ------------ ---------- ---------- ----------- ----------                                                                     
+Diana Lorentz                   IT                                   4200         6400       2200 IT_PROG           4200          0                                                                     
+Bruce Ernst                     IT                                   6000         6400        400 IT_PROG           4200       1800                                                                     
+Alexander Hunold                IT                                   9000         6400      -2600 IT_PROG           4200       4800                                                                     
+Shelley Higgins                 Accounting                          12000        10150      -1850 AC_MGR           12000          0                                                                     
+William Gietz                   Accounting                           8300        10150       1850 AC_ACCOUNT        8300          0                                                                     
+Kevin Mourgos                   Shiping                              5800         3500      -2300 ST_MAN            5800          0                                                                     
+Jennifer Whalen                 Administration                       4400         4400          0 AD_ASST           4400          0                                                                     
+Lex De Haan                     Executive                           17000   19333.3333 2333.33333 AD_VP            17000          0                                                                     
+Neena Kochhar                   Executive                           17000   19333.3333 2333.33333 AD_VP            17000          0                                                                     
+Eleni Zlotkey                   Sales                               10500   10033.3333 -466.66667 SA_MAN           10500          0                                                                     
+Michael Hartstein               Marketing                           13000         9500      -3500 MK_MAN           13000          0                                                                     
+Steven King                     Executive                           24000   19333.3333 -4666.6667 AD_PRES          24000          0                                                                     
+Ellen Abel                      Sales                               11000   10033.3333 -966.66667 SA_REP            7000       4000                                                                     
+Jonathon Taylor                 Sales                                8600   10033.3333 1433.33333 SA_REP            7000       1600                                                                     
+Pat Fay                         Marketing                            6000         9500       3500 MK_REP            6000          0                                                                     
+Peter Vargas                    Shiping                              2500         3500       1000 ST_CLERK          2500          0                                                                     
+Randall Matos                   Shiping                              2600         3500        900 ST_CLERK          2500        100                                                                     
+Curtis Davies                   Shiping                              3100         3500        400 ST_CLERK          2500        600                                                                     
+Trenna Rajs                     Shiping                              3500         3500          0 ST_CLERK          2500       1000                                                                     
+
+19 rows selected.
+
+SQL> REM 3 FIRST_NAME , JOB_TITLE , SALARY , JOB_SUM_SAL , "%_OF_JOB_SUM_SAL" , MANAGER_ID , MGR_SUM_SAL , "%_OF_MGR_SUM_SAL" ( NATURAL , USING , ON , USE CASE SENSITIVE ALIAS )
+SQL> 
+SQL> SELECT FIRST_NAME , JOB_TITLE , SALARY , "Job_Sum_Sal" , TO_CHAR(SALARY*100/"Job_Sum_Sal",'999.99')||'%',
+  2  E.MANAGER_ID , "Mgr_Sum_Sal" , TO_CHAR(SALARY*100/"Mgr_Sum_Sal",'999.99')||'%' "%_OF_MGR_SUM_SAL"
+  3  FROM EMPLOYEES E
+  4  NATURAL JOIN JOBS
+  5  JOIN (SELECT JOB_ID , SUM(SALARY) "Job_Sum_Sal" FROM EMPLOYEES GROUP BY JOB_ID) USING (JOB_ID)
+  6  JOIN (SELECT MANAGER_ID , SUM(SALARY) "Mgr_Sum_Sal" FROM EMPLOYEES GROUP BY MANAGER_ID) M ON E.MANAGER_ID = M.MANAGER_ID;
+
+FIRST_NAME      JOB_TITLE                               SALARY Job_Sum_Sal TO_CHAR( MANAGER_ID Mgr_Sum_Sal %_OF_MGR                                                                                     
+--------------- ----------------------------------- ---------- ----------- -------- ---------- ----------- --------                                                                                     
+Neena           Administration Vice President            17000       34000   50.00%        100       63300   26.86%                                                                                     
+Lex             Administration Vice President            17000       34000   50.00%        100       63300   26.86%                                                                                     
+Kevin           Stock Manager                             5800        5800  100.00%        100       63300    9.16%                                                                                     
+Eleni           Sales Manager                            10500       10500  100.00%        100       63300   16.59%                                                                                     
+Michael         Marketing Manager                        13000       13000  100.00%        100       63300   20.54%                                                                                     
+Ellen           Sales Representative                     11000       26600   41.35%        149       26600   41.35%                                                                                     
+Jonathon        Sales Representative                      8600       26600   32.33%        149       26600   32.33%                                                                                     
+Kimerely        Sales Representative                      7000       26600   26.32%        149       26600   26.32%                                                                                     
+William         Public Accountant                         8300        8300  100.00%        205        8300  100.00%                                                                                     
+Alexander       Programmer                                9000       19200   46.88%        102        9000  100.00%                                                                                     
+Pat             Marketing Representative                  6000        6000  100.00%        201        6000  100.00%                                                                                     
+Jennifer        Administration Assistant                  4400        4400  100.00%        101       16400   26.83%                                                                                     
+Shelley         Accounting Manager                       12000       12000  100.00%        101       16400   73.17%                                                                                     
+Trenna          Stock Clerk                               3500       11700   29.91%        124       11700   29.91%                                                                                     
+Curtis          Stock Clerk                               3100       11700   26.50%        124       11700   26.50%                                                                                     
+Randall         Stock Clerk                               2600       11700   22.22%        124       11700   22.22%                                                                                     
+Peter           Stock Clerk                               2500       11700   21.37%        124       11700   21.37%                                                                                     
+Bruce           Programmer                                6000       19200   31.25%        103       10200   58.82%                                                                                     
+Diana           Programmer                                4200       19200   21.88%        103       10200   41.18%                                                                                     
+
+19 rows selected.
+
+SQL> SELECT FIRST_NAME || LAST_NAME FULL_NAME, B.DEPARTMENT_NAME, SALARY, DEPT_AVG_SAL,SALARY - DEPT_AVG_SAL AVG_DIFF ,C.JOB_ID,JOB_MIN_SAL ,SALARY - JOB_MIN_SAL MIN_DIFF FROM EMPLOYEES A JOIN DEPARTMENTS D ON A.DEPARTMENT_ID = D.DEPARTMENT_ID JOIN (SELECT DEPARTMENT_NAME, AVG(SALARY) DEPT_AVG_SAL FROM EMPLOYEES NATURAL JOIN DEPARTMENTS GROUP BY DEPARTMENT_NAME) B ON D.DEPARTMENT_NAME = B.DEPARTMENT_NAME JOIN (SELECT JOB_ID, MIN(SALARY) JOB_MIN_SAL FROM EMPLOYEES GROUP BY JOB_ID) C ON A.JOB_ID = C.JOB_ID;
+
+FULL_NAME                      DEPARTMENT_NAME                    SALARY DEPT_AVG_SAL   AVG_DIFF JOB_ID     JOB_MIN_SAL   MIN_DIFF                                                                      
+------------------------------ ------------------------------ ---------- ------------ ---------- ---------- ----------- ----------                                                                      
+DianaLorentz                   IT                                   4200         5100       -900 IT_PROG           4200          0                                                                      
+BruceErnst                     IT                                   6000         5100        900 IT_PROG           4200       1800                                                                      
+AlexanderHunold                IT                                   9000         5100       3900 IT_PROG           4200       4800                                                                      
+ShelleyHiggins                 Accounting                          12000         8300       3700 AC_MGR           12000          0                                                                      
+WilliamGietz                   Accounting                           8300         8300          0 AC_ACCOUNT        8300          0                                                                      
+KevinMourgos                   Shiping                              5800         2925       2875 ST_MAN            5800          0                                                                      
+LexDe Haan                     Executive                           17000        17000          0 AD_VP            17000          0                                                                      
+NeenaKochhar                   Executive                           17000        17000          0 AD_VP            17000          0                                                                      
+EleniZlotkey                   Sales                               10500         9800        700 SA_MAN           10500          0                                                                      
+MichaelHartstein               Marketing                           13000         6000       7000 MK_MAN           13000          0                                                                      
+StevenKing                     Executive                           24000        17000       7000 AD_PRES          24000          0                                                                      
+EllenAbel                      Sales                               11000         9800       1200 SA_REP            7000       4000                                                                      
+JonathonTaylor                 Sales                                8600         9800      -1200 SA_REP            7000       1600                                                                      
+PatFay                         Marketing                            6000         6000          0 MK_REP            6000          0                                                                      
+PeterVargas                    Shiping                              2500         2925       -425 ST_CLERK          2500          0                                                                      
+RandallMatos                   Shiping                              2600         2925       -325 ST_CLERK          2500        100                                                                      
+CurtisDavies                   Shiping                              3100         2925        175 ST_CLERK          2500        600                                                                      
+TrennaRajs                     Shiping                              3500         2925        575 ST_CLERK          2500       1000                                                                      
+
+18 rows selected.
+
+SQL> SELECT FIRST_NAME || LAST_NAME FULL_NAME, B.DEPARTMENT_NAME, SALARY, DEPT_AVG_SAL,SALARY - DEPT_AVG_SAL AVG_DIFF ,
+  2  C.JOB_ID,JOB_MIN_SAL ,SALARY - JOB_MIN_SAL MIN_DIFF
+  3  FROM EMPLOYEES A
+  4  JOIN DEPARTMENTS D ON A.DEPARTMENT_ID = D.DEPARTMENT_ID
+  5  
+SQL> 
+SQL> SPOOL OFF

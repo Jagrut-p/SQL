@@ -1,0 +1,1069 @@
+SQL> 
+SQL> SELECT DISTINCT JOB_ID FROM EMPLOYEES ORDER BY 1;
+
+JOB_ID                                                                                                                                                                                                  
+----------                                                                                                                                                                                              
+AC_ACCOUNT                                                                                                                                                                                              
+AC_MGR                                                                                                                                                                                                  
+AD_ASST                                                                                                                                                                                                 
+AD_PRES                                                                                                                                                                                                 
+AD_VP                                                                                                                                                                                                   
+IT_PROG                                                                                                                                                                                                 
+MK_MAN                                                                                                                                                                                                  
+MK_REP                                                                                                                                                                                                  
+SA_MAN                                                                                                                                                                                                  
+SA_REP                                                                                                                                                                                                  
+ST_CLERK                                                                                                                                                                                                
+ST_MAN                                                                                                                                                                                                  
+
+12 rows selected.
+
+SQL> 37. DISPLAY LAST_NAME , HIRE_DATE , TOTAL YEARS COMPLETED , EXTRA MONTHS COMPLETED , EXTRA DAYS COMPLETED.
+SP2-0734: unknown command beginning "37. DISPLA..." - rest of line ignored.
+SQL> 
+SQL> REM DISPLAY LAST_NAME , HIRE_DATE , TOTAL YEARS COMPLETED , EXTRA MONTHS COMPLETED , EXTRA DAYS COMPLETED.
+SQL> 
+SQL> SELECT LAST_NAME , HIRE_DATE ,
+  2  TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)/12) "TOTAL YEARS COMPLETED",
+  3  MOD(TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)/12),12) "EXTRA MONTHS COMPLETED",
+  4  TRUNC(SYSDATE-ADD_MONTHS(HIRE_DATE,TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)))) "EXTRA DAYS COMPLETED"
+  5  FROM EMPLOYEES;
+
+LAST_NAME       HIRE_DATE                   TOTAL YEARS COMPLETED EXTRA MONTHS COMPLETED EXTRA DAYS COMPLETED                                                                                           
+--------------- --------------------------- --------------------- ---------------------- --------------------                                                                                           
+King            17-JULY     -1987 FRIDAY                       38                      2                    6                                                                                           
+Kochhar         21-SEPTEMBER-1989 THURSDAY                     36                      0                    2                                                                                           
+De Haan         13-JANUARY  -1993 WEDNESDAY                    33                      9                   10                                                                                           
+Hunold          03-JANUARY  -1990 WEDNESDAY                    36                      0                   20                                                                                           
+Ernst           21-MAY      -1991 TUESDAY                      35                     11                    2                                                                                           
+Lorentz         07-FEBRUARY -1999 SUNDAY                       27                      3                   16                                                                                           
+Mourgos         16-NOVEMBER -1999 TUESDAY                      26                      2                    7                                                                                           
+Rajs            17-OCTOBER  -1995 TUESDAY                      30                      6                    6                                                                                           
+Davies          29-JANUARY  -1997 WEDNESDAY                    29                      5                   24                                                                                           
+Matos           15-MARCH    -1998 SUNDAY                       28                      4                    8                                                                                           
+Vargas          09-JULY     -1998 THURSDAY                     27                      3                   14                                                                                           
+Zlotkey         29-JANUARY  -2000 SATURDAY                     26                      2                   24                                                                                           
+Abel            11-MAY      -1996 SATURDAY                     30                      6                   12                                                                                           
+Taylor          24-MARCH    -1998 TUESDAY                      28                      4                   29                                                                                           
+Grant           24-MAY      -1999 MONDAY                       26                      2                   29                                                                                           
+Whalen          17-SEPTEMBER-1987 THURSDAY                     38                      2                    6                                                                                           
+Hartstein       17-FEBRUARY -1996 SATURDAY                     30                      6                    6                                                                                           
+Fay             17-AUGUST   -1997 SUNDAY                       28                      4                    6                                                                                           
+Higgins         07-JUNE     -1994 TUESDAY                      31                      7                   16                                                                                           
+Gietz           07-JUNE     -1994 TUESDAY                      31                      7                   16                                                                                           
+
+20 rows selected.
+
+SQL> SELECT LAST_NAME , SYSDATE , HIRE_DATE ,
+  2  TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)/12) "TOTAL YEARS COMPLETED",
+  3  MOD(TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)/12),12) "EXTRA MONTHS COMPLETED",
+  4  TRUNC(SYSDATE-ADD_MONTHS(HIRE_DATE,TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)))) "EXTRA DAYS COMPLETED"
+  5  FROM EMPLOYEES;
+
+LAST_NAME       SYSDATE                     HIRE_DATE                   TOTAL YEARS COMPLETED EXTRA MONTHS COMPLETED EXTRA DAYS COMPLETED                                                               
+--------------- --------------------------- --------------------------- --------------------- ---------------------- --------------------                                                               
+King            21-MAY      -2026 THURSDAY  17-JULY     -1987 FRIDAY                       38                      2                    4                                                               
+Kochhar         21-MAY      -2026 THURSDAY  21-SEPTEMBER-1989 THURSDAY                     36                      0                    0                                                               
+De Haan         21-MAY      -2026 THURSDAY  13-JANUARY  -1993 WEDNESDAY                    33                      9                    8                                                               
+Hunold          21-MAY      -2026 THURSDAY  03-JANUARY  -1990 WEDNESDAY                    36                      0                   18                                                               
+Ernst           21-MAY      -2026 THURSDAY  21-MAY      -1991 TUESDAY                      35                     11                    0                                                               
+Lorentz         21-MAY      -2026 THURSDAY  07-FEBRUARY -1999 SUNDAY                       27                      3                   14                                                               
+Mourgos         21-MAY      -2026 THURSDAY  16-NOVEMBER -1999 TUESDAY                      26                      2                    5                                                               
+Rajs            21-MAY      -2026 THURSDAY  17-OCTOBER  -1995 TUESDAY                      30                      6                    4                                                               
+Davies          21-MAY      -2026 THURSDAY  29-JANUARY  -1997 WEDNESDAY                    29                      5                   22                                                               
+Matos           21-MAY      -2026 THURSDAY  15-MARCH    -1998 SUNDAY                       28                      4                    6                                                               
+Vargas          21-MAY      -2026 THURSDAY  09-JULY     -1998 THURSDAY                     27                      3                   12                                                               
+Zlotkey         21-MAY      -2026 THURSDAY  29-JANUARY  -2000 SATURDAY                     26                      2                   22                                                               
+Abel            21-MAY      -2026 THURSDAY  11-MAY      -1996 SATURDAY                     30                      6                   10                                                               
+Taylor          21-MAY      -2026 THURSDAY  24-MARCH    -1998 TUESDAY                      28                      4                   27                                                               
+Grant           21-MAY      -2026 THURSDAY  24-MAY      -1999 MONDAY                       26                      2                   27                                                               
+Whalen          21-MAY      -2026 THURSDAY  17-SEPTEMBER-1987 THURSDAY                     38                      2                    4                                                               
+Hartstein       21-MAY      -2026 THURSDAY  17-FEBRUARY -1996 SATURDAY                     30                      6                    4                                                               
+Fay             21-MAY      -2026 THURSDAY  17-AUGUST   -1997 SUNDAY                       28                      4                    4                                                               
+Higgins         21-MAY      -2026 THURSDAY  07-JUNE     -1994 TUESDAY                      31                      7                   14                                                               
+Gietz           21-MAY      -2026 THURSDAY  07-JUNE     -1994 TUESDAY                      31                      7                   14                                                               
+
+20 rows selected.
+
+SQL> R
+  1  SELECT LAST_NAME , SYSDATE , HIRE_DATE ,
+  2  TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)/12) "TOTAL YEARS COMPLETED",
+  3  MOD(TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)/12),12) "EXTRA MONTHS COMPLETED",
+  4  TRUNC(SYSDATE-ADD_MONTHS(HIRE_DATE,TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)))) "EXTRA DAYS COMPLETED"
+  5* FROM EMPLOYEES
+
+LAST_NAME       SYSDATE                     HIRE_DATE                   TOTAL YEARS COMPLETED EXTRA MONTHS COMPLETED EXTRA DAYS COMPLETED                                                               
+--------------- --------------------------- --------------------------- --------------------- ---------------------- --------------------                                                               
+King            22-MAY      -2026 FRIDAY    17-JULY     -1987 FRIDAY                       38                      2                    5                                                               
+Kochhar         22-MAY      -2026 FRIDAY    21-SEPTEMBER-1989 THURSDAY                     36                      0                    1                                                               
+De Haan         22-MAY      -2026 FRIDAY    13-JANUARY  -1993 WEDNESDAY                    33                      9                    9                                                               
+Hunold          22-MAY      -2026 FRIDAY    03-JANUARY  -1990 WEDNESDAY                    36                      0                   19                                                               
+Ernst           22-MAY      -2026 FRIDAY    21-MAY      -1991 TUESDAY                      35                     11                    1                                                               
+Lorentz         22-MAY      -2026 FRIDAY    07-FEBRUARY -1999 SUNDAY                       27                      3                   15                                                               
+Mourgos         22-MAY      -2026 FRIDAY    16-NOVEMBER -1999 TUESDAY                      26                      2                    6                                                               
+Rajs            22-MAY      -2026 FRIDAY    17-OCTOBER  -1995 TUESDAY                      30                      6                    5                                                               
+Davies          22-MAY      -2026 FRIDAY    29-JANUARY  -1997 WEDNESDAY                    29                      5                   23                                                               
+Matos           22-MAY      -2026 FRIDAY    15-MARCH    -1998 SUNDAY                       28                      4                    7                                                               
+Vargas          22-MAY      -2026 FRIDAY    09-JULY     -1998 THURSDAY                     27                      3                   13                                                               
+Zlotkey         22-MAY      -2026 FRIDAY    29-JANUARY  -2000 SATURDAY                     26                      2                   23                                                               
+Abel            22-MAY      -2026 FRIDAY    11-MAY      -1996 SATURDAY                     30                      6                   11                                                               
+Taylor          22-MAY      -2026 FRIDAY    24-MARCH    -1998 TUESDAY                      28                      4                   28                                                               
+Grant           22-MAY      -2026 FRIDAY    24-MAY      -1999 MONDAY                       26                      2                   28                                                               
+Whalen          22-MAY      -2026 FRIDAY    17-SEPTEMBER-1987 THURSDAY                     38                      2                    5                                                               
+Hartstein       22-MAY      -2026 FRIDAY    17-FEBRUARY -1996 SATURDAY                     30                      6                    5                                                               
+Fay             22-MAY      -2026 FRIDAY    17-AUGUST   -1997 SUNDAY                       28                      4                    5                                                               
+Higgins         22-MAY      -2026 FRIDAY    07-JUNE     -1994 TUESDAY                      31                      7                   15                                                               
+Gietz           22-MAY      -2026 FRIDAY    07-JUNE     -1994 TUESDAY                      31                      7                   15                                                               
+
+20 rows selected.
+
+SQL> SELECT LAST_NAME , SYSDATE , HIRE_DATE ,
+  2  TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)/12) "TOTAL YEARS COMPLETED",
+  3  MOD(TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)),12) "EXTRA MONTHS COMPLETED",
+  4  TRUNC(SYSDATE-ADD_MONTHS(HIRE_DATE,TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)))) "EXTRA DAYS COMPLETED"
+  5  FROM EMPLOYEESTRUNC(SYSDATE-ADD_MONTHS(HIRE_DATE,TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)))) "EXTRA DAYS COMPLETED"
+  6  FROM EMPLOYEES
+  7  
+SQL> 
+SQL> SELECT LAST_NAME , SYSDATE , HIRE_DATE ,
+  2  TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)/12) "TOTAL YEARS COMPLETED",
+  3  MOD(TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)),12) "EXTRA MONTHS COMPLETED",
+  4  TRUNC(SYSDATE-ADD_MONTHS(HIRE_DATE,TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)))) "EXTRA DAYS COMPLETED"
+  5  FROM EMPLOYEES
+  6  ;
+
+LAST_NAME       SYSDATE                     HIRE_DATE                   TOTAL YEARS COMPLETED EXTRA MONTHS COMPLETED EXTRA DAYS COMPLETED                                                               
+--------------- --------------------------- --------------------------- --------------------- ---------------------- --------------------                                                               
+King            22-MAY      -2026 FRIDAY    17-JULY     -1987 FRIDAY                       38                     10                    5                                                               
+Kochhar         22-MAY      -2026 FRIDAY    21-SEPTEMBER-1989 THURSDAY                     36                      8                    1                                                               
+De Haan         22-MAY      -2026 FRIDAY    13-JANUARY  -1993 WEDNESDAY                    33                      4                    9                                                               
+Hunold          22-MAY      -2026 FRIDAY    03-JANUARY  -1990 WEDNESDAY                    36                      4                   19                                                               
+Ernst           22-MAY      -2026 FRIDAY    21-MAY      -1991 TUESDAY                      35                      0                    1                                                               
+Lorentz         22-MAY      -2026 FRIDAY    07-FEBRUARY -1999 SUNDAY                       27                      3                   15                                                               
+Mourgos         22-MAY      -2026 FRIDAY    16-NOVEMBER -1999 TUESDAY                      26                      6                    6                                                               
+Rajs            22-MAY      -2026 FRIDAY    17-OCTOBER  -1995 TUESDAY                      30                      7                    5                                                               
+Davies          22-MAY      -2026 FRIDAY    29-JANUARY  -1997 WEDNESDAY                    29                      3                   23                                                               
+Matos           22-MAY      -2026 FRIDAY    15-MARCH    -1998 SUNDAY                       28                      2                    7                                                               
+Vargas          22-MAY      -2026 FRIDAY    09-JULY     -1998 THURSDAY                     27                     10                   13                                                               
+Zlotkey         22-MAY      -2026 FRIDAY    29-JANUARY  -2000 SATURDAY                     26                      3                   23                                                               
+Abel            22-MAY      -2026 FRIDAY    11-MAY      -1996 SATURDAY                     30                      0                   11                                                               
+Taylor          22-MAY      -2026 FRIDAY    24-MARCH    -1998 TUESDAY                      28                      1                   28                                                               
+Grant           22-MAY      -2026 FRIDAY    24-MAY      -1999 MONDAY                       26                     11                   28                                                               
+Whalen          22-MAY      -2026 FRIDAY    17-SEPTEMBER-1987 THURSDAY                     38                      8                    5                                                               
+Hartstein       22-MAY      -2026 FRIDAY    17-FEBRUARY -1996 SATURDAY                     30                      3                    5                                                               
+Fay             22-MAY      -2026 FRIDAY    17-AUGUST   -1997 SUNDAY                       28                      9                    5                                                               
+Higgins         22-MAY      -2026 FRIDAY    07-JUNE     -1994 TUESDAY                      31                     11                   15                                                               
+Gietz           22-MAY      -2026 FRIDAY    07-JUNE     -1994 TUESDAY                      31                     11                   15                                                               
+
+20 rows selected.
+
+SQL> R
+  1  SELECT LAST_NAME , SYSDATE , HIRE_DATE ,
+  2  TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)/12) "TOTAL YEARS COMPLETED",
+  3  MOD(TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)),12) "EXTRA MONTHS COMPLETED",
+  4  TRUNC(SYSDATE-ADD_MONTHS(HIRE_DATE,TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)))) "EXTRA DAYS COMPLETED"
+  5  FROM EMPLOYEES
+  6* 
+
+LAST_NAME       SYSDATE                     HIRE_DATE                   TOTAL YEARS COMPLETED EXTRA MONTHS COMPLETED EXTRA DAYS COMPLETED                                                               
+--------------- --------------------------- --------------------------- --------------------- ---------------------- --------------------                                                               
+King            21-MAY      -2026 THURSDAY  17-JULY     -1987 FRIDAY                       38                     10                    4                                                               
+Kochhar         21-MAY      -2026 THURSDAY  21-SEPTEMBER-1989 THURSDAY                     36                      8                    0                                                               
+De Haan         21-MAY      -2026 THURSDAY  13-JANUARY  -1993 WEDNESDAY                    33                      4                    8                                                               
+Hunold          21-MAY      -2026 THURSDAY  03-JANUARY  -1990 WEDNESDAY                    36                      4                   18                                                               
+Ernst           21-MAY      -2026 THURSDAY  21-MAY      -1991 TUESDAY                      35                      0                    0                                                               
+Lorentz         21-MAY      -2026 THURSDAY  07-FEBRUARY -1999 SUNDAY                       27                      3                   14                                                               
+Mourgos         21-MAY      -2026 THURSDAY  16-NOVEMBER -1999 TUESDAY                      26                      6                    5                                                               
+Rajs            21-MAY      -2026 THURSDAY  17-OCTOBER  -1995 TUESDAY                      30                      7                    4                                                               
+Davies          21-MAY      -2026 THURSDAY  29-JANUARY  -1997 WEDNESDAY                    29                      3                   22                                                               
+Matos           21-MAY      -2026 THURSDAY  15-MARCH    -1998 SUNDAY                       28                      2                    6                                                               
+Vargas          21-MAY      -2026 THURSDAY  09-JULY     -1998 THURSDAY                     27                     10                   12                                                               
+Zlotkey         21-MAY      -2026 THURSDAY  29-JANUARY  -2000 SATURDAY                     26                      3                   22                                                               
+Abel            21-MAY      -2026 THURSDAY  11-MAY      -1996 SATURDAY                     30                      0                   10                                                               
+Taylor          21-MAY      -2026 THURSDAY  24-MARCH    -1998 TUESDAY                      28                      1                   27                                                               
+Grant           21-MAY      -2026 THURSDAY  24-MAY      -1999 MONDAY                       26                     11                   27                                                               
+Whalen          21-MAY      -2026 THURSDAY  17-SEPTEMBER-1987 THURSDAY                     38                      8                    4                                                               
+Hartstein       21-MAY      -2026 THURSDAY  17-FEBRUARY -1996 SATURDAY                     30                      3                    4                                                               
+Fay             21-MAY      -2026 THURSDAY  17-AUGUST   -1997 SUNDAY                       28                      9                    4                                                               
+Higgins         21-MAY      -2026 THURSDAY  07-JUNE     -1994 TUESDAY                      31                     11                   14                                                               
+Gietz           21-MAY      -2026 THURSDAY  07-JUNE     -1994 TUESDAY                      31                     11                   14                                                               
+
+20 rows selected.
+
+SQL> REM RULES FOR USING SET OPERATORS :
+SQL> 
+SQL> REM 1 ALL QUERIES SHOULD HAVE SAME NUMBER OF ITEMS.
+SQL> 
+SQL> REM 2 THEIR CORRESPONDING DATA TYPES SHOULD MATCH.
+SQL> 
+SQL> REM 3 COLUMN ALIAS USED IN FIRST QUERY WILL BE DISPLAYED IN RESULT.
+SQL> 
+SQL> REM 4 IF WE WANT TO USE OFFSET OR FETCH FOR INDIVIDUAL STATEMENT, EACH STATEMENT MUST BE PUT WITHIN ()
+SQL> 
+SQL> REM 5 IF WE WANT TO USE ORDER BY CLAUSE FOR INDIVIDUAL STATEMENT, THEN EITHER OFFSET OR FETCH IS MANDATORY. EACH STATEMENT MUST BE PUT WITHIN ().
+SQL> 
+SQL> REM 6 WHEN WE USE */META CHARACTER IN SELECT AND IF WE USE ORDER BY AT COMPOUND STATEMENT LEVEL, ORACLE ALLOWS COLUMN REFERENCE ONLY WITH IT'S POSITION.
+SQL> 
+SQL> 
+SQL> 
+SQL> REM 1 ALL QUERIES SHOULD HAVE SAME NUMBER OF ITEMS.
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  UNION
+  3  SELECT DEPARTMENT_NAME , DEPARTMENT_ID FROM DEPARTMENTS;
+
+FIRST_NAME                         SALARY                                                                                                                                                               
+------------------------------ ----------                                                                                                                                                               
+Accounting                            110                                                                                                                                                               
+Administration                         10                                                                                                                                                               
+Alexander                            9000                                                                                                                                                               
+Bruce                                6000                                                                                                                                                               
+Contracting                           190                                                                                                                                                               
+Curtis                               3100                                                                                                                                                               
+Diana                                4200                                                                                                                                                               
+Eleni                               10500                                                                                                                                                               
+Ellen                               11000                                                                                                                                                               
+Executive                              90                                                                                                                                                               
+IT                                     60                                                                                                                                                               
+Jennifer                             4400                                                                                                                                                               
+Jonathon                             8600                                                                                                                                                               
+Kevin                                5800                                                                                                                                                               
+Kimerely                             7000                                                                                                                                                               
+Lex                                 17000                                                                                                                                                               
+Marketing                              20                                                                                                                                                               
+Michael                             13000                                                                                                                                                               
+Neena                               17000                                                                                                                                                               
+Pat                                  6000                                                                                                                                                               
+Peter                                2500                                                                                                                                                               
+
+FIRST_NAME                         SALARY                                                                                                                                                               
+------------------------------ ----------                                                                                                                                                               
+Randall                              2600                                                                                                                                                               
+Sales                                  80                                                                                                                                                               
+Shelley                             12000                                                                                                                                                               
+Shiping                                50                                                                                                                                                               
+Steven                              24000                                                                                                                                                               
+Trenna                               3500                                                                                                                                                               
+William                              8300                                                                                                                                                               
+
+28 rows selected.
+
+SQL> SET PAGES 10000
+SQL> 
+SQL> R
+  1  SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  UNION
+  3* SELECT DEPARTMENT_NAME , DEPARTMENT_ID FROM DEPARTMENTS
+
+FIRST_NAME                         SALARY                                                                                                                                                               
+------------------------------ ----------                                                                                                                                                               
+Accounting                            110                                                                                                                                                               
+Administration                         10                                                                                                                                                               
+Alexander                            9000                                                                                                                                                               
+Bruce                                6000                                                                                                                                                               
+Contracting                           190                                                                                                                                                               
+Curtis                               3100                                                                                                                                                               
+Diana                                4200                                                                                                                                                               
+Eleni                               10500                                                                                                                                                               
+Ellen                               11000                                                                                                                                                               
+Executive                              90                                                                                                                                                               
+IT                                     60                                                                                                                                                               
+Jennifer                             4400                                                                                                                                                               
+Jonathon                             8600                                                                                                                                                               
+Kevin                                5800                                                                                                                                                               
+Kimerely                             7000                                                                                                                                                               
+Lex                                 17000                                                                                                                                                               
+Marketing                              20                                                                                                                                                               
+Michael                             13000                                                                                                                                                               
+Neena                               17000                                                                                                                                                               
+Pat                                  6000                                                                                                                                                               
+Peter                                2500                                                                                                                                                               
+Randall                              2600                                                                                                                                                               
+Sales                                  80                                                                                                                                                               
+Shelley                             12000                                                                                                                                                               
+Shiping                                50                                                                                                                                                               
+Steven                              24000                                                                                                                                                               
+Trenna                               3500                                                                                                                                                               
+William                              8300                                                                                                                                                               
+
+28 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  UNION
+  3  SELECT DEPARTMENT_NAME FROM DEPARTMENTS;
+SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+*
+ERROR at line 1:
+ORA-01789: query block has incorrect number of result columns 
+
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  UNION
+  3  SELECT DEPARTMENT_NAME , 420 FROM DEPARTMENTS;
+
+FIRST_NAME                         SALARY                                                                                                                                                               
+------------------------------ ----------                                                                                                                                                               
+Accounting                            420                                                                                                                                                               
+Administration                        420                                                                                                                                                               
+Alexander                            9000                                                                                                                                                               
+Bruce                                6000                                                                                                                                                               
+Contracting                           420                                                                                                                                                               
+Curtis                               3100                                                                                                                                                               
+Diana                                4200                                                                                                                                                               
+Eleni                               10500                                                                                                                                                               
+Ellen                               11000                                                                                                                                                               
+Executive                             420                                                                                                                                                               
+IT                                    420                                                                                                                                                               
+Jennifer                             4400                                                                                                                                                               
+Jonathon                             8600                                                                                                                                                               
+Kevin                                5800                                                                                                                                                               
+Kimerely                             7000                                                                                                                                                               
+Lex                                 17000                                                                                                                                                               
+Marketing                             420                                                                                                                                                               
+Michael                             13000                                                                                                                                                               
+Neena                               17000                                                                                                                                                               
+Pat                                  6000                                                                                                                                                               
+Peter                                2500                                                                                                                                                               
+Randall                              2600                                                                                                                                                               
+Sales                                 420                                                                                                                                                               
+Shelley                             12000                                                                                                                                                               
+Shiping                               420                                                                                                                                                               
+Steven                              24000                                                                                                                                                               
+Trenna                               3500                                                                                                                                                               
+William                              8300                                                                                                                                                               
+
+28 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  UNION
+  3  SELECT DEPARTMENT_NAME , NULL FROM DEPARTMENTS;
+
+FIRST_NAME                         SALARY                                                                                                                                                               
+------------------------------ ----------                                                                                                                                                               
+Accounting                                                                                                                                                                                              
+Administration                                                                                                                                                                                          
+Alexander                            9000                                                                                                                                                               
+Bruce                                6000                                                                                                                                                               
+Contracting                                                                                                                                                                                             
+Curtis                               3100                                                                                                                                                               
+Diana                                4200                                                                                                                                                               
+Eleni                               10500                                                                                                                                                               
+Ellen                               11000                                                                                                                                                               
+Executive                                                                                                                                                                                               
+IT                                                                                                                                                                                                      
+Jennifer                             4400                                                                                                                                                               
+Jonathon                             8600                                                                                                                                                               
+Kevin                                5800                                                                                                                                                               
+Kimerely                             7000                                                                                                                                                               
+Lex                                 17000                                                                                                                                                               
+Marketing                                                                                                                                                                                               
+Michael                             13000                                                                                                                                                               
+Neena                               17000                                                                                                                                                               
+Pat                                  6000                                                                                                                                                               
+Peter                                2500                                                                                                                                                               
+Randall                              2600                                                                                                                                                               
+Sales                                                                                                                                                                                                   
+Shelley                             12000                                                                                                                                                               
+Shiping                                                                                                                                                                                                 
+Steven                              24000                                                                                                                                                               
+Trenna                               3500                                                                                                                                                               
+William                              8300                                                                                                                                                               
+
+28 rows selected.
+
+SQL> REM 2 THEIR CORRESPONDING DATA TYPES SHOULD MATCH.
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  UNION
+  3  SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS;
+SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+       *
+ERROR at line 1:
+ORA-01790: expression must have same datatype as corresponding expression 
+
+
+SQL> SELECT FIRST_NAME , TO_CHAR(SALARY) FROM EMPLOYEES
+  2  UNION
+  3  SELECT TO_CHAR(DEPARTMENT_ID) , DEPARTMENT_NAME FROM DEPARTMENTS;
+
+FIRST_NAME                               TO_CHAR(SALARY)                                                                                                                                                
+---------------------------------------- ----------------------------------------                                                                                                                       
+10                                       Administration                                                                                                                                                 
+110                                      Accounting                                                                                                                                                     
+190                                      Contracting                                                                                                                                                    
+20                                       Marketing                                                                                                                                                      
+50                                       Shiping                                                                                                                                                        
+60                                       IT                                                                                                                                                             
+80                                       Sales                                                                                                                                                          
+90                                       Executive                                                                                                                                                      
+Alexander                                9000                                                                                                                                                           
+Bruce                                    6000                                                                                                                                                           
+Curtis                                   3100                                                                                                                                                           
+Diana                                    4200                                                                                                                                                           
+Eleni                                    10500                                                                                                                                                          
+Ellen                                    11000                                                                                                                                                          
+Jennifer                                 4400                                                                                                                                                           
+Jonathon                                 8600                                                                                                                                                           
+Kevin                                    5800                                                                                                                                                           
+Kimerely                                 7000                                                                                                                                                           
+Lex                                      17000                                                                                                                                                          
+Michael                                  13000                                                                                                                                                          
+Neena                                    17000                                                                                                                                                          
+Pat                                      6000                                                                                                                                                           
+Peter                                    2500                                                                                                                                                           
+Randall                                  2600                                                                                                                                                           
+Shelley                                  12000                                                                                                                                                          
+Steven                                   24000                                                                                                                                                          
+Trenna                                   3500                                                                                                                                                           
+William                                  8300                                                                                                                                                           
+
+28 rows selected.
+
+SQL> SELECT HIRE_DATE , TO_CHAR(SALARY) FROM EMPLOYEES
+  2  UNION
+  3  SELECT TO_CHAR(DEPARTMENT_ID) , DEPARTMENT_NAME FROM DEPARTMENTS;
+SELECT HIRE_DATE , TO_CHAR(SALARY) FROM EMPLOYEES
+       *
+ERROR at line 1:
+ORA-01790: expression must have same datatype as corresponding expression 
+
+
+SQL> SELECT TO_CHAR(HIRE_DATE) , TO_CHAR(SALARY) FROM EMPLOYEES
+  2  UNION
+  3  SELECT TO_CHAR(DEPARTMENT_ID) , DEPARTMENT_NAME FROM DEPARTMENTS;
+
+TO_CHAR(HIRE_DATE)                                                                TO_CHAR(SALARY)                                                                                                       
+--------------------------------------------------------------------------------- ----------------------------------------                                                                              
+03-JANUARY  -1990 WEDNESDAY                                                       9000                                                                                                                  
+07-FEBRUARY -1999 SUNDAY                                                          4200                                                                                                                  
+07-JUNE     -1994 TUESDAY                                                         12000                                                                                                                 
+07-JUNE     -1994 TUESDAY                                                         8300                                                                                                                  
+09-JULY     -1998 THURSDAY                                                        2500                                                                                                                  
+10                                                                                Administration                                                                                                        
+11-MAY      -1996 SATURDAY                                                        11000                                                                                                                 
+110                                                                               Accounting                                                                                                            
+13-JANUARY  -1993 WEDNESDAY                                                       17000                                                                                                                 
+15-MARCH    -1998 SUNDAY                                                          2600                                                                                                                  
+16-NOVEMBER -1999 TUESDAY                                                         5800                                                                                                                  
+17-AUGUST   -1997 SUNDAY                                                          6000                                                                                                                  
+17-FEBRUARY -1996 SATURDAY                                                        13000                                                                                                                 
+17-JULY     -1987 FRIDAY                                                          24000                                                                                                                 
+17-OCTOBER  -1995 TUESDAY                                                         3500                                                                                                                  
+17-SEPTEMBER-1987 THURSDAY                                                        4400                                                                                                                  
+190                                                                               Contracting                                                                                                           
+20                                                                                Marketing                                                                                                             
+21-MAY      -1991 TUESDAY                                                         6000                                                                                                                  
+21-SEPTEMBER-1989 THURSDAY                                                        17000                                                                                                                 
+24-MARCH    -1998 TUESDAY                                                         8600                                                                                                                  
+24-MAY      -1999 MONDAY                                                          7000                                                                                                                  
+29-JANUARY  -1997 WEDNESDAY                                                       3100                                                                                                                  
+29-JANUARY  -2000 SATURDAY                                                        10500                                                                                                                 
+50                                                                                Shiping                                                                                                               
+60                                                                                IT                                                                                                                    
+80                                                                                Sales                                                                                                                 
+90                                                                                Executive                                                                                                             
+
+28 rows selected.
+
+SQL> CONN SCOTT/TIGER
+Connected.
+SQL> 
+SQL> R
+  1  SELECT TO_CHAR(HIRE_DATE) , TO_CHAR(SALARY) FROM EMPLOYEES
+  2  UNION
+  3* SELECT TO_CHAR(DEPARTMENT_ID) , DEPARTMENT_NAME FROM DEPARTMENTS
+
+TO_CHAR(HIRE_DATE)                       TO_CHAR(SALARY)                                                                                                                                                
+---------------------------------------- ----------------------------------------                                                                                                                       
+03-JAN-90                                9000                                                                                                                                                           
+07-FEB-99                                4200                                                                                                                                                           
+07-JUN-94                                12000                                                                                                                                                          
+07-JUN-94                                8300                                                                                                                                                           
+09-JUL-98                                2500                                                                                                                                                           
+10                                       Administration                                                                                                                                                 
+11-MAY-96                                11000                                                                                                                                                          
+110                                      Accounting                                                                                                                                                     
+13-JAN-93                                17000                                                                                                                                                          
+15-MAR-98                                2600                                                                                                                                                           
+16-NOV-99                                5800                                                                                                                                                           
+17-AUG-97                                6000                                                                                                                                                           
+17-FEB-96                                13000                                                                                                                                                          
+17-JUL-87                                24000                                                                                                                                                          
+17-OCT-95                                3500                                                                                                                                                           
+17-SEP-87                                4400                                                                                                                                                           
+190                                      Contracting                                                                                                                                                    
+20                                       Marketing                                                                                                                                                      
+21-MAY-91                                6000                                                                                                                                                           
+21-SEP-89                                17000                                                                                                                                                          
+24-MAR-98                                8600                                                                                                                                                           
+24-MAY-99                                7000                                                                                                                                                           
+29-JAN-00                                10500                                                                                                                                                          
+29-JAN-97                                3100                                                                                                                                                           
+50                                       Shiping                                                                                                                                                        
+60                                       IT                                                                                                                                                             
+80                                       Sales                                                                                                                                                          
+90                                       Executive                                                                                                                                                      
+
+28 rows selected.
+
+SQL> REM 3 COLUMN ALIAS USED IN FIRST QUERY WILL BE DISPLAYED IN RESULT.
+SQL> 
+SQL> SELECT TO_CHAR(HIRE_DATE) "HD AND DID", TO_CHAR(SALARY) FROM EMPLOYEES
+  2  UNION
+  3  SELECT TO_CHAR(DEPARTMENT_ID) , DEPARTMENT_NAME "SAL AND DNM" FROM DEPARTMENTS;
+
+HD AND DID                               TO_CHAR(SALARY)                                                                                                                                                
+---------------------------------------- ----------------------------------------                                                                                                                       
+03-JAN-90                                9000                                                                                                                                                           
+07-FEB-99                                4200                                                                                                                                                           
+07-JUN-94                                12000                                                                                                                                                          
+07-JUN-94                                8300                                                                                                                                                           
+09-JUL-98                                2500                                                                                                                                                           
+10                                       Administration                                                                                                                                                 
+11-MAY-96                                11000                                                                                                                                                          
+110                                      Accounting                                                                                                                                                     
+13-JAN-93                                17000                                                                                                                                                          
+15-MAR-98                                2600                                                                                                                                                           
+16-NOV-99                                5800                                                                                                                                                           
+17-AUG-97                                6000                                                                                                                                                           
+17-FEB-96                                13000                                                                                                                                                          
+17-JUL-87                                24000                                                                                                                                                          
+17-OCT-95                                3500                                                                                                                                                           
+17-SEP-87                                4400                                                                                                                                                           
+190                                      Contracting                                                                                                                                                    
+20                                       Marketing                                                                                                                                                      
+21-MAY-91                                6000                                                                                                                                                           
+21-SEP-89                                17000                                                                                                                                                          
+24-MAR-98                                8600                                                                                                                                                           
+24-MAY-99                                7000                                                                                                                                                           
+29-JAN-00                                10500                                                                                                                                                          
+29-JAN-97                                3100                                                                                                                                                           
+50                                       Shiping                                                                                                                                                        
+60                                       IT                                                                                                                                                             
+80                                       Sales                                                                                                                                                          
+90                                       Executive                                                                                                                                                      
+
+28 rows selected.
+
+SQL> SELECT TO_CHAR(HIRE_DATE) "HD AND DID", TO_CHAR(SALARY) "SAL AND DNM" FROM EMPLOYEES
+  2  UNION
+  3  SELECT TO_CHAR(DEPARTMENT_ID) , DEPARTMENT_NAME FROM DEPARTMENTS;
+
+HD AND DID                               SAL AND DNM                                                                                                                                                    
+---------------------------------------- ----------------------------------------                                                                                                                       
+03-JAN-90                                9000                                                                                                                                                           
+07-FEB-99                                4200                                                                                                                                                           
+07-JUN-94                                12000                                                                                                                                                          
+07-JUN-94                                8300                                                                                                                                                           
+09-JUL-98                                2500                                                                                                                                                           
+10                                       Administration                                                                                                                                                 
+11-MAY-96                                11000                                                                                                                                                          
+110                                      Accounting                                                                                                                                                     
+13-JAN-93                                17000                                                                                                                                                          
+15-MAR-98                                2600                                                                                                                                                           
+16-NOV-99                                5800                                                                                                                                                           
+17-AUG-97                                6000                                                                                                                                                           
+17-FEB-96                                13000                                                                                                                                                          
+17-JUL-87                                24000                                                                                                                                                          
+17-OCT-95                                3500                                                                                                                                                           
+17-SEP-87                                4400                                                                                                                                                           
+190                                      Contracting                                                                                                                                                    
+20                                       Marketing                                                                                                                                                      
+21-MAY-91                                6000                                                                                                                                                           
+21-SEP-89                                17000                                                                                                                                                          
+24-MAR-98                                8600                                                                                                                                                           
+24-MAY-99                                7000                                                                                                                                                           
+29-JAN-00                                10500                                                                                                                                                          
+29-JAN-97                                3100                                                                                                                                                           
+50                                       Shiping                                                                                                                                                        
+60                                       IT                                                                                                                                                             
+80                                       Sales                                                                                                                                                          
+90                                       Executive                                                                                                                                                      
+
+28 rows selected.
+
+SQL> REM 4 IF WE WANT TO USE OFFSET OR FETCH FOR INDIVIDUAL STATEMENT, EACH STATEMENT MUST BE PUT WITHIN ()
+SQL> 
+SQL> REM DISPLAY FIRST 5 AND LAST 5 ROWS
+SQL> 
+SQL> SELECT * FROM EMPLOYEES; FETCH FIRST 5 ROWS ONLY;
+SELECT * FROM EMPLOYEES; FETCH FIRST 5 ROWS ONLY
+                       *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT * FROM EMPLOYEES FETCH FIRST 5 ROWS ONLY;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+
+SQL> SELECT * FROM EMPLOYEES OFFSET (SELECT COUNT(*) FROM EMPLOYEES)-5 ROWS;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+
+SQL> SELECT * FROM EMPLOYEES FETCH FIRST 5 ROWS ONLY
+  2  UNION ALL
+  3  SELECT * FROM EMPLOYEES OFFSET (SELECT COUNT(*) FROM EMPLOYEES)-5 ROWS;
+UNION ALL
+*
+ERROR at line 2:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> (SELECT * FROM EMPLOYEES FETCH FIRST 5 ROWS ONLY)
+  2  UNION ALL
+  3  (SELECT * FROM EMPLOYEES OFFSET (SELECT COUNT(*) FROM EMPLOYEES)-5 ROWS);
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+
+10 rows selected.
+
+SQL> REM 5 IF WE WANT TO USE ORDER BY CLAUSE FOR INDIVIDUAL STATEMENT, THEN EITHER OFFSET OR FETCH IS MANDATORY. EACH STATEMENT MUST BE PUT WITHIN ().
+SQL> 
+SQL> REM DISPLAY THOSE WHO WERE HIRED BEFORE 96, SORT THEIR ROWS IN ASCENDING ORDER OF SALARY, ATTACH OTHERS AND SORT THEM IN DESCENDING ORDER OF SALARY.
+SQL> 
+SQL> SELECT * FROM EMPLOYEES WHERE HIRE_DATE < '1JAN96' ORDER BY SALARY
+  2  UNION ALL
+  3  SELECT * FROM EMPLOYEES WHERE HIRE_DATE >= '1JAN96' ORDER BY SALARY DESC;
+UNION ALL
+*
+ERROR at line 2:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> (SELECT * FROM EMPLOYEES WHERE HIRE_DATE < '1JAN96' ORDER BY SALARY)
+  2  UNION ALL
+  3  (SELECT * FROM EMPLOYEES WHERE HIRE_DATE >= '1JAN96' ORDER BY SALARY DESC);
+(SELECT * FROM EMPLOYEES WHERE HIRE_DATE < '1JAN96' ORDER BY SALARY)
+                                                    *
+ERROR at line 1:
+ORA-00907: missing right parenthesis 
+
+
+SQL> (SELECT * FROM EMPLOYEES WHERE HIRE_DATE < '1JAN96' ORDER BY SALARY OFFSET 0 ROWS)
+  2  (SELECT * FROM EMPLOYEES WHERE HIRE_DATE >= '1JAN96' ORDER BY SALARY DESC);
+(SELECT * FROM EMPLOYEES WHERE HIRE_DATE >= '1JAN96' ORDER BY SALARY DESC)
+*
+ERROR at line 2:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> (SELECT * FROM EMPLOYEES WHERE HIRE_DATE < '1JAN96' ORDER BY SALARY OFFSET 0 ROWS)
+  2  UNION ALL
+  3  (SELECT * FROM EMPLOYEES WHERE HIRE_DATE >= '1JAN96' ORDER BY SALARY DESC FETCH NEXT (SELECT COUNT(*) FROM EMPLOYEES) ROWS ONLY);
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        174 Ellen           Abel            EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas                     650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+
+20 rows selected.
+
+SQL> REM 6 WHEN WE USE */META CHARACTER IN SELECT AND IF WE USE ORDER BY AT COMPOUND STATEMENT LEVEL, ORACLE ALLOWS COLUMN REFERENCE ONLY WITH IT'S POSITION.
+SQL> 
+SQL> SELECT * FROM REGIONS
+  2  UNION ALL
+  3  SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS ORDER BY REGION_NAME;
+SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS ORDER BY REGION_NAME
+                                                                 *
+ERROR at line 3:
+ORA-00904: "REGION_NAME": invalid identifier 
+
+
+SQL> SELECT * FROM REGIONS
+  2  UNION ALL
+  3  SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS ORDER BY 2;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- ------------------------------                                                                                                                                                               
+       110 Accounting                                                                                                                                                                                   
+        10 Administration                                                                                                                                                                               
+         2 Americas                                                                                                                                                                                     
+         3 Asia                                                                                                                                                                                         
+       190 Contracting                                                                                                                                                                                  
+         1 Europe                                                                                                                                                                                       
+        90 Executive                                                                                                                                                                                    
+        60 IT                                                                                                                                                                                           
+        20 Marketing                                                                                                                                                                                    
+         4 Middle East and Africa                                                                                                                                                                       
+        80 Sales                                                                                                                                                                                        
+        50 Shiping                                                                                                                                                                                      
+
+12 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS ORDER BY 2
+  2  UNION ALL
+  3  SELECT * FROM REGIONS ORDER BY DEPARTMENT_NAME
+  4  
+SQL> 
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS
+  2  UNION ALL
+  3  SELECT * FROM REGIONS ORDER BY DEPARTMENT_NAME;
+
+DEPARTMENT_ID DEPARTMENT_NAME                                                                                                                                                                           
+------------- ------------------------------                                                                                                                                                            
+          110 Accounting                                                                                                                                                                                
+           10 Administration                                                                                                                                                                            
+            2 Americas                                                                                                                                                                                  
+            3 Asia                                                                                                                                                                                      
+          190 Contracting                                                                                                                                                                               
+            1 Europe                                                                                                                                                                                    
+           90 Executive                                                                                                                                                                                 
+           60 IT                                                                                                                                                                                        
+           20 Marketing                                                                                                                                                                                 
+            4 Middle East and Africa                                                                                                                                                                    
+           80 Sales                                                                                                                                                                                     
+           50 Shiping                                                                                                                                                                                   
+
+12 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS
+  2  UNION ALL
+  3  SELECT * FROM REGIONS ORDER BY 2;
+
+DEPARTMENT_ID DEPARTMENT_NAME                                                                                                                                                                           
+------------- ------------------------------                                                                                                                                                            
+          110 Accounting                                                                                                                                                                                
+           10 Administration                                                                                                                                                                            
+            2 Americas                                                                                                                                                                                  
+            3 Asia                                                                                                                                                                                      
+          190 Contracting                                                                                                                                                                               
+            1 Europe                                                                                                                                                                                    
+           90 Executive                                                                                                                                                                                 
+           60 IT                                                                                                                                                                                        
+           20 Marketing                                                                                                                                                                                 
+            4 Middle East and Africa                                                                                                                                                                    
+           80 Sales                                                                                                                                                                                     
+           50 Shiping                                                                                                                                                                                   
+
+12 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME DNM FROM DEPARTMENTS
+  2  UNION ALL
+  3  SELECT * FROM REGIONS ORDER BY 2;UNION ALL
+  4  SELECT * FROM REGIONS ORDER BY 2;
+SELECT * FROM REGIONS ORDER BY 2;UNION ALL
+                                *
+ERROR at line 3:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> 
+SQL> ELECT DEPARTMENT_ID , DEPARTMENT_NAME DNM FROM DEPARTMENTS
+SP2-0734: unknown command beginning "ELECT DEPA..." - rest of line ignored.
+SQL> NION ALL
+SP2-0042: unknown command "NION ALL" - rest of line ignored.
+SQL> ELECT * FROM REGIONS ORDER BY 2;UNION ALL
+SP2-0734: unknown command beginning "ELECT * FR..." - rest of line ignored.
+SQL> 
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME DNM FROM DEPARTMENTS
+  2  UNION ALL
+  3  SELECT * FROM REGIONS ORDER BY DNM;
+
+DEPARTMENT_ID DNM                                                                                                                                                                                       
+------------- ------------------------------                                                                                                                                                            
+          110 Accounting                                                                                                                                                                                
+           10 Administration                                                                                                                                                                            
+            2 Americas                                                                                                                                                                                  
+            3 Asia                                                                                                                                                                                      
+          190 Contracting                                                                                                                                                                               
+            1 Europe                                                                                                                                                                                    
+           90 Executive                                                                                                                                                                                 
+           60 IT                                                                                                                                                                                        
+           20 Marketing                                                                                                                                                                                 
+            4 Middle East and Africa                                                                                                                                                                    
+           80 Sales                                                                                                                                                                                     
+           50 Shiping                                                                                                                                                                                   
+
+12 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME DNM FROM DEPARTMENTS
+  2  UNION ALL
+  3  SELECT * FROM REGIONS ORDER BY 2;
+
+DEPARTMENT_ID DNM                                                                                                                                                                                       
+------------- ------------------------------                                                                                                                                                            
+          110 Accounting                                                                                                                                                                                
+           10 Administration                                                                                                                                                                            
+            2 Americas                                                                                                                                                                                  
+            3 Asia                                                                                                                                                                                      
+          190 Contracting                                                                                                                                                                               
+            1 Europe                                                                                                                                                                                    
+           90 Executive                                                                                                                                                                                 
+           60 IT                                                                                                                                                                                        
+           20 Marketing                                                                                                                                                                                 
+            4 Middle East and Africa                                                                                                                                                                    
+           80 Sales                                                                                                                                                                                     
+           50 Shiping                                                                                                                                                                                   
+
+12 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME DNM FROM DEPARTMENTS
+  2  UNION ALL
+  3  SELECT * FROM REGIONS ORDER BY DEPARTMENT_NAME;
+SELECT * FROM REGIONS ORDER BY DEPARTMENT_NAME
+                               *
+ERROR at line 3:
+ORA-00904: "DEPARTMENT_NAME": invalid identifier 
+
+
+SQL> REM 1 COMBINE FIRST_NAME , SALARY AND HIRE_DATE WITH DEPARTMENT_NAME , DEPARTMENT_ID COLUMNS.
+SQL> 
+SQL> REM 2 COMBINE LAST_NAME , HIRE_DATE WITH LOCATION_ID , CITY
+SQL> 
+SQL> REM 3 COMBINE FULL_NAME AND COMMISSION_PCT WITH LOCATION_ID AND DEPARTMENT_NAME WITH PROPER COLUMN HEADINGS.
+SQL> 
+SQL> REM 4 COMBINE LAST 8 ROWS AND FIRST 4 ROWS OF EMPLOYEES TABLE
+SQL> 
+SQL> REM 5 COMBINE THOSE WHOSE SALARY IS UPTO 9000 SORT THEM IN DESCENDING ORDER OF SALARY WITH THOSE WHOSE SALARY IS HIGHER THAN 9000 SORT THEM ON HIRE_DATE COLUMN
+SQL> 
+SQL> REM 6 COMBINE ALL ROWS OF MPSCANTEACH TABLE (USE * ) AND CITY , STATE_PROVINCE. SORT THE RESULT ON SECOND COLUMN IN DESC ORDER
+SQL> 
+SQL> 
+SQL> 
+SQL> REM 1 COMBINE FIRST_NAME , SALARY AND HIRE_DATE WITH DEPARTMENT_NAME , DEPARTMENT_ID COLUMNS.
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY , HIRE_DATE FROM EMPLOYEES
+  2  UNION ALL
+  3  SELECT DEPARTMENT_NAME ,
+  4  
+SQL> SELECT FIRST_NAME , SALARY , HIRE_DATE FROM EMPLOYEES
+  2  UNION ALL
+  3  SELECT DEPARTMENT_NAME , DEPARTMENT_ID, NULL FROM DEPARTMENTS;
+
+FIRST_NAME                         SALARY HIRE_DATE                                                                                                                                                     
+------------------------------ ---------- ---------                                                                                                                                                     
+Steven                              24000 17-JUL-87                                                                                                                                                     
+Neena                               17000 21-SEP-89                                                                                                                                                     
+Lex                                 17000 13-JAN-93                                                                                                                                                     
+Alexander                            9000 03-JAN-90                                                                                                                                                     
+Bruce                                6000 21-MAY-91                                                                                                                                                     
+Diana                                4200 07-FEB-99                                                                                                                                                     
+Kevin                                5800 16-NOV-99                                                                                                                                                     
+Trenna                               3500 17-OCT-95                                                                                                                                                     
+Curtis                               3100 29-JAN-97                                                                                                                                                     
+Randall                              2600 15-MAR-98                                                                                                                                                     
+Peter                                2500 09-JUL-98                                                                                                                                                     
+Eleni                               10500 29-JAN-00                                                                                                                                                     
+Ellen                               11000 11-MAY-96                                                                                                                                                     
+Jonathon                             8600 24-MAR-98                                                                                                                                                     
+Kimerely                             7000 24-MAY-99                                                                                                                                                     
+Jennifer                             4400 17-SEP-87                                                                                                                                                     
+Michael                             13000 17-FEB-96                                                                                                                                                     
+Pat                                  6000 17-AUG-97                                                                                                                                                     
+Shelley                             12000 07-JUN-94                                                                                                                                                     
+William                              8300 07-JUN-94                                                                                                                                                     
+Administration                         10                                                                                                                                                               
+Marketing                              20                                                                                                                                                               
+Shiping                                50                                                                                                                                                               
+IT                                     60                                                                                                                                                               
+Sales                                  80                                                                                                                                                               
+Executive                              90                                                                                                                                                               
+Accounting                            110                                                                                                                                                               
+Contracting                           190                                                                                                                                                               
+
+28 rows selected.
+
+SQL> REM 2 COMBINE LAST_NAME , HIRE_DATE WITH LOCATION_ID , CITY
+SQL> 
+SQL> SELECT LAST_NAME , TO_CHAR(HIRE_DATE) FROM EMPLOYEES
+  2  UNION ALL
+  3  SELECT TO_CHAR(LOCATION_ID) , CITY FROM DEPARTMENTS;
+SELECT TO_CHAR(LOCATION_ID) , CITY FROM DEPARTMENTS
+                              *
+ERROR at line 3:
+ORA-00904: "CITY": invalid identifier 
+
+
+SQL> SELECT LAST_NAME , TO_CHAR(HIRE_DATE) FROM EMPLOYEES
+  2  UNION ALL
+  3  SELECT TO_CHAR(LOCATION_ID) , CITY FROM LOCATIONS;
+
+LAST_NAME                                TO_CHAR(HIRE_DATE)                                                                                                                                             
+---------------------------------------- ------------------------------                                                                                                                                 
+King                                     17-JUL-87                                                                                                                                                      
+Kochhar                                  21-SEP-89                                                                                                                                                      
+De Haan                                  13-JAN-93                                                                                                                                                      
+Hunold                                   03-JAN-90                                                                                                                                                      
+Ernst                                    21-MAY-91                                                                                                                                                      
+Lorentz                                  07-FEB-99                                                                                                                                                      
+Mourgos                                  16-NOV-99                                                                                                                                                      
+Rajs                                     17-OCT-95                                                                                                                                                      
+Davies                                   29-JAN-97                                                                                                                                                      
+Matos                                    15-MAR-98                                                                                                                                                      
+Vargas                                   09-JUL-98                                                                                                                                                      
+Zlotkey                                  29-JAN-00                                                                                                                                                      
+Abel                                     11-MAY-96                                                                                                                                                      
+Taylor                                   24-MAR-98                                                                                                                                                      
+Grant                                    24-MAY-99                                                                                                                                                      
+Whalen                                   17-SEP-87                                                                                                                                                      
+Hartstein                                17-FEB-96                                                                                                                                                      
+Fay                                      17-AUG-97                                                                                                                                                      
+Higgins                                  07-JUN-94                                                                                                                                                      
+Gietz                                    07-JUN-94                                                                                                                                                      
+1400                                     Southlake                                                                                                                                                      
+1500                                     South San Francisco                                                                                                                                            
+1700                                     Seattle                                                                                                                                                        
+1800                                     Toronto                                                                                                                                                        
+2500                                     Oxford                                                                                                                                                         
+
+25 rows selected.
+
+SQL> REM 3 COMBINE FULL_NAME AND COMMISSION_PCT WITH LOCATION_ID AND DEPARTMENT_NAME WITH PROPER COLUMN HEADINGS.
+SQL> 
+SQL> SELECT FIRST_NAME || ' ' || LAST_NAME FULL_NAME , TO_CHAR(COMMISSION_PCT) "COMM_PCT AND DNM
+  2  
+SQL> 
+SQL> SELECT FIRST_NAME || ' ' || LAST_NAME FULL_NAME , TO_CHAR(COMMISSION_PCT) "COMM_PCT AND DNM" FROM EMPLOYEES
+  2  UNION ALL
+  3  SELECT TO_CHAR(LOCATION_ID) , DEPARTMENT_NAME FROM DEPARTMENTS;
+
+FULL_NAME                                COMM_PCT AND DNM                                                                                                                                               
+---------------------------------------- ----------------------------------------                                                                                                                       
+Steven King                                                                                                                                                                                             
+Neena Kochhar                                                                                                                                                                                           
+Lex De Haan                                                                                                                                                                                             
+Alexander Hunold                                                                                                                                                                                        
+Bruce Ernst                                                                                                                                                                                             
+Diana Lorentz                                                                                                                                                                                           
+Kevin Mourgos                                                                                                                                                                                           
+Trenna Rajs                                                                                                                                                                                             
+Curtis Davies                                                                                                                                                                                           
+Randall Matos                                                                                                                                                                                           
+Peter Vargas                                                                                                                                                                                            
+Eleni Zlotkey                            .2                                                                                                                                                             
+Ellen Abel                               .3                                                                                                                                                             
+Jonathon Taylor                          .3                                                                                                                                                             
+Kimerely Grant                           .15                                                                                                                                                            
+Jennifer Whalen                                                                                                                                                                                         
+Michael Hartstein                                                                                                                                                                                       
+Pat Fay                                                                                                                                                                                                 
+Shelley Higgins                                                                                                                                                                                         
+William Gietz                                                                                                                                                                                           
+1700                                     Administration                                                                                                                                                 
+1800                                     Marketing                                                                                                                                                      
+1500                                     Shiping                                                                                                                                                        
+1400                                     IT                                                                                                                                                             
+2500                                     Sales                                                                                                                                                          
+1700                                     Executive                                                                                                                                                      
+1700                                     Accounting                                                                                                                                                     
+1700                                     Contracting                                                                                                                                                    
+
+28 rows selected.
+
+SQL> REM 4 COMBINE LAST 8 ROWS AND FIRST 4 ROWS OF EMPLOYEES TABLE
+SQL> 
+SQL> (SELECT * FROM EMPLOYEES OFFSET (SELECT COUNT(*) FROM EMPLOYEES) - 8 ROWS)
+  2  UNION ALL
+  3  (SELECT * FROM EMPLOYEES FETCH FIRST 4 ROWS ONLY);
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        174 Ellen           Abel            EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+
+12 rows selected.
+
+SQL> REM 5 COMBINE THOSE WHOSE SALARY IS UPTO 9000 SORT THEM IN DESCENDING ORDER OF SALARY WITH THOSE WHOSE SALARY IS HIGHER THAN 9000 SORT THEM ON HIRE_DATE COLUMN
+SQL> 
+SQL> (SELECT * FROM EMPLOYEES WHERE SALARY <= 9000 ORDER BY SALARY DESC OFFSET 0 ROWS)
+  2  UNION ALL
+  3  (SELECT * FROM EMPLOYEES WHERE SALARY > 9000 ORDER BY SALARY FETCH FIRST (SELECT COUNT(*) FROM EMPLOYEES) ROWS ONLY);
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas                     650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel            EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+
+20 rows selected.
+
+SQL> REM 6 COMBINE ALL ROWS OF MPSCANTEACH TABLE (USE * ) AND CITY , STATE_PROVINCE. SORT THE RESULT ON SECOND COLUMN IN DESC ORDER
+SQL> 
+SQL> SELECT * FROM MPSCANTEACH
+  2  UNION ALL
+  3  SELECT CITY , STATE_PROVINCE FROM LOCATIONS ORDER BY 2 DESC;
+
+STAFF                          SUBJECT                                                                                                                                                                  
+------------------------------ -------------------------                                                                                                                                                
+Seattle                        Washington                                                                                                                                                               
+Southlake                      Texas                                                                                                                                                                    
+ASHWIN                         TOEFL                                                                                                                                                                    
+BIMAL                          SAT                                                                                                                                                                      
+Oxford                         Oxford                                                                                                                                                                   
+Toronto                        Ontario                                                                                                                                                                  
+ASHWIN                         GRE                                                                                                                                                                      
+SARITA                         GMAT                                                                                                                                                                     
+South San Francisco            California                                                                                                                                                               
+
+9 rows selected.
+
+SQL> SPOOL OFF

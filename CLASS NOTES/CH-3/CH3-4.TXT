@@ -364,6 +364,9 @@ SQL>
 SQL> REM 1 ADD 10 MINUTES TO CURRENT_DATE
 SQL>
 SQL> REM 2 SUBSTRACT 40 SECONDS FROM SYSDATE
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 SQL>
 SQL> REM 3 ADD 2 DAYS AND 3 HOURS : CURRENT_DATE
 SQL>
