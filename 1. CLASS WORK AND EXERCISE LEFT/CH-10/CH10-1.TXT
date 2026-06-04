@@ -1,0 +1,565 @@
+SQL> 
+SQL> REM CREATE TABLE :
+SQL> 
+SQL> REM CREATE TABLE : WE CAN CREATE TABLE IN TWO STYLES : 1 FROM SCRATCH 2 USING sub query/EXISTING TABLE
+SQL> 
+SQL> REM CREATE TABLE FROM SCRATCH SYNTAX : CREATE TABLE tablename (columnname datatype(size) DEFAULT defaultvalue column_level_constraints , ... , table_level_constraints , ...);
+SQL> 
+SQL> REM ORACLE SUPPORTS TWO TYPES OF NAMING CONVENTIONS : 1 CASE INSENSITIVE (DEFAULT, WIDELY USED) 2 CASE SENSITIVE (NON-DEFAULT, RARELY USED)
+SQL> 
+SQL> 
+SQL> 
+SQL> REM RULES FOR CASE INSENSITIVE (DEFAULT, WIDELY USED) NAMING :
+SQL> 
+SQL> REM 1 MIN 1 CHARACTER , MAXIMUM 30 CHARACTERS (11G VERSION) , MAX 128 CHARACTER (12C VERSION ONWARDS)
+SQL> 
+SQL> REM 2 FIRST CHARACTER MUST BE ALPHABET
+SQL> 
+SQL> REM 3 REMAINING CHARACTERS MAY BE ALPHABETS , DIGITS OR ANY OF THE 3 SPECIAL CHARACTERS _ # $
+SQL> 
+SQL> REM 4 WE CAN'T USE SAME TABLE NAME UNDER SAME USER/SCHEMA.
+SQL> 
+SQL> REM 5 WE CAN'T USE ORACLE/SQL KEY/RESERVE WORD AS TABLE NAME, BUT IT MAY BE PART OR COMBINATIONS.
+SQL> 
+SQL> 
+SQL> REM 1 ABC    2 123    3 _#$     4 ABC123    5 ABC123_#$    6 REGIONS   7 PURGE     8 MODIFY     9 EMPLOYEE    10 DAUL
+SQL> 
+SQL> REM 1 TRUE   2 FALSE  3 FALSE   4 TRUE      5 TRUE         6 FALSE     7 FALSE     8 FALSE      9 TRUE        10 TRUE
+SQL> 
+SQL> 
+SQL> REM RULES FOR CASE SENSITIVE NAMING :
+SQL> 
+SQL> REM 1 MINIMUM 1 CHARACTER AND MAXIMUM 30 CHARACTERS (UPTO ORACLE 11G) , MAXIMUM 128 CHARACTERS FROM ORACLE 12C VERSION
+SQL> 
+SQL> REM 2 WE CAN START NAME WITH ANY CHARACTER
+SQL> 
+SQL> REM 3 REMAINING CHARACTERS MAY BE ALPHABETS , DIGITS OR ANY SPECIAL CHARACTERS ( EXCEPT : " , &)
+SQL> 
+SQL> REM 4 WE CAN USE IDENTICAL NAME UNDER SAME USER/SCHEMA WITH DIFFERENT CASE. : "Regions"   "REgions"   "REGions" ...
+SQL> 
+SQL> REM 5 WE CAN USE ORACLE/SQL KEY/RESERVE WORD AS TABLE NAME.
+SQL> 
+SQL> REM 6 WE MUST DELIMIT/QUOTE THE NAME WITH DOUBLE QUOTES.
+SQL> 
+SQL> REM 7 WHILE REFERRING THE NAME, WE MUST USE 1 DOUBLE QUOTE 2 SAME SPELLING 3 SAME CASE 4 SAME SPACING
+SQL> 
+SQL> REM 8 AVOID USING ALL CAPITAL ALPHABETS
+SQL> 
+SQL> 
+SQL> CREATE TABLE qaz(NO NUMBER);
+
+Table created.
+
+SQL> INSERT INTO QAZ VALUES (10);
+
+1 row created.
+
+SQL> SELECT * FROM QaZ;
+
+        NO                                                                      
+----------                                                                      
+        10                                                                      
+
+SQL> SELECT * FROM Qaz;
+
+        NO                                                                      
+----------                                                                      
+        10                                                                      
+
+SQL> SELECT * FROM qaz;
+
+        NO                                                                      
+----------                                                                      
+        10                                                                      
+
+SQL> SELECT * FROM qAz;
+
+        NO                                                                      
+----------                                                                      
+        10                                                                      
+
+SQL> REM ABC123 , ABC_#$ , ABC!@#
+SQL> 
+SQL> REM 1 "ABC 123"   2 "def!@#"   3 pqr%^*   4 "DeLETe"    5 "EMPLOYEES"    6 "DEPARTMENT"    7 "Hi#hello~byE    8 'shri Ganesh'   9 "Ayush'    10 "ab%^&123"
+SQL> 
+SQL> REM 1 TRUE        2 TRUE       3 FALSE    4 TRUE        5 FALSE          6 AVOID           7 FALSE            8 FALSE           9 FALSE      10 AVOID
+SQL> 
+SQL> 
+SQL> CREATE TABLE "Zaq"(d date);
+
+Table created.
+
+SQL> INSERT INTO Zaq VALUES (SYSDATE);
+INSERT INTO Zaq VALUES (SYSDATE)
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> INSERT INTO "ZaQ" VALUES (SYSDATE);
+INSERT INTO "ZaQ" VALUES (SYSDATE)
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> INSERT INTO "Zaq" VALUES (SYSDATE);
+
+1 row created.
+
+SQL> SELECT * FROM Zaq;
+SELECT * FROM Zaq
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> SELECT * FROM "Zaq";
+
+D                                                                               
+---------                                                                       
+02-JUN-26                                                                       
+
+SQL> ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MON-RRRR HH:MI.SS AM';
+
+Session altered.
+
+SQL> 
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER             
+----------- --------------- --------------- ---------- --------------------     
+HIRE_DATE               JOB_ID         SALARY COMMISSION_PCT MANAGER_ID         
+----------------------- ---------- ---------- -------------- ----------         
+DEPARTMENT_ID                                                                   
+-------------                                                                   
+        100 Steven          King            SKING      515.123.4567             
+17-JUL-1987 12:00.00 AM AD_PRES         24000                                   
+           90                                                                   
+                                                                                
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568             
+21-SEP-1989 12:00.00 AM AD_VP           17000                       100         
+           90                                                                   
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER             
+----------- --------------- --------------- ---------- --------------------     
+HIRE_DATE               JOB_ID         SALARY COMMISSION_PCT MANAGER_ID         
+----------------------- ---------- ---------- -------------- ----------         
+DEPARTMENT_ID                                                                   
+-------------                                                                   
+                                                                                
+        102 Lex             De Haan         LDEHAAN    515.123.4569             
+13-JAN-1993 12:00.00 AM AD_VP           17000                       100         
+           90                                                                   
+                                                                                
+        103 Alexander       Hunold          AHUNOLD    590.423.4567             
+03-JAN-1990 12:00.00 AM IT_PROG          9000                       102         
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER             
+----------- --------------- --------------- ---------- --------------------     
+HIRE_DATE               JOB_ID         SALARY COMMISSION_PCT MANAGER_ID         
+----------------------- ---------- ---------- -------------- ----------         
+DEPARTMENT_ID                                                                   
+-------------                                                                   
+           60                                                                   
+                                                                                
+        104 Bruce           Ernst           BERNST     590.423.4568             
+21-MAY-1991 12:00.00 AM IT_PROG          6000                       103         
+           60                                                                   
+                                                                                
+        107 Diana           Lorentz         DLORENTZ   590.423.5567             
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER             
+----------- --------------- --------------- ---------- --------------------     
+HIRE_DATE               JOB_ID         SALARY COMMISSION_PCT MANAGER_ID         
+----------------------- ---------- ---------- -------------- ----------         
+DEPARTMENT_ID                                                                   
+-------------                                                                   
+07-FEB-1999 12:00.00 AM IT_PROG          4200                       103         
+           60                                                                   
+                                                                                
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234             
+16-NOV-1999 12:00.00 AM ST_MAN           5800                       100         
+           50                                                                   
+                                                                                
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER             
+----------- --------------- --------------- ---------- --------------------     
+HIRE_DATE               JOB_ID         SALARY COMMISSION_PCT MANAGER_ID         
+----------------------- ---------- ---------- -------------- ----------         
+DEPARTMENT_ID                                                                   
+-------------                                                                   
+        141 Trenna          Rajs            TRAJS      650.121.8009             
+17-OCT-1995 12:00.00 AM ST_CLERK         3500                       124         
+           50                                                                   
+                                                                                
+        142 Curtis          Davies          CDAVIES    650.121.2994             
+29-JAN-1997 12:00.00 AM ST_CLERK         3100                       124         
+           50                                                                   
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER             
+----------- --------------- --------------- ---------- --------------------     
+HIRE_DATE               JOB_ID         SALARY COMMISSION_PCT MANAGER_ID         
+----------------------- ---------- ---------- -------------- ----------         
+DEPARTMENT_ID                                                                   
+-------------                                                                   
+                                                                                
+        143 Randall         Matos           RMATOS     650.121.2874             
+15-MAR-1998 12:00.00 AM ST_CLERK         2600                       124         
+           50                                                                   
+                                                                                
+        144 Peter           Vargas                     650.121.2004             
+09-JUL-1998 12:00.00 AM ST_CLERK         2500                       124         
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER             
+----------- --------------- --------------- ---------- --------------------     
+HIRE_DATE               JOB_ID         SALARY COMMISSION_PCT MANAGER_ID         
+----------------------- ---------- ---------- -------------- ----------         
+DEPARTMENT_ID                                                                   
+-------------                                                                   
+           50                                                                   
+                                                                                
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018       
+29-JAN-2000 12:00.00 AM SA_MAN          10500             .2        100         
+           80                                                                   
+                                                                                
+        174 Ellen           Abel            EABEL      011.44.1644.429267       
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER             
+----------- --------------- --------------- ---------- --------------------     
+HIRE_DATE               JOB_ID         SALARY COMMISSION_PCT MANAGER_ID         
+----------------------- ---------- ---------- -------------- ----------         
+DEPARTMENT_ID                                                                   
+-------------                                                                   
+11-MAY-1996 12:00.00 AM SA_REP          11000             .3        149         
+           80                                                                   
+                                                                                
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265       
+24-MAR-1998 12:00.00 AM SA_REP           8600             .3        149         
+           80                                                                   
+                                                                                
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER             
+----------- --------------- --------------- ---------- --------------------     
+HIRE_DATE               JOB_ID         SALARY COMMISSION_PCT MANAGER_ID         
+----------------------- ---------- ---------- -------------- ----------         
+DEPARTMENT_ID                                                                   
+-------------                                                                   
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263       
+24-MAY-1999 12:00.00 AM SA_REP           7000            .15        149         
+                                                                                
+                                                                                
+        200 Jennifer        Whalen          JWHALEN    515.123.4444             
+17-SEP-1987 12:00.00 AM AD_ASST          4400                       101         
+           10                                                                   
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER             
+----------- --------------- --------------- ---------- --------------------     
+HIRE_DATE               JOB_ID         SALARY COMMISSION_PCT MANAGER_ID         
+----------------------- ---------- ---------- -------------- ----------         
+DEPARTMENT_ID                                                                   
+-------------                                                                   
+                                                                                
+        201 Michael         Hartstein       MHARTSTE   515.123.5555             
+17-FEB-1996 12:00.00 AM MK_MAN          13000                       100         
+           20                                                                   
+                                                                                
+        202 Pat             Fay             PFAY       603.123.6666             
+17-AUG-1997 12:00.00 AM MK_REP           6000                       201         
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER             
+----------- --------------- --------------- ---------- --------------------     
+HIRE_DATE               JOB_ID         SALARY COMMISSION_PCT MANAGER_ID         
+----------------------- ---------- ---------- -------------- ----------         
+DEPARTMENT_ID                                                                   
+-------------                                                                   
+           20                                                                   
+                                                                                
+        205 Shelley         Higgins         SHIGGINS   515.123.8080             
+07-JUN-1994 12:00.00 AM AC_MGR          12000                       101         
+          110                                                                   
+                                                                                
+        206 William         Gietz           WGIETZ     515.123.8181             
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER             
+----------- --------------- --------------- ---------- --------------------     
+HIRE_DATE               JOB_ID         SALARY COMMISSION_PCT MANAGER_ID         
+----------------------- ---------- ---------- -------------- ----------         
+DEPARTMENT_ID                                                                   
+-------------                                                                   
+07-JUN-1994 12:00.00 AM AC_ACCOUNT       8300                       205         
+          110                                                                   
+                                                                                
+
+20 rows selected.
+
+SQL> SET LINES 200 PAGES 24
+SQL> 
+SQL> R
+  1* SELECT * FROM EMPLOYEES
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE               JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                       
+----------- --------------- --------------- ---------- -------------------- ----------------------- ---------- ---------- -------------- ---------- -------------                                       
+        100 Steven          King            SKING      515.123.4567         17-JUL-1987 12:00.00 AM AD_PRES         24000                                      90                                       
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-1989 12:00.00 AM AD_VP           17000                       100            90                                       
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-1993 12:00.00 AM AD_VP           17000                       100            90                                       
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-1990 12:00.00 AM IT_PROG          9000                       102            60                                       
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-1991 12:00.00 AM IT_PROG          6000                       103            60                                       
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-1999 12:00.00 AM IT_PROG          4200                       103            60                                       
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-1999 12:00.00 AM ST_MAN           5800                       100            50                                       
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-1995 12:00.00 AM ST_CLERK         3500                       124            50                                       
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-1997 12:00.00 AM ST_CLERK         3100                       124            50                                       
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-1998 12:00.00 AM ST_CLERK         2600                       124            50                                       
+        144 Peter           Vargas                     650.121.2004         09-JUL-1998 12:00.00 AM ST_CLERK         2500                       124            50                                       
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-2000 12:00.00 AM SA_MAN          10500             .2        100            80                                       
+        174 Ellen           Abel            EABEL      011.44.1644.429267   11-MAY-1996 12:00.00 AM SA_REP          11000             .3        149            80                                       
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-1998 12:00.00 AM SA_REP           8600             .3        149            80                                       
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-1999 12:00.00 AM SA_REP           7000            .15        149                                                     
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-1987 12:00.00 AM AD_ASST          4400                       101            10                                       
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-1996 12:00.00 AM MK_MAN          13000                       100            20                                       
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-1997 12:00.00 AM MK_REP           6000                       201            20                                       
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-1994 12:00.00 AM AC_MGR          12000                       101           110                                       
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-1994 12:00.00 AM AC_ACCOUNT       8300                       205           110                                       
+
+20 rows selected.
+
+SQL> SELECT SYSTIMESTAMP FROM DUAL;
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.41.47.273000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.19.368000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.19.504000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.19.656000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.19.809000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.19.960000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.20.088000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.20.233000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.20.368000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.20.504000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.20.648000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.20.800000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.20.944000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.21.089000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.21.232000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.21.368000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.21.520000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.21.672000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.21.808000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.21.968000 PM +05:30                                                                                                                                                                     
+
+SQL> /
+
+SYSTIMESTAMP                                                                                                                                                                                            
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 09.42.22.112000 PM +05:30                                                                                                                                                                     
+
+SQL> SELECT  SYSDATE , SYSDATE + 1 FROM DUAL;
+
+SYSDATE                 SYSDATE+1                                                                                                                                                                       
+----------------------- -----------------------                                                                                                                                                         
+02-JUN-2026 09:54.16 PM 03-JUN-2026 09:54.16 PM                                                                                                                                                         
+
+SQL> SELECT  SYSDATE , SYSDATE + (2/24) FROM DUAL;
+
+SYSDATE                 SYSDATE+(2/24)                                                                                                                                                                  
+----------------------- -----------------------                                                                                                                                                         
+02-JUN-2026 09:54.22 PM 02-JUN-2026 11:54.22 PM                                                                                                                                                         
+
+SQL> SELECT  SYSDATE , SYSDATE + (3/1440) FROM DUAL;
+
+SYSDATE                 SYSDATE+(3/1440)                                                                                                                                                                
+----------------------- -----------------------                                                                                                                                                         
+02-JUN-2026 09:54.30 PM 02-JUN-2026 09:57.30 PM                                                                                                                                                         
+
+SQL> SELECT  SYSDATE , SYSDATE + (4/86400) FROM DUAL;
+
+SYSDATE                 SYSDATE+(4/86400)                                                                                                                                                               
+----------------------- -----------------------                                                                                                                                                         
+02-JUN-2026 09:54.38 PM 02-JUN-2026 09:54.42 PM                                                                                                                                                         
+
+SQL> SELECT  SYSDATE , SYSDATE + 1 + (2/24) + (3/1440) + (4/86400) FROM DUAL;
+
+SYSDATE                 SYSDATE+1+(2/24)+(3/144                                                                                                                                                         
+----------------------- -----------------------                                                                                                                                                         
+02-JUN-2026 09:55.03 PM 03-JUN-2026 11:58.07 PM                                                                                                                                                         
+
+SQL> 
+SQL> CREATE TABLE WSX(BDT DATE , DS INTERVAL DAY TO SECOND);
+
+Table created.
+
+SQL> INSERT INTO WSX VALUES (SYSDATE,TO_DSINTERVAL('1 2:3:4.222'));
+
+1 row created.
+
+SQL> SELECT * FROM WSX;
+
+BDT                     DS                                                                                                                                                                              
+----------------------- ---------------------------------------------------------------------------                                                                                                     
+02-JUN-2026 09:57.44 PM +01 02:03:04.222000                                                                                                                                                             
+
+SQL> SELECT BDT , DS , BDT + DS FROM WSX;
+
+BDT                     DS                                                                          BDT+DS                                                                                              
+----------------------- --------------------------------------------------------------------------- -----------------------                                                                             
+02-JUN-2026 09:57.44 PM +01 02:03:04.222000                                                         04-JUN-2026 12:00.48 AM                                                                             
+
+SQL> INSERT INTO WSX VALUES (SYSDATE,TO_DSINTERVAL('1 2:3:4:222'));
+INSERT INTO WSX VALUES (SYSDATE,TO_DSINTERVAL('1 2:3:4:222'))
+                                              *
+ERROR at line 1:
+ORA-01867: the interval is invalid 
+
+
+SQL> INSERT INTO WSX VALUES (SYSDATE,TO_DSINTERVAL('1 2:3.4.222'));
+INSERT INTO WSX VALUES (SYSDATE,TO_DSINTERVAL('1 2:3.4.222'))
+                                              *
+ERROR at line 1:
+ORA-01867: the interval is invalid 
+
+
+SQL> SELECT SYSDATE , ADD_MONTHS(SYSDATE,4) FROM DUAL;
+
+SYSDATE                 ADD_MONTHS(SYSDATE,4)                                                                                                                                                           
+----------------------- -----------------------                                                                                                                                                         
+02-JUN-2026 10:05.22 PM 02-OCT-2026 10:05.22 PM                                                                                                                                                         
+
+SQL> SELECT SYSDATE , ADD_MONTHS(SYSDATE,12) FROM DUAL;
+
+SYSDATE                 ADD_MONTHS(SYSDATE,12)                                                                                                                                                          
+----------------------- -----------------------                                                                                                                                                         
+02-JUN-2026 10:05.28 PM 02-JUN-2027 10:05.28 PM                                                                                                                                                         
+
+SQL> SELECT SYSDATE , ADD_MONTHS(SYSDATE,12*5) FROM DUAL;
+
+SYSDATE                 ADD_MONTHS(SYSDATE,12*5                                                                                                                                                         
+----------------------- -----------------------                                                                                                                                                         
+02-JUN-2026 10:05.33 PM 02-JUN-2031 10:05.33 PM                                                                                                                                                         
+
+SQL> SELECT SYSDATE , ADD_MONTHS(SYSDATE,12*5+3) FROM DUAL;
+
+SYSDATE                 ADD_MONTHS(SYSDATE,12*5                                                                                                                                                         
+----------------------- -----------------------                                                                                                                                                         
+02-JUN-2026 10:05.38 PM 02-SEP-2031 10:05.38 PM                                                                                                                                                         
+
+SQL> CREATE TABLE EDC(ST TIMESTAMP , YM INTERVAL YEAR TO MONTH);
+
+Table created.
+
+SQL> INSERT INTO EDC VALUES (LOCALTIMESTAMP , TO_YMINTERVAL('3-5'));
+
+1 row created.
+
+SQL> SELECT * FROM EDC;
+
+ST                                                                          YM                                                                                                                          
+--------------------------------------------------------------------------- ---------------------------------------------------------------------------                                                 
+02-JUN-26 10.07.38.720000 PM                                                +03-05                                                                                                                      
+
+SQL> SELECT ST , YM , ST + YM FROM EDC;
+
+ST                                                                          YM                                                                                                                          
+--------------------------------------------------------------------------- ---------------------------------------------------------------------------                                                 
+ST+YM                                                                                                                                                                                                   
+---------------------------------------------------------------------------                                                                                                                             
+02-JUN-26 10.07.38.720000 PM                                                +03-05                                                                                                                      
+02-NOV-29 10.07.38.720000000 PM                                                                                                                                                                         
+                                                                                                                                                                                                        
+
+SQL> SPOOL OFF
