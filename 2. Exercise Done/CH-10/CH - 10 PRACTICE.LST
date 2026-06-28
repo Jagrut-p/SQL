@@ -1,22 +1,48 @@
-SQL> CL SCR
+SQL> DESC REGIONS;
+ Name             Null?    Type
+ --------------- --------  -------------
+ REGION_ID        NOT NULL  NUMBER
+ REGION_NAME      	    VARCHAR2(25)
 
 SQL> SELECT * FROM REGIONS;
 
  REGION_ID REGION_NAME                                                                                                                                                                                  
----------- -------------------------                                                                                                                                                                    
+---------- ---------------                                                                                                                                                                   
          1 Europe                                                                                                                                                                                       
          2 Americas                                                                                                                                                                                     
          3 Asia                                                                                                                                                                                         
          4 Middle East and Africa                                                                                                                                                                       
 
+SQL> DESC COUNTRIES
+ Name                Null?    Type
+ ----------------- -------- -------------
+ COUNTRY_ID          NOT NULL CHAR(2)
+ COUNTRY_NAME        VARCHAR2(40)
+ REGION_ID           NUMBER
+
 SQL> SELECT * FROM COUNTRIES;
 
-CO COUNTRY_NAME                              REGION_ID                                                                                                                                                  
--- ---------------------------------------- ----------                                                                                                                                                  
-CA Canada                                            2                                                                                                                                                  
-DE Germany                                           1                                                                                                                                                  
-UK United Kingdom                                    1                                                                                                                                                  
-US United States of America                          2                                                                                                                                                  
+CO COUNTRY_NAME                   REGION_ID                                                                                                                                                  
+-- -----------                    ----------                                                                                                                                                  
+CA Canada                          2                                                                                                                                                  
+DE Germany                         1                                                                                                                                                  
+UK United Kingdom                  1                                                                                                                                                  
+US United States of America        2                                                                                                                                                  
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> DESC LOCATIONS;
+ Name               Null?    Type
+ ----------------- -------  --------    
+LOCATION_ID        NOT NULL  NUMBER(4)
+ STREET_ADRESS     	     VARCHAR2(40)
+ POSTAL_CODE       	     VARCHAR2(12)
+ CITY              NOT NULL  VARCHAR2(30)
+ STATE_PROVINCE              VARCHAR2(25)
+ COUNTRY_ID                  CHAR(2)
 
 SQL> SELECT * FROM LOCATIONS;
 
@@ -28,20 +54,44 @@ LOCATION_ID STREET_ADRESS                            POSTAL_CODE  CITY          
        1800 460 Bloor St. W.                         ON M5S 1X8   Toronto                        Ontario                   CA                                                                           
        2500 Magdalen Centre, The Oxford Science Park OX9 9ZB      Oxford                         Oxford                    UK                                                                           
 
+SQL> DESC DEPARTMENTS;
+ Name                               Null?    Type
+ -------------------------------- -------- -------------
+ DEPARTMENT_ID                    NOT NULL NUMBER(4)
+ DEPARTMENT_NAME                  NOT NULL VARCHAR2(30)
+ MANAGER_ID                       NUMBER(6)
+ LOCATION_ID                      NUMBER(4)
+
 SQL> SELECT * FROM DEPARTMENTS;
 
-DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID                                                                                                                                     
-------------- ------------------------------ ---------- -----------                                                                                                                                     
-           10 Administration                        200        1700                                                                                                                                     
-           20 Marketing                             201        1800                                                                                                                                     
-           50 Shiping                               124        1500                                                                                                                                     
-           60 IT                                    103        1400                                                                                                                                     
-           80 Sales                                 149        2500                                                                                                                                     
-           90 Executive                             100        1700                                                                                                                                     
-          110 Accounting                            205        1700                                                                                                                                     
-          190 Contracting                                      1700                                                                                                                                     
+DEPARTMENT_ID DEPARTMENT_NAME     MANAGER_ID LOCATION_ID                                                                                                                                     
+------------- ------------------------------ -----------                                                                                                                                     
+           10 Administration      200        1700                                                                                                                                     
+           20 Marketing           201        1800                                                                                                                                     
+           50 Shiping             124        1500                                                                                                                                     
+           60 IT                  103        1400                                                                                                                                     
+           80 Sales               149        2500                                                                                                                                     
+           90 Executive           100        1700                                                                                                                                     
+          110 Accounting          205        1700                                                                                                                                     
+          190 Contracting         1700                                                                                                                                     
 
 8 rows selected.
+
+SQL> 
+SQL> DESC EMPLOYEES;
+ Name                                 Null?     Type
+ ------------------------------------- -------- ---------------
+ EMPLOYEE_ID                          NOT NULL  NUMBER(6)
+ FIRST_NAME                                     VARCHAR2(15)
+ LAST_NAME                            NOT NULL  VARCHAR2(15)
+ EMAIL                                NOT NULL  VARCHAR2(10)
+ PHONE_NUMBER                                   VARCHAR2(20)
+ HIRE_DATE                            NOT NULL  DATE
+ JOB_ID                               NOT NULL  VARCHAR2(10)
+ SALARY                                         NUMBER(8,2)
+ COMMISSION_PCT                                 NUMBER(2,2)
+ MANAGER_ID                                     NUMBER(6)
+ DEPARTMENT_ID                                  NUMBER(4)
 
 SQL> SELECT * FROM EMPLOYEES;
 
@@ -70,6 +120,14 @@ EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE
 
 20 rows selected.
 
+SQL> DESC JOBS;
+ Name                            Null?    Type
+ ----------------------------- -------- ----------------
+ JOB_ID                          NOT NULL VARCHAR2(10)
+ JOB_TITLE                       NOT NULL VARCHAR2(35)
+ MIN_SALARY                      	  NUMBER(6)
+ MAX_SALARY                      	  NUMBER(6)
+
 SQL> SELECT * FROM JOBS;
 
 JOB_ID     JOB_TITLE                           MIN_SALARY MAX_SALARY                                                                                                                                    
@@ -89,6 +147,13 @@ MK_REP     Marketing Representative                  4000       9000
 
 12 rows selected.
 
+SQL> DESC JOB_GRADES;
+ Name                                      Null?    Type
+ --------------------------------------- -------- ---------------
+ GRADE_LEVEL                               VARCHAR2(3)
+ LOWEST_SAL                                NUMBER
+ HIGHEST_SAL                               NUMBER
+
 SQL> SELECT * FROM JOB_GRADES;
 
 GRA LOWEST_SAL HIGHEST_SAL                                                                                                                                                                              
@@ -102,21 +167,31 @@ F        25000       40000
 
 6 rows selected.
 
-SQL> SELECT * FROM JOB_HISTORY;
+SQL> COL TABLE_NAME FOR A30
+SQL> COL COLUMN_NAME FOR A30
+SQL> COL CONSTRAINT_NAME FOR A30
+SQL> COL R_CONSTRAINT_NAME FOR A30
+SQL> COL SEARCH_CONDITION FOR A50
+SQL> 
+SQL> SELECT TABLE_NAME , COLUMN_NAME , CONSTRAINT_TYPE , CONSTRAINT_NAME , R_CONSTRAINT_NAME , SEARCH_CONDITION , DELETE_RULE FROM USER_CONSTRAINTS NATURAL JOIN USER_CONS_COLUMNS WHERE TABLE_NAME IN ('REGIONS', 'COUNTRIES', 'LOCATIONS', 'DEPARTMENTS', 'EMPLOYEES', 'JOBS', 'JOB_GRADES');
 
-EMPLOYEE_ID START_DAT END_DATE  JOB_ID     DEPARTMENT_ID                                                                                                                                                
------------ --------- --------- ---------- -------------                                                                                                                                                
-        102 13-JAN-93 24-JUL-98 IT_PROG               60                                                                                                                                                
-        101 21-SEP-89 27-OCT-93 AC_ACCOUNT           110                                                                                                                                                
-        101 28-OCT-93 15-MAR-97 AC_MGR               110                                                                                                                                                
-        201 17-FEB-96 19-DEC-99 MK_REP                20                                                                                                                                                
-        114 24-MAR-98 31-DEC-99 ST_CLERK              50                                                                                                                                                
-        122 01-JAN-99 31-DEC-99 ST_CLERK              50                                                                                                                                                
-        200 17-SEP-87 17-JUN-93 AD_ASST               90                                                                                                                                                
-        176 24-MAR-98 31-DEC-98 SA_REP                80                                                                                                                                                
-        176 01-JAN-99 31-DEC-99 SA_MAN                80                                                                                                                                                
-        200 01-JUL-94 31-DEC-98 AC_ACCOUNT            90                                                                                                                                                
+TABLE_NAME                     COLUMN_NAME                    C CONSTRAINT_NAME                R_CONSTRAINT_NAME              SEARCH_CONDITION                                   DELETE_RU              
+------------------------------ ------------------------------ - ------------------------------ ------------------------------ -------------------------------------------------- ---------              
+COUNTRIES                      COUNTRY_ID                     C COUNTRIES_COUN_ID_NN                                          "COUNTRY_ID" IS NOT NULL                                                  
+DEPARTMENTS                    DEPARTMENT_NAME                C DEPARTMENTS_DEPT_NAME_NN                                      "DEPARTMENT_NAME" IS NOT NULL                                             
+DEPARTMENTS                    DEPARTMENT_ID                  P DEPARTMENTS_DEPT_ID_PK                                                                                                                  
+EMPLOYEES                      EMPLOYEE_ID                    C EMPLOYEES_EMP_ID_NN                                           "EMPLOYEE_ID" IS NOT NULL                                                 
+EMPLOYEES                      LAST_NAME                      C EMPLOYEES_LAST_NAME_NN                                        "LAST_NAME" IS NOT NULL                                                   
+EMPLOYEES                      EMAIL                          C EMPLOYEES_EMAIL_NN                                            "EMAIL" IS NOT NULL                                                       
+EMPLOYEES                      HIRE_DATE                      C EMPLOYEES_HIRE_DATE_NN                                        "HIRE_DATE" IS NOT NULL                                                   
+EMPLOYEES                      JOB_ID                         C EMPLOYEES_JOB_ID_NN                                           "JOB_ID" IS NOT NULL                                                      
+JOBS                           JOB_TITLE                      C JOBS_JOB_TITLE_NN                                             "JOB_TITLE" IS NOT NULL                                                   
+JOBS                           JOB_ID                         P JOBS_JOB_ID_PK                                                                                                                          
+LOCATIONS                      LOCATION_ID                    C LOCATIONS_LOC_ID_NN                                           "LOCATION_ID" IS NOT NULL                                                 
+LOCATIONS                      CITY                           C LOCATIONS_CITY_NN                                             "CITY" IS NOT NULL                                                        
+REGIONS                        REGION_ID                      C REGIONS_REG_ID_NN                                             "REGION_ID" IS NOT NULL                                                   
 
-10 rows selected.
+13 rows selected.
 
-SQL> SPOOL OFF
+
+SQL> SPOOL OFF;

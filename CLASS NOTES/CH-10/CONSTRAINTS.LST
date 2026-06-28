@@ -1,0 +1,27 @@
+SQL> COL TABLE_NAME FOR A30
+SQL> COL COLUMN_NAME FOR A30
+SQL> COL CONSTRAINT_NAME FOR A30
+SQL> COL R_CONSTRAINT_NAME FOR A30
+SQL> COL SEARCH_CONDITION FOR A50
+SQL> 
+SQL> SELECT TABLE_NAME , COLUMN_NAME , CONSTRAINT_TYPE , CONSTRAINT_NAME , R_CONSTRAINT_NAME , SEARCH_CONDITION , DELETE_RULE FROM USER_CONSTRAINTS NATURAL JOIN USER_CONS_COLUMNS WHERE TABLE_NAME IN ('REGIONS', 'COUNTRIES', 'LOCATIONS', 'DEPARTMENTS', 'EMPLOYEES', 'JOBS', 'JOB_GRADES');
+
+TABLE_NAME                     COLUMN_NAME                    C CONSTRAINT_NAME                R_CONSTRAINT_NAME              SEARCH_CONDITION                                   DELETE_RU              
+------------------------------ ------------------------------ - ------------------------------ ------------------------------ -------------------------------------------------- ---------              
+COUNTRIES                      COUNTRY_ID                     C COUNTRIES_COUN_ID_NN                                          "COUNTRY_ID" IS NOT NULL                                                  
+DEPARTMENTS                    DEPARTMENT_NAME                C DEPARTMENTS_DEPT_NAME_NN                                      "DEPARTMENT_NAME" IS NOT NULL                                             
+DEPARTMENTS                    DEPARTMENT_ID                  P DEPARTMENTS_DEPT_ID_PK                                                                                                                  
+EMPLOYEES                      EMPLOYEE_ID                    C EMPLOYEES_EMP_ID_NN                                           "EMPLOYEE_ID" IS NOT NULL                                                 
+EMPLOYEES                      LAST_NAME                      C EMPLOYEES_LAST_NAME_NN                                        "LAST_NAME" IS NOT NULL                                                   
+EMPLOYEES                      EMAIL                          C EMPLOYEES_EMAIL_NN                                            "EMAIL" IS NOT NULL                                                       
+EMPLOYEES                      HIRE_DATE                      C EMPLOYEES_HIRE_DATE_NN                                        "HIRE_DATE" IS NOT NULL                                                   
+EMPLOYEES                      JOB_ID                         C EMPLOYEES_JOB_ID_NN                                           "JOB_ID" IS NOT NULL                                                      
+JOBS                           JOB_TITLE                      C JOBS_JOB_TITLE_NN                                             "JOB_TITLE" IS NOT NULL                                                   
+JOBS                           JOB_ID                         P JOBS_JOB_ID_PK                                                                                                                          
+LOCATIONS                      LOCATION_ID                    C LOCATIONS_LOC_ID_NN                                           "LOCATION_ID" IS NOT NULL                                                 
+LOCATIONS                      CITY                           C LOCATIONS_CITY_NN                                             "CITY" IS NOT NULL                                                        
+REGIONS                        REGION_ID                      C REGIONS_REG_ID_NN                                             "REGION_ID" IS NOT NULL                                                   
+
+13 rows selected.
+
+SQL> SPOOL OFF
